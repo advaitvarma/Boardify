@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Board - AstraScore</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=Space+Grotesk:wght@700&display=swap');
+        body { font-family: 'Outfit', sans-serif; overflow: hidden; }
+        .font-mono { font-family: 'Space Grotesk', monospace; }
+        /* Cosmic Background */
+        .cosmic-bg {
+            background: radial-gradient(circle at top right, #4f46e5, #1e1b4b, #0f172a);
+        }
+        .animate-pulse-slow { animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    </style>
+</head>
+<body class="cosmic-bg text-white min-h-screen flex flex-col" id="board-page">
+
+    <div class="p-6 flex justify-between items-end border-b border-white/10 bg-black/20 backdrop-blur-sm">
+        <div>
+            <h1 class="text-4xl font-black tracking-tight" id="board-title">Loading Event...</h1>
+            <p class="text-indigo-300 font-bold uppercase tracking-widest text-sm mt-1" id="board-subtitle">Please Wait</p>
+        </div>
+        <div class="flex items-center gap-2 opacity-50">
+            <i class="fas fa-star"></i> AstraScore Live
+        </div>
+    </div>
+
+    <main class="flex-grow flex items-center justify-center p-4 relative" id="board-content">
+        <div class="text-center animate-pulse">
+            <i class="fas fa-circle-notch fa-spin text-4xl mb-4"></i>
+            <p>Connecting to Scoreboard...</p>
+        </div>
+    </main>
+
+    <div class="h-12 bg-indigo-600 flex items-center justify-center overflow-hidden relative">
+        <div class="absolute w-full text-center font-bold tracking-widest uppercase text-sm animate-marquee whitespace-nowrap">
+            *** LIVE UPDATES *** OFFICIAL SCOREBOARD *** ASTRASCORE SYSTEM ***
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

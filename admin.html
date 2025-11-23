@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - AstraScore</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { darkMode: 'class' }</script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap'); body { font-family: 'Outfit', sans-serif; }</style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-900 transition-colors duration-300 min-h-screen" id="admin-page">
+
+    <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-4 sticky top-0 z-40">
+        <div class="container mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                    <a href="dashboard.html" class="text-slate-400 hover:text-indigo-500"><i class="fas fa-arrow-left"></i></a>
+                    <span id="admin-title">Loading...</span>
+                </h1>
+                <div class="flex gap-2 mt-1 text-xs">
+                    <span id="admin-badge" class="bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 px-2 py-0.5 rounded font-bold uppercase"></span>
+                    <span id="admin-status" class="bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 px-2 py-0.5 rounded font-bold uppercase"></span>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <a id="public-link" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-bold text-sm transition">
+                    <i class="fas fa-external-link-alt mr-1"></i> Public View
+                </a>
+                <button id="theme-toggle" class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-white"><i class="fas fa-moon"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <div class="lg:col-span-2" id="controls-container">
+            </div>
+
+        <div class="space-y-6">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-lg h-80 overflow-hidden flex flex-col">
+                <h3 class="font-bold text-slate-500 uppercase text-xs mb-3">Event Log</h3>
+                <div id="event-logs" class="flex-grow overflow-y-auto pr-2 space-y-1">
+                    </div>
+            </div>
+
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-lg">
+                <h3 class="font-bold text-slate-500 uppercase text-xs mb-2">Quick Notes</h3>
+                <textarea class="w-full bg-slate-100 dark:bg-slate-700 rounded-lg p-3 text-sm dark:text-white resize-none h-32 focus:ring-2 focus:ring-indigo-500" placeholder="Type organizer notes here..."></textarea>
+            </div>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
