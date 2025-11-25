@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Festival Live Hub - AstraScore</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { darkMode: 'class' }</script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        
+        /* --- Themes --- */
+        .bg-gradient-brand {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+        }
+        
+        /* NEW: Rich Gradient Background */
+        .bg-rich-gradient {
+            /* Light Mode: Soft Indigo -> Pink -> White */
+            background: radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 50%), 
+                        radial-gradient(circle at 100% 0%, rgba(236, 72, 153, 0.15) 0%, transparent 50%), 
+                        radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.1) 0%, transparent 50%), 
+                        linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+            background-attachment: fixed;
+        }
+        
+        .dark .bg-rich-gradient {
+            /* Dark Mode: Deep Navy -> Deep Purple -> Deep Slate */
+            background: radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.2) 0%, transparent 50%), 
+                        radial-gradient(circle at 100% 0%, rgba(236, 72, 153, 0.15) 0%, transparent 50%), 
+                        linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%);
+            background-attachment: fixed;
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .dark .glass {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Animations */
+        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        .animate-ticker { animation: ticker 20s linear infinite; }
+        .hover-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px -10px rgba(0,0,0,0.15); }
+        
+        /* Podium Heights */
+        .h-podium-1 { height: 160px; }
+        .h-podium-2 { height: 120px; }
+        .h-podium-3 { height: 90px; }
+    </style>
+</head>
+<body class="bg-rich-gradient text-slate-800 dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col">
+
+    <!-- LIVE TICKER -->
+    <div class="bg-slate-900 text-white text-xs font-bold py-2 overflow-hidden relative z-50">
+        <div class="whitespace-nowrap animate-ticker inline-block" id="news-ticker">
+            🎉 Welcome to the Festival Live Hub! • 🏆 Check out the updated standings! • 📅 Finals starting soon! • 📢 Stay tuned for live results...
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="glass sticky top-0 z-40 border-b border-slate-200 dark:border-slate-800">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-xl font-black tracking-tight flex items-center gap-2 text-slate-900 dark:text-white">
+                <div class="w-8 h-8 rounded-lg bg-gradient-brand flex items-center justify-center text-white shadow-lg">
+                    <i class="fas fa-star text-xs"></i>
+                </div>
+                <span>Astra<span class="text-transparent bg-clip-text bg-gradient-brand">Score</span></span>
+            </a>
+            
+            <div class="flex items-center gap-3">
+                <button id="favorites-toggle" class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400 text-xs font-bold border border-yellow-200 dark:border-yellow-700/50 transition hover:bg-yellow-100">
+                    <i class="fas fa-star"></i> <span id="fav-count">0</span> Saved
+                </button>
+                <button id="theme-toggle" class="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-indigo-500 transition flex items-center justify-center border border-slate-200 dark:border-slate-700">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="relative pt-10 pb-16 overflow-hidden">
+        <!-- Removed local blurred orb since body now has rich gradient -->
+        
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm text-[10px] font-black uppercase tracking-widest mb-6 text-slate-500 dark:text-slate-400">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                Live Dashboard
+            </div>
+            
+            <h1 id="hero-title" class="text-4xl md:text-6xl font-black text-slate-900 dark:text-white mb-2 tracking-tight">
+                Loading Festival...
+            </h1>
+            
+            <div class="flex items-center justify-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400 mb-8">
+                <span id="hero-org">...</span> • <span id="hero-dates">...</span>
+            </div>
+
+            <!-- Global Search Bar -->
+            <div class="max-w-md mx-auto relative group">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <i class="fas fa-search text-slate-400 group-focus-within:text-indigo-500 transition-colors"></i>
+                </div>
+                <input type="text" id="global-search" placeholder="Search events (e.g., 'Football', 'Quiz')..." 
+                    class="w-full bg-white dark:bg-slate-800 pl-11 pr-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-lg shadow-indigo-500/5 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all text-sm font-bold placeholder-slate-400 text-slate-800 dark:text-white">
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 pb-20 -mt-6">
+
+        <!-- DASHBOARD GRID -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- LEFT COLUMN: Standings (Takes 8 cols on large screens) -->
+            <div class="lg:col-span-8 space-y-8">
+                
+                <!-- STANDINGS CARD -->
+                <div class="bg-white dark:bg-slate-800 rounded-3xl p-1 shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-700">
+                    <div class="bg-slate-50 dark:bg-slate-800/50 rounded-[20px] p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-xl font-black flex items-center gap-2">
+                                <i class="fas fa-trophy text-yellow-500"></i> Leaderboard
+                            </h2>
+                            <button onclick="toggleView('standings')" class="text-xs font-bold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 uppercase tracking-wide">
+                                View Full Table
+                            </button>
+                        </div>
+
+                        <!-- Split Layout: Podium + Top List -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
+                            
+                            <!-- Podium Visual -->
+                            <div id="podium-container" class="flex justify-center items-end gap-2 h-56 pb-2 border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-700">
+                                <!-- JS Injected Podium -->
+                                <div class="text-slate-400 text-sm animate-pulse">Loading data...</div>
+                            </div>
+
+                            <!-- Top 5 List -->
+                            <div class="flex flex-col gap-2" id="top-list-container">
+                                <!-- JS Injected List -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EVENTS SECTION -->
+                <div>
+                    <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+                        <h3 class="text-xl font-black">Upcoming & Live</h3>
+                        
+                        <!-- Filter Pills -->
+                        <div class="flex overflow-x-auto pb-2 sm:pb-0 gap-2 w-full sm:w-auto scrollbar-hide" id="category-filters">
+                            <button onclick="filterEvents('all')" class="filter-btn active whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold bg-slate-800 text-white shadow-lg transition-all transform hover:scale-105">All</button>
+                            <button onclick="filterEvents('sports')" class="filter-btn whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 transition-all">Sports</button>
+                            <button onclick="filterEvents('academic')" class="filter-btn whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all">Academic</button>
+                            <button onclick="filterEvents('cultural')" class="filter-btn whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-pink-50 hover:text-pink-600 hover:border-pink-200 transition-all">Cultural</button>
+                            <button onclick="filterEvents('esports')" class="filter-btn whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-200 transition-all">Esports</button>
+                        </div>
+                    </div>
+
+                    <!-- Pinned Events Area (Hidden by default) -->
+                    <div id="pinned-section" class="hidden mb-8">
+                        <div class="text-xs font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <i class="fas fa-star text-yellow-400"></i> Your Favorites
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="pinned-grid"></div>
+                        <hr class="border-slate-200 dark:border-slate-700 my-6 border-dashed">
+                    </div>
+
+                    <!-- Main Events Grid -->
+                    <div id="events-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <!-- JS Injected Cards -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: Stats & Widgets (Takes 4 cols) -->
+            <div class="lg:col-span-4 space-y-6">
+                
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-indigo-500 text-white p-5 rounded-2xl shadow-lg shadow-indigo-500/20 relative overflow-hidden">
+                        <i class="fas fa-calendar-check absolute -right-2 -bottom-2 text-6xl text-indigo-400 opacity-50 transform rotate-12"></i>
+                        <div class="text-2xl font-black" id="stat-total-events">0</div>
+                        <div class="text-[10px] font-bold uppercase opacity-80">Total Events</div>
+                    </div>
+                    <div class="bg-pink-500 text-white p-5 rounded-2xl shadow-lg shadow-pink-500/20 relative overflow-hidden">
+                        <i class="fas fa-bolt absolute -right-2 -bottom-2 text-6xl text-pink-400 opacity-50 transform rotate-12"></i>
+                        <div class="text-2xl font-black" id="stat-live-events">0</div>
+                        <div class="text-[10px] font-bold uppercase opacity-80">Live Now</div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity / News Feed (Mockup) -->
+                <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 border border-slate-100 dark:border-slate-700 shadow-sm">
+                    <h4 class="font-black text-sm uppercase tracking-wide mb-4 text-slate-400">Live Updates</h4>
+                    <div class="space-y-4 relative">
+                        <div class="absolute left-1.5 top-2 bottom-2 w-0.5 bg-slate-100 dark:bg-slate-700"></div>
+                        
+                        <!-- Mock Update Items -->
+                        <div class="relative pl-6">
+                            <div class="absolute left-0 top-1.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white dark:border-slate-800"></div>
+                            <p class="text-xs font-bold text-slate-800 dark:text-white">Football Finals Started</p>
+                            <p class="text-[10px] text-slate-400">2 mins ago</p>
+                        </div>
+                        <div class="relative pl-6">
+                            <div class="absolute left-0 top-1.5 w-3.5 h-3.5 bg-blue-500 rounded-full border-2 border-white dark:border-slate-800"></div>
+                            <p class="text-xs font-bold text-slate-800 dark:text-white">Quiz Prelims Results Out</p>
+                            <p class="text-[10px] text-slate-400">15 mins ago</p>
+                        </div>
+                         <div class="relative pl-6">
+                            <div class="absolute left-0 top-1.5 w-3.5 h-3.5 bg-slate-300 dark:bg-slate-600 rounded-full border-2 border-white dark:border-slate-800"></div>
+                            <p class="text-xs font-bold text-slate-800 dark:text-white">Opening Ceremony Concluded</p>
+                            <p class="text-[10px] text-slate-400">1 hour ago</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Banner Ad / Announcement -->
+                <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-6 text-center text-white relative overflow-hidden group cursor-pointer hover:shadow-xl transition">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-brand"></div>
+                    <i class="fas fa-qrcode text-6xl absolute -bottom-4 -right-4 text-slate-700 opacity-20 group-hover:scale-110 transition"></i>
+                    <h5 class="font-black text-lg mb-1">Scan to Vote!</h5>
+                    <p class="text-xs text-slate-400 mb-4">Audience poll for "Best Performance" is now open.</p>
+                    <button class="bg-white text-slate-900 px-4 py-2 rounded-lg text-xs font-bold w-full hover:bg-slate-100 transition">Open Voting Pad</button>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-slate-400 text-sm font-bold opacity-60 hover:opacity-100 transition">&copy; 2025 AstraScore System</p>
+        </div>
+    </footer>
+
+    <!-- LOGIC -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initDashboard();
+            initThemeToggle();
+            initSearch();
+            updateFavoritesUI();
+        });
+
+        let festivalData = null;
+        let pinnedEventIds = JSON.parse(localStorage.getItem('astra_pinned_events')) || [];
+
+        function initDashboard() {
+            // 1. Data Fetching (with robust fallback)
+            const params = new URLSearchParams(window.location.search);
+            const festId = params.get('id');
+            
+            try {
+                const saved = JSON.parse(localStorage.getItem('astra_festivals')) || [];
+                festivalData = festId ? saved.find(f => f.id === festId) : saved[saved.length - 1];
+            } catch(e) { console.error(e); }
+
+            if (!festivalData) {
+                console.warn("Using Dummy Data");
+                festivalData = generateDummyData();
+            }
+
+            // 2. Render Static Info
+            document.getElementById('hero-title').textContent = festivalData.name;
+            document.getElementById('hero-org').textContent = festivalData.organizer;
+            document.getElementById('hero-dates').textContent = festivalData.dates;
+            
+            // 3. Render Widgets
+            renderStats();
+            renderStandings();
+            renderEvents('all');
+        }
+
+        // --- RENDERERS ---
+
+        function renderStats() {
+            const allEvents = festivalData.subEvents || [];
+            let liveCount = 0;
+            allEvents.forEach(e => {
+                const active = e.stages?.some(s => s.scoreboardConfig?.status === 'live');
+                if(active) liveCount++;
+            });
+            
+            animateValue("stat-total-events", 0, allEvents.length, 1000);
+            animateValue("stat-live-events", 0, liveCount, 1000);
+        }
+
+        function renderStandings() {
+            const container = document.getElementById('podium-container');
+            const list = document.getElementById('top-list-container');
+            
+            // Mock Points Logic
+            const entities = (festivalData.entities || []).map(e => ({
+                ...e, points: Math.floor(Math.random() * 600) + 150
+            })).sort((a,b) => b.points - a.points);
+
+            if(entities.length === 0) {
+                container.innerHTML = '<div class="text-xs text-slate-400">No data</div>';
+                return;
+            }
+
+            // PODIUM (Top 3)
+            container.innerHTML = '';
+            const podiumOrder = [1, 0, 2]; // 2nd, 1st, 3rd
+            
+            podiumOrder.forEach(idx => {
+                if(!entities[idx]) return;
+                const ent = entities[idx];
+                const rank = idx + 1;
+                const hClass = rank === 1 ? 'h-32 md:h-40' : (rank === 2 ? 'h-24 md:h-32' : 'h-16 md:h-24');
+                const colorClass = rank === 1 ? 'bg-yellow-400 ring-4 ring-yellow-100 dark:ring-yellow-900/30' : (rank === 2 ? 'bg-slate-300' : 'bg-orange-300');
+                
+                container.innerHTML += `
+                    <div class="flex flex-col items-center group w-16 md:w-20">
+                        <div class="w-10 h-10 md:w-14 md:h-14 rounded-full border-4 border-white dark:border-slate-800 shadow-xl flex items-center justify-center text-xs md:text-sm font-black text-white ${colorClass} mb-2 relative z-10">
+                            ${rank}
+                        </div>
+                        <div class="text-[10px] font-bold text-slate-500 mb-1 truncate w-full text-center">${ent.shortCode}</div>
+                        <div class="${hClass} w-full rounded-t-xl bg-gradient-to-t from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600 relative overflow-hidden group-hover:opacity-90 transition-all">
+                            <div class="absolute bottom-2 inset-x-0 text-center text-[10px] font-black text-slate-400">${ent.points}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // LIST (Top 5 details)
+            list.innerHTML = entities.slice(0, 5).map((ent, i) => `
+                <div class="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700/50 transition border border-transparent hover:border-slate-100 dark:hover:border-slate-600">
+                    <div class="flex items-center gap-3">
+                        <div class="w-6 text-center text-xs font-black text-slate-400">#${i+1}</div>
+                        <div class="w-2 h-8 rounded-full" style="background-color: ${ent.color}"></div>
+                        <div>
+                            <div class="text-sm font-bold text-slate-800 dark:text-white leading-none">${ent.name}</div>
+                            <div class="text-[10px] text-slate-400 font-bold uppercase">${ent.type}</div>
+                        </div>
+                    </div>
+                    <div class="font-mono text-sm font-black text-indigo-600 dark:text-indigo-400">${ent.points} pts</div>
+                </div>
+            `).join('');
+        }
+
+        function renderEvents(filter, searchTerm = '') {
+            const grid = document.getElementById('events-grid');
+            const pinnedGrid = document.getElementById('pinned-grid');
+            const pinnedSection = document.getElementById('pinned-section');
+            
+            grid.innerHTML = '';
+            pinnedGrid.innerHTML = '';
+            
+            let allEvents = festivalData.subEvents || [];
+            
+            // Apply Search
+            if(searchTerm) {
+                allEvents = allEvents.filter(e => e.name.toLowerCase().includes(searchTerm.toLowerCase()));
+            }
+            // Apply Category Filter
+            if(filter !== 'all') {
+                allEvents = allEvents.filter(e => e.category === filter);
+            }
+
+            // Separation logic
+            const pinned = [];
+            const normal = [];
+
+            allEvents.forEach((ev, idx) => {
+                // We use a simple ID composed of name for demo (in real app use unique ID)
+                const uniqueId = ev.id || ev.name.replace(/\s+/g, '-').toLowerCase(); 
+                ev._uid = uniqueId; // Attach for toggle function
+                if (pinnedEventIds.includes(uniqueId)) pinned.push(ev);
+                else normal.push(ev);
+            });
+
+            // Render Pinned Section
+            if (pinned.length > 0 && !searchTerm && filter === 'all') {
+                pinnedSection.classList.remove('hidden');
+                pinned.forEach(ev => pinnedGrid.innerHTML += createEventCard(ev, true));
+            } else {
+                pinnedSection.classList.add('hidden');
+            }
+
+            // Render Main Grid
+            if (normal.length === 0 && pinned.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-400 font-bold italic">No events found matching criteria.</div>`;
+                return;
+            }
+            
+            normal.forEach(ev => grid.innerHTML += createEventCard(ev, false));
+        }
+
+        function createEventCard(ev, isPinned) {
+            const colors = { sports: 'orange', academic: 'blue', cultural: 'pink', esports: 'purple' };
+            const c = colors[ev.category] || 'slate';
+            
+            // Status Logic
+            const liveStage = ev.stages?.find(s => s.scoreboardConfig?.status === 'live');
+            const nextStage = ev.stages?.find(s => s.scoreboardConfig?.status === 'upcoming') || ev.stages?.[ev.stages.length-1];
+            
+            const isLive = !!liveStage;
+            const displayStage = liveStage || nextStage;
+            const stageName = displayStage ? displayStage.name : 'Completed';
+            const boardId = displayStage?.scoreboardConfig?.id || '#';
+
+            let statusBadge = isLive 
+                ? `<span class="bg-red-500 text-white px-2 py-0.5 rounded shadow-sm shadow-red-500/50 text-[10px] font-black uppercase tracking-wide flex items-center gap-1"><span class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span> LIVE</span>`
+                : `<span class="bg-slate-100 dark:bg-slate-700 text-slate-500 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wide">Up Next</span>`;
+            
+            let actionBtn = isLive 
+                ? `<a href="board.html?id=${boardId}" class="flex-1 bg-red-500 hover:bg-red-600 text-white py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-red-500/30 transition transform active:scale-95 flex items-center justify-center gap-2"><i class="fas fa-play"></i> Watch</a>`
+                : `<a href="board.html?id=${boardId}" class="flex-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-white py-2.5 rounded-xl font-bold text-sm transition flex items-center justify-center">Details</a>`;
+
+            const starClass = isPinned ? "fas fa-star text-yellow-400" : "far fa-star text-slate-300 hover:text-yellow-400";
+
+            return `
+            <div class="hover-card bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-700 relative overflow-hidden flex flex-col h-full group">
+                <div class="absolute top-0 left-0 w-1.5 h-full bg-${c}-500"></div>
+                
+                <div class="flex justify-between items-start mb-3 pl-3">
+                    <div class="flex flex-col gap-1">
+                        <span class="text-[10px] font-black text-${c}-500 uppercase tracking-widest">${ev.category}</span>
+                        ${statusBadge}
+                    </div>
+                    <button onclick="togglePin('${ev._uid}')" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-50 dark:hover:bg-slate-700 transition">
+                        <i class="${starClass}"></i>
+                    </button>
+                </div>
+
+                <div class="pl-3 mb-4 flex-grow">
+                    <h3 class="text-lg font-black text-slate-800 dark:text-white leading-tight mb-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">${ev.name}</h3>
+                    <p class="text-xs font-bold text-slate-400 uppercase">${ev.type}</p>
+                </div>
+
+                <div class="pl-3 mt-auto space-y-3">
+                    <div class="bg-slate-50 dark:bg-slate-900/50 rounded-lg p-2.5 flex items-center justify-between border border-slate-100 dark:border-slate-700/50">
+                        <div class="text-[10px] font-bold text-slate-400 uppercase">Stage</div>
+                        <div class="text-xs font-bold text-slate-700 dark:text-slate-200">${stageName}</div>
+                    </div>
+                    <div class="flex gap-2">
+                        ${actionBtn}
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        // --- INTERACTIVITY ---
+
+        window.filterEvents = function(cat) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                const isActive = btn.textContent.toLowerCase().includes(cat === 'all' ? 'all' : cat);
+                if(isActive) {
+                    btn.className = "filter-btn active whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold bg-slate-800 dark:bg-white text-white dark:text-slate-900 shadow-lg transition-all transform hover:scale-105";
+                } else {
+                    btn.className = "filter-btn whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-500 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600 transition-all";
+                }
+            });
+            renderEvents(cat, document.getElementById('global-search').value);
+        }
+
+        function initSearch() {
+            const input = document.getElementById('global-search');
+            input.addEventListener('input', (e) => {
+                const term = e.target.value;
+                // Find currently active filter
+                const activeBtn = document.querySelector('.filter-btn.active');
+                const filter = activeBtn ? activeBtn.textContent.toLowerCase().trim() : 'all';
+                renderEvents(filter === 'all' ? 'all' : filter, term);
+            });
+        }
+
+        window.togglePin = function(id) {
+            if (pinnedEventIds.includes(id)) {
+                pinnedEventIds = pinnedEventIds.filter(pid => pid !== id);
+            } else {
+                pinnedEventIds.push(id);
+            }
+            localStorage.setItem('astra_pinned_events', JSON.stringify(pinnedEventIds));
+            updateFavoritesUI();
+            
+            // Re-render current view
+            const activeBtn = document.querySelector('.filter-btn.active');
+            const filter = activeBtn ? activeBtn.textContent.toLowerCase().trim() : 'all';
+            renderEvents(filter === 'all' ? 'all' : filter, document.getElementById('global-search').value);
+        }
+
+        function updateFavoritesUI() {
+            document.getElementById('fav-count').textContent = pinnedEventIds.length;
+        }
+
+        function animateValue(id, start, end, duration) {
+            if (start === end) return;
+            const range = end - start;
+            let current = start;
+            const increment = end > start ? 1 : -1;
+            const stepTime = Math.abs(Math.floor(duration / range));
+            const obj = document.getElementById(id);
+            const timer = setInterval(function() {
+                current += increment;
+                obj.innerHTML = current;
+                if (current == end) {
+                    clearInterval(timer);
+                }
+            }, stepTime);
+        }
+
+        function generateDummyData() {
+            // Robust dummy data
+            return {
+                id: 'dummy-1', name: 'Inter-High Summer TechFest', organizer: 'Springfield High', dates: 'Nov 20-22',
+                entities: [
+                    { name: 'Red House', shortCode: 'RED', color: '#ef4444', type: 'House' },
+                    { name: 'Blue House', shortCode: 'BLU', color: '#3b82f6', type: 'House' },
+                    { name: 'Green House', shortCode: 'GRN', color: '#22c55e', type: 'House' },
+                    { name: 'Yellow House', shortCode: 'YEL', color: '#eab308', type: 'House' }
+                ],
+                subEvents: [
+                    { id: 'ev1', name: 'Senior Football Boys', category: 'sports', type: 'Football', stages: [{ scoreboardConfig: { status: 'live', id: 'board1' }, name: 'Finals' }] },
+                    { id: 'ev2', name: 'Science Quiz', category: 'academic', type: 'Quiz', stages: [{ scoreboardConfig: { status: 'upcoming', id: 'board2' }, name: 'Grand Finale' }] },
+                    { id: 'ev3', name: 'Battle of Bands', category: 'cultural', type: 'Music', stages: [{ scoreboardConfig: { status: 'live', id: 'board3' }, name: 'Performances' }] },
+                    { id: 'ev4', name: 'Valorant Tournament', category: 'esports', type: 'FPS', stages: [{ scoreboardConfig: { status: 'upcoming', id: 'board4' }, name: 'Group Stage' }] },
+                    { id: 'ev5', name: 'Chess Championship', category: 'sports', type: 'Strategy', stages: [{ scoreboardConfig: { status: 'upcoming', id: 'board5' }, name: 'Round 1' }] }
+                ]
+            };
+        }
+
+        function initThemeToggle() {
+            const btn = document.getElementById('theme-toggle');
+            const html = document.documentElement;
+            if (localStorage.getItem('astra_theme') === 'dark') html.classList.add('dark');
+            btn.addEventListener('click', () => {
+                html.classList.toggle('dark');
+                localStorage.setItem('astra_theme', html.classList.contains('dark') ? 'dark' : 'light');
+            });
+        }
+    </script>
+</body>
+</html>

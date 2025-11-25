@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1451,4 +1452,1754 @@
         }
     </script>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Event - AstraScore</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { 
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    animation: {
+                        'bounce-slow': 'bounce 3s infinite',
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-in': 'fadeIn 0.3s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap'); body { font-family: 'Outfit', sans-serif; }</style>
+</head>
+<body class="bg-yellow-50 dark:bg-slate-900 transition-colors duration-300 min-h-screen flex flex-col" id="create-page">
+
+    <div class="w-full h-3 bg-blue-100 dark:bg-slate-800">
+        <div class="h-full bg-red-500 w-1/4 transition-all duration-500 rounded-r-full shadow-[0_0_15px_rgba(239,68,68,0.5)]" id="progress-bar"></div>
+    </div>
+
+    <div class="container mx-auto px-6 py-8 flex-grow max-w-4xl"> 
+        <div class="flex justify-center mb-8">
+            <div class="bg-white dark:bg-slate-800 p-1.5 rounded-2xl shadow-lg inline-flex gap-2 border border-slate-100 dark:border-slate-700">
+                <button onclick="switchMode('single')" id="btn-mode-single" class="px-6 py-3 rounded-xl font-bold text-sm transition-all bg-red-500 text-white shadow-md">
+                    <i class="fas fa-gamepad mr-2"></i>Single Scoreboard
+                </button>
+                <button onclick="switchMode('festival')" id="btn-mode-fest" class="px-6 py-3 rounded-xl font-bold text-sm transition-all text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 dark:text-slate-400">
+                    <i class="fas fa-icons mr-2"></i>Festival / Mega Event
+                </button>
+            </div>
+        </div>
+
+        <div class="flex justify-center gap-4 mb-10" id="stepper-container">
+            <div id="dot-1" class="stepper-dot w-4 h-4 rounded-full bg-red-500 transition-colors shadow-lg ring-2 ring-offset-2 ring-transparent"></div>
+            <div id="dot-2" class="stepper-dot w-4 h-4 rounded-full bg-slate-200 transition-colors"></div>
+            <div id="dot-3" class="stepper-dot w-4 h-4 rounded-full bg-slate-200 transition-colors"></div>
+            <div id="dot-4" class="stepper-dot w-4 h-4 rounded-full bg-slate-200 transition-colors"></div>
+            <div id="dot-5" class="stepper-dot w-4 h-4 rounded-full bg-slate-200 transition-colors"></div>
+            <div id="dot-6" class="stepper-dot w-4 h-4 rounded-full bg-slate-200 transition-colors"></div>
+            </div>
+
+        <div class="bg-white dark:bg-slate-800 rounded-[2rem] shadow-2xl p-8 md:p-12 relative overflow-hidden min-h-[600px]">
+            <div id="top-gradient" class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-400 via-yellow-400 to-blue-400 transition-all duration-500"></div>
+
+            <div id="single-mode-flow">
+                
+                <div id="step-1" class="wizard-step animate-fade-in">
+                    <h2 class="text-4xl font-black text-blue-900 dark:text-white mb-8 text-center">What's the game?</h2>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="cat-card cursor-pointer p-6 rounded-2xl bg-orange-50 dark:bg-slate-700 text-center hover:scale-105 transition border-2 border-transparent hover:border-orange-300 hover:shadow-xl hover:shadow-orange-500/20" onclick="selectCategory('sports', this)">
+                            <i class="fas fa-trophy text-5xl text-orange-500 mb-4"></i>
+                            <h3 class="font-black text-xl text-blue-900 dark:text-white">Sports</h3>
+                        </div>
+                        <div class="cat-card cursor-pointer p-6 rounded-2xl bg-blue-50 dark:bg-slate-700 text-center hover:scale-105 transition border-2 border-transparent hover:border-blue-300 hover:shadow-xl hover:shadow-blue-500/20" onclick="selectCategory('academic', this)">
+                            <i class="fas fa-graduation-cap text-5xl text-blue-500 mb-4"></i>
+                            <h3 class="font-black text-xl text-blue-900 dark:text-white">Academic</h3>
+                        </div>
+                        <div class="cat-card cursor-pointer p-6 rounded-2xl bg-pink-50 dark:bg-slate-700 text-center hover:scale-105 transition border-2 border-transparent hover:border-pink-300 hover:shadow-xl hover:shadow-pink-500/20" onclick="selectCategory('cultural', this)">
+                            <i class="fas fa-theater-masks text-5xl text-pink-500 mb-4"></i>
+                            <h3 class="font-black text-xl text-blue-900 dark:text-white">Cultural</h3>
+                        </div>
+                        <div class="cat-card cursor-pointer p-6 rounded-2xl bg-purple-50 dark:bg-slate-700 text-center hover:scale-105 transition border-2 border-transparent hover:border-purple-300 hover:shadow-xl hover:shadow-purple-500/20" onclick="selectCategory('esports', this)">
+                            <i class="fas fa-headset text-5xl text-purple-500 mb-4"></i>
+                            <h3 class="font-black text-xl text-blue-900 dark:text-white">Esports</h3>
+                        </div>
+                    </div>
+                    <div class="mt-10 text-right">
+                        <button onclick="nextStep(2)" class="next-btn bg-red-500 text-white px-10 py-4 rounded-2xl font-black text-lg hover:bg-red-600 transition shadow-lg shadow-red-500/30">Next <i class="fas fa-arrow-right ml-2"></i></button>
+                    </div>
+                </div>
+
+                <div id="step-layout-board-select" class="wizard-step hidden animate-fade-in">
+                    <div class="flex justify-center mb-4">
+                        <span id="category-badge-final" class="bg-red-100 text-red-600 px-4 py-1 rounded-full text-xs font-black uppercase tracking-wide">Category: Selected</span>
+                    </div>
+                    <h2 class="text-3xl font-black text-blue-900 dark:text-white mb-2 text-center">Choose your board type(s)</h2>
+                    <p class="text-center text-slate-500 dark:text-slate-400 text-sm font-bold mb-8">Select all that apply. (Final Setup Step)</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                        <div class="board-type-card cursor-pointer p-4 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-100 dark:border-slate-600 hover:shadow-lg transition relative group" onclick="toggleBoardType('leaderboard', this)">
+                            <div class="absolute top-3 right-3 opacity-0 check-icon text-green-500"><i class="fas fa-check-circle text-xl"></i></div>
+                            <div class="h-16 bg-slate-100 dark:bg-slate-600 rounded-lg mb-3 flex flex-col justify-center gap-1 p-2 opacity-50 group-hover:opacity-100 transition-opacity">
+                                <div class="h-2 w-3/4 bg-slate-300 dark:bg-slate-500 rounded"></div>
+                                <div class="h-2 w-full bg-slate-300 dark:bg-slate-500 rounded"></div>
+                                <div class="h-2 w-5/6 bg-slate-300 dark:bg-slate-500 rounded"></div>
+                            </div>
+                            <h3 class="font-black text-blue-900 dark:text-white">Leaderboard</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Participants ranked in rows by score.</p>
+                            <div class="rec-tag hidden mt-2 inline-block bg-green-100 text-green-600 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Recommended</div>
+                        </div>
+
+                        <div class="board-type-card cursor-pointer p-4 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-100 dark:border-slate-600 hover:shadow-lg transition relative group" onclick="toggleBoardType('scoresheet', this)">
+                            <div class="absolute top-3 right-3 opacity-0 check-icon text-green-500"><i class="fas fa-check-circle text-xl"></i></div>
+                            <div class="h-16 bg-slate-100 dark:bg-slate-600 rounded-lg mb-3 grid grid-cols-3 gap-1 p-2 opacity-50 group-hover:opacity-100 transition-opacity">
+                                <div class="bg-slate-300 dark:bg-slate-500 rounded"></div><div class="bg-slate-300 dark:bg-slate-500 rounded"></div><div class="bg-slate-300 dark:bg-slate-500 rounded"></div>
+                                <div class="bg-slate-300 dark:bg-slate-500 rounded"></div><div class="bg-slate-300 dark:bg-slate-500 rounded"></div><div class="bg-slate-300 dark:bg-slate-500 rounded"></div>
+                            </div>
+                            <h3 class="font-black text-blue-900 dark:text-white">Scoresheet</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Multi-column grid for rounds & judges.</p>
+                            <div class="rec-tag hidden mt-2 inline-block bg-green-100 text-green-600 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Recommended</div>
+                        </div>
+
+                        <div class="board-type-card cursor-pointer p-4 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-100 dark:border-slate-600 hover:shadow-lg transition relative group" onclick="toggleBoardType('scoreboard', this)">
+                            <div class="absolute top-3 right-3 opacity-0 check-icon text-green-500"><i class="fas fa-check-circle text-xl"></i></div>
+                            <div class="h-16 bg-slate-100 dark:bg-slate-600 rounded-lg mb-3 flex justify-center items-center gap-2 p-2 opacity-50 group-hover:opacity-100 transition-opacity">
+                                <div class="w-8 h-8 bg-slate-300 dark:bg-slate-500 rounded"></div>
+                                <div class="w-8 h-8 bg-slate-300 dark:bg-slate-500 rounded"></div>
+                                <div class="w-8 h-8 bg-slate-300 dark:bg-slate-500 rounded"></div>
+                            </div>
+                            <h3 class="font-black text-blue-900 dark:text-white">Scoreboard</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Large display blocks for participants.</p>
+                            <div class="rec-tag hidden mt-2 inline-block bg-green-100 text-green-600 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Recommended</div>
+                        </div>
+
+                        <div class="board-type-card cursor-pointer p-4 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-100 dark:border-slate-600 hover:shadow-lg transition relative group" onclick="toggleBoardType('sports-scoreboard', this)">
+                            <div class="absolute top-3 right-3 opacity-0 check-icon text-green-500"><i class="fas fa-check-circle text-xl"></i></div>
+                            <div class="h-16 bg-slate-100 dark:bg-slate-600 rounded-lg mb-3 flex items-center justify-between px-4 opacity-50 group-hover:opacity-100 transition-opacity">
+                                <div class="text-xs font-bold text-slate-400">0</div>
+                                <div class="text-[10px] font-bold bg-red-400 text-white px-1 rounded">10:00</div>
+                                <div class="text-xs font-bold text-slate-400">0</div>
+                            </div>
+                            <h3 class="font-black text-blue-900 dark:text-white">Sports Board</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Head-to-head scorebug with timer.</p>
+                            <div class="rec-tag hidden mt-2 inline-block bg-green-100 text-green-600 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Recommended</div>
+                        </div>
+
+                        <div class="board-type-card cursor-pointer p-4 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-100 dark:border-slate-600 hover:shadow-lg transition relative group" onclick="toggleBoardType('counter', this)">
+                            <div class="absolute top-3 right-3 opacity-0 check-icon text-green-500"><i class="fas fa-check-circle text-xl"></i></div>
+                            <div class="h-16 bg-slate-100 dark:bg-slate-600 rounded-lg mb-3 flex justify-center items-center opacity-50 group-hover:opacity-100 transition-opacity">
+                                <div class="w-8 h-8 rounded-full bg-slate-300 dark:bg-slate-500 flex items-center justify-center text-slate-100 font-bold">+</div>
+                            </div>
+                            <h3 class="font-black text-blue-900 dark:text-white">Counter</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Simple click counter/tally.</p>
+                            <div class="rec-tag hidden mt-2 inline-block bg-green-100 text-green-600 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Recommended</div>
+                        </div>
+                    </div>
+
+                    <div id="board-error-final" class="hidden text-center text-red-500 text-sm font-bold mb-4 animate-pulse">
+                        <i class="fas fa-exclamation-circle mr-1"></i> Please choose at least one board type.
+                    </div>
+
+                    <div class="flex justify-between items-center pt-6 border-t border-slate-100 dark:border-slate-700">
+                        <button onclick="prevStep(4)" class="text-slate-400 font-bold hover:text-slate-600 px-4">Back</button>
+                        <button onclick="validateBoardStepFinal()" class="bg-gradient-to-r from-red-500 to-orange-500 text-white px-8 py-3 rounded-xl font-black hover:shadow-lg hover:shadow-orange-500/30 transition transform hover:-translate-y-1">Next: Review</button>
+                    </div>
+                </div>
+
+                <div id="step-2" class="wizard-step hidden animate-fade-in">
+                    <h2 class="text-3xl font-black text-blue-900 dark:text-white mb-6 text-center">Who's playing?</h2>
+                    
+                    <div class="flex justify-center mb-8">
+                        <div class="bg-slate-100 dark:bg-slate-700 p-1 rounded-xl inline-flex">
+                            <button onclick="setParticipantType('teams')" id="pt-teams" class="px-6 py-2 rounded-lg font-bold text-sm transition-all bg-white text-blue-900 shadow-sm">Teams</button>
+                            <button onclick="setParticipantType('individuals')" id="pt-individuals" class="px-6 py-2 rounded-lg font-bold text-sm transition-all text-slate-500 hover:text-slate-700">Individuals</button>
+                            <button onclick="setParticipantType('houses')" id="pt-houses" class="px-6 py-2 rounded-lg font-bold text-sm transition-all text-slate-500 hover:text-slate-700">Houses</button>
+                        </div>
+                    </div>
+
+                    <div id="individual-entities-section" class="mb-8 hidden">
+                        <div class="bg-blue-50 dark:bg-slate-700/50 p-6 rounded-2xl border border-blue-100 dark:border-slate-700">
+                            <h3 class="font-black text-xl text-blue-900 dark:text-white mb-4 flex items-center">
+                                <i class="fas fa-school text-blue-500 mr-2"></i> Manage Schools / Houses / Teams <span class="text-xs text-slate-400 font-medium ml-2">(Optional)</span>
+                            </h3>
+                            <div id="single-entities-list" class="space-y-3 max-h-48 overflow-y-auto mb-4 p-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800">
+                                </div>
+                            <button onclick="openSingleEntityModal()" class="w-full py-2 bg-blue-100 text-blue-600 rounded-xl text-sm font-bold hover:bg-blue-200 transition">
+                                <i class="fas fa-plus-circle mr-1"></i> Add Entity
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mb-8 text-center">
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2" id="count-label">How many teams?</label>
+                        <div class="flex justify-center gap-2 mb-4">
+                            <button onclick="generateParticipants(2)" class="px-4 py-2 bg-blue-50 dark:bg-slate-600 text-blue-600 dark:text-blue-200 rounded-lg font-bold hover:bg-blue-100">2</button>
+                            <button onclick="generateParticipants(4)" class="px-4 py-2 bg-blue-50 dark:bg-slate-600 text-blue-600 dark:text-blue-200 rounded-lg font-bold hover:bg-blue-100">4</button>
+                            <button onclick="generateParticipants(6)" class="px-4 py-2 bg-blue-50 dark:bg-slate-600 text-blue-600 dark:text-blue-200 rounded-lg font-bold hover:bg-blue-100">6</button>
+                            <button onclick="generateParticipants(8)" class="px-4 py-2 bg-blue-50 dark:bg-slate-600 text-blue-600 dark:text-blue-200 rounded-lg font-bold hover:bg-blue-100">8</button>
+                        </div>
+                    </div>
+
+                    <div id="participants-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[300px] overflow-y-auto pr-2 mb-6 scrollbar-thin">
+                        </div>
+
+                    <div class="text-center mb-8">
+                        <button onclick="addParticipant()" class="text-sm font-bold text-red-500 hover:text-red-600"><i class="fas fa-plus-circle mr-1"></i> Add Participant</button>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-6 border-t border-slate-100 dark:border-slate-700">
+                        <button onclick="prevStep(1)" class="text-slate-400 font-bold hover:text-slate-600 px-4">Back</button>
+                        <button onclick="nextStep(3)" class="bg-gradient-to-r from-red-500 to-orange-500 text-white px-8 py-3 rounded-xl font-black hover:shadow-lg hover:shadow-orange-500/30 transition transform hover:-translate-y-1">Next</button>
+                    </div>
+                </div>
+
+                <div id="step-3" class="wizard-step hidden animate-fade-in">
+                    <h2 class="text-3xl font-black text-blue-900 dark:text-white mb-2 text-center">How do we score it?</h2>
+                    <p id="scoring-subtitle" class="text-center text-slate-500 dark:text-slate-400 text-sm font-bold mb-8 uppercase tracking-wide">Game Type: Sports</p>
+
+                    <div class="grid grid-cols-2 gap-6 mb-8">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Score Unit Name</label>
+                            <input type="text" id="score-unit" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border-none dark:text-white font-bold text-slate-700 focus:ring-2 focus:ring-red-400" placeholder="e.g. Points">
+                        </div>
+                        <div class="flex items-center">
+                            <label class="flex items-center cursor-pointer mt-5">
+                                <input type="checkbox" id="allow-negative" class="w-5 h-5 rounded text-red-500 focus:ring-red-500 border-gray-300">
+                                <span class="ml-2 text-sm font-bold text-slate-600 dark:text-slate-300">Allow Negative Scores?</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="panel-sports" class="cat-panel hidden space-y-6">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Sport Type</label>
+                            <select id="sport-type" onchange="updateSportFields()" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border-none font-bold text-slate-700 dark:text-white">
+                                <option value="football">Football</option>
+                                <option value="cricket">Cricket</option>
+                                <option value="basketball">Basketball</option>
+                                <option value="volleyball">Volleyball</option>
+                                <option value="custom">Custom Sport</option>
+                            </select>
+                        </div>
+                        <div id="sport-specific-options" class="bg-blue-50 dark:bg-slate-700/50 p-4 rounded-xl">
+                            </div>
+                    </div>
+
+                    <div id="panel-academic" class="cat-panel hidden space-y-6">
+                        <div class="flex gap-4">
+                            <label class="cursor-pointer"><input type="radio" name="acad-type" value="quiz" checked onchange="updateAcadFields()" class="accent-red-500"> <span class="font-bold text-slate-600 dark:text-slate-300">Quiz</span></label>
+                            <label class="cursor-pointer"><input type="radio" name="acad-type" value="debate" onchange="updateAcadFields()" class="accent-red-500"> <span class="font-bold text-slate-600 dark:text-slate-300">Debate</span></label>
+                            <label class="cursor-pointer"><input type="radio" name="acad-type" value="other" onchange="updateAcadFields()" class="accent-red-500"> <span class="font-bold text-slate-600 dark:text-slate-300">Other</span></label>
+                        </div>
+                        <div id="acad-specific-options" class="bg-blue-50 dark:bg-slate-700/50 p-4 rounded-xl">
+                             </div>
+                    </div>
+
+                    <div id="panel-cultural" class="cat-panel hidden space-y-6">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Event Sub-Type</label>
+                            <select class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border-none font-bold text-slate-700 dark:text-white">
+                                <option>Dance</option>
+                                <option>Music / Singing</option>
+                                <option>Drama</option>
+                                <option>Fashion Show</option>
+                            </select>
+                        </div>
+                        <div class="flex gap-6">
+                             <label class="flex items-center gap-2"><input type="radio" name="cult-perf" value="solo" class="accent-pink-500" checked> <span class="font-bold text-sm dark:text-white">Solo</span></label>
+                             <label class="flex items-center gap-2"><input type="radio" name="cult-perf" value="group" class="accent-pink-500"> <span class="font-bold text-sm dark:text-white">Group</span></label>
+                        </div>
+                        <div class="bg-pink-50 dark:bg-slate-700/50 p-4 rounded-xl">
+                            <h4 class="font-bold text-pink-600 mb-2 text-sm">Judging Criteria</h4>
+                            <table class="w-full text-sm" id="criteria-table">
+                                <thead><tr class="text-left text-slate-400 text-xs uppercase"><th>Criteria Name</th><th class="w-20">Max</th><th></th></tr></thead>
+                                <tbody id="criteria-body"></tbody>
+                            </table>
+                            <button onclick="addCriteriaRow()" class="mt-2 text-xs font-bold text-pink-500 hover:text-pink-700">+ Add Criteria</button>
+                        </div>
+                    </div>
+
+                    <div id="panel-esports" class="cat-panel hidden space-y-6">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Game Title</label>
+                            <select class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border-none font-bold text-slate-700 dark:text-white">
+                                <option>Valorant / CS2 (FPS)</option>
+                                <option>BGMI / Warzone (Battle Royale)</option>
+                                <option>FIFA / Rocket League</option>
+                                <option>MOBA (Dota/LoL)</option>
+                            </select>
+                        </div>
+                         <div class="bg-purple-50 dark:bg-slate-700/50 p-4 rounded-xl">
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Series Type</label>
+                            <div class="flex gap-4 mb-4">
+                                <label class="cursor-pointer font-bold text-sm text-slate-600 dark:text-slate-300"><input type="radio" name="series" value="bo1" class="accent-purple-500"> BO1</label>
+                                <label class="cursor-pointer font-bold text-sm text-slate-600 dark:text-slate-300"><input type="radio" name="series" value="bo3" class="accent-purple-500" checked> BO3</label>
+                                <label class="cursor-pointer font-bold text-sm text-slate-600 dark:text-slate-300"><input type="radio" name="series" value="bo5" class="accent-purple-500"> BO5</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-6 border-t border-slate-100 dark:border-slate-700 mt-6">
+                        <button onclick="prevStep(2)" class="text-slate-400 font-bold hover:text-slate-600 px-4">Back</button>
+                        <button onclick="nextStep(4)" class="bg-gradient-to-r from-red-500 to-orange-500 text-white px-8 py-3 rounded-xl font-black hover:shadow-lg hover:shadow-orange-500/30 transition transform hover:-translate-y-1">Next</button>
+                    </div>
+                </div>
+
+                <div id="step-4" class="wizard-step hidden animate-fade-in">
+                    <h2 class="text-3xl font-black text-blue-900 dark:text-white mb-6 text-center">Layout & Setup</h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                        <div class="space-y-5">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Scoreboard Name</label>
+                                <input type="text" id="layout-name" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border-none font-bold text-lg text-blue-900 dark:text-white focus:ring-2 focus:ring-red-400" placeholder="e.g. Summer Cup Finals">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Visual Theme</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="p-3 rounded-xl border-2 border-red-500 bg-white dark:bg-slate-800 cursor-pointer text-center font-bold text-sm dark:text-white">Light Mode</div>
+                                    <div class="p-3 rounded-xl border-2 border-slate-200 dark:border-slate-600 bg-slate-900 text-white cursor-pointer text-center font-bold text-sm opacity-60">Dark Mode</div>
+                                </div>
+                            </div>
+                             <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Display Options</label>
+                                <div class="space-y-2">
+                                    <label class="flex items-center cursor-pointer"><input type="checkbox" class="w-4 h-4 rounded text-red-500 accent-red-500" checked> <span class="ml-2 text-sm font-medium dark:text-slate-300">Show Timer</span></label>
+                                    <label class="flex items-center cursor-pointer"><input type="checkbox" class="w-4 h-4 rounded text-red-500 accent-red-500"> <span class="ml-2 text-sm font-medium dark:text-slate-300">Show Logos</span></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-indigo-50/50 dark:bg-slate-700/30 rounded-2xl p-5 border border-indigo-100 dark:border-slate-600">
+                             <h3 class="text-sm font-black text-indigo-900 dark:text-indigo-300 uppercase mb-4"><i class="fas fa-sliders-h mr-2"></i> Custom Fields</h3>
+                             
+                             <div class="mb-4">
+                                <h4 class="text-xs font-bold text-slate-400 mb-2">Extra Stats (Rows)</h4>
+                                <div id="single-rows-container" class="space-y-2 mb-2"></div>
+                                <button onclick="addCustomRow('single-rows-container')" class="w-full py-2 border-2 border-dashed border-indigo-200 dark:border-slate-500 rounded-lg text-xs font-bold text-indigo-500 hover:bg-indigo-50 dark:hover:bg-slate-600">+ Add Row</button>
+                             </div>
+
+                             <div>
+                                <h4 class="text-xs font-bold text-slate-400 mb-2">Extra Columns (Table)</h4>
+                                <div id="single-cols-container" class="space-y-2 mb-2"></div>
+                                <button onclick="addCustomCol('single-cols-container')" class="w-full py-2 border-2 border-dashed border-indigo-200 dark:border-slate-500 rounded-lg text-xs font-bold text-indigo-500 hover:bg-indigo-50 dark:hover:bg-slate-600">+ Add Column</button>
+                             </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-6 border-t border-slate-100 dark:border-slate-700">
+                        <button onclick="prevStep(3)" class="text-slate-400 font-bold hover:text-slate-600 px-4">Back</button>
+                        <button onclick="updateBoardTypeVisualsFinal(); nextStep(5)" class="bg-gradient-to-r from-red-500 to-orange-500 text-white px-8 py-3 rounded-xl font-black hover:shadow-lg hover:shadow-orange-500/30 transition transform hover:-translate-y-1">Next: Board Layout</button>
+                    </div>
+                </div>
+
+                <div id="step-5" class="wizard-step hidden animate-fade-in">
+                     <h2 class="text-3xl font-black text-blue-900 dark:text-white mb-6 text-center">Ready to Launch?</h2>
+
+                     <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700 p-8 mb-8 max-w-2xl mx-auto relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-red-500"></div>
+                        
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <div class="text-xs font-bold text-red-500 uppercase tracking-wider mb-1" id="sum-cat">SPORTS</div>
+                                <h3 class="text-2xl font-black text-slate-800 dark:text-white" id="sum-name">My Scoreboard</h3>
+                            </div>
+                            <div class="bg-slate-100 dark:bg-slate-700 px-3 py-1 rounded-lg text-xs font-bold text-slate-500" id="sum-type">TEAMS</div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <div class="text-xs font-bold text-slate-400 uppercase mb-1">Participants</div>
+                                <div class="font-bold text-lg text-slate-700 dark:text-slate-200" id="sum-count">8 Teams</div>
+                                <ul class="text-xs text-slate-500 mt-1 list-disc pl-4" id="sum-part-preview">
+                                    </ul>
+                            </div>
+                             <div>
+                                <div class="text-xs font-bold text-slate-400 uppercase mb-1">Scoring</div>
+                                <ul class="text-sm font-medium text-slate-600 dark:text-slate-300 space-y-1" id="sum-rules">
+                                    </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="border-t border-slate-100 dark:border-slate-700 pt-4">
+                            <div class="flex gap-2 flex-wrap" id="sum-tags">
+                                </div>
+                        </div>
+                     </div>
+
+                     <div class="flex justify-between items-center pt-6 max-w-2xl mx-auto">
+                        <button onclick="prevStep(5)" class="text-slate-400 font-bold hover:text-slate-600 px-4">Back</button>
+                        <button onclick="createScoreboard()" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-10 py-4 rounded-2xl font-black text-xl shadow-xl shadow-green-500/30 transition transform hover:-translate-y-1 w-full md:w-auto">
+                            🚀 Create Scoreboard
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="festival-mode-flow" class="hidden">
+                <div id="fest-step-1" class="wizard-step">
+                    <h2 class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 mb-2 text-center">Mega Event Details</h2>
+                    <p class="text-center text-slate-500 dark:text-slate-400 mb-8 font-medium">Let's build something legendary.</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-bold text-purple-500 mb-1 uppercase tracking-wide">Festival Name</label>
+                            <input type="text" id="fest-input-name" class="w-full p-4 rounded-xl bg-purple-50 dark:bg-slate-700 border-2 border-transparent focus:border-purple-400 dark:text-white font-bold text-blue-900 text-lg transition-all outline-none" placeholder="e.g. Inter-School TechFest 2025">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-purple-500 mb-1 uppercase tracking-wide">Organizer</label>
+                            <input type="text" id="fest-input-organizer" class="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-700 border-none dark:text-white font-medium text-slate-700" placeholder="School / Org Name">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-purple-500 mb-1 uppercase tracking-wide">Location</label>
+                            <input type="text" id="fest-input-location" class="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-700 border-none dark:text-white font-medium text-slate-700" placeholder="City or Campus">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-purple-500 mb-1 uppercase tracking-wide">Start Date</label>
+                            <input type="date" id="fest-input-start" class="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-700 border-none dark:text-white font-medium text-slate-700">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-purple-500 mb-1 uppercase tracking-wide">End Date</label>
+                            <input type="date" id="fest-input-end" class="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-700 border-none dark:text-white font-medium text-slate-700">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-bold text-purple-500 mb-1 uppercase tracking-wide">Event Types Included</label>
+                            <div class="flex gap-3 flex-wrap">
+                                <label class="cursor-pointer select-none"><input type="checkbox" class="peer hidden"> <span class="px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 peer-checked:bg-orange-100 peer-checked:text-orange-600 peer-checked:ring-2 peer-checked:ring-orange-400 transition-all font-bold text-sm"><i class="fas fa-trophy mr-1"></i> Sports</span></label>
+                                <label class="cursor-pointer select-none"><input type="checkbox" class="peer hidden"> <span class="px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 peer-checked:bg-blue-100 peer-checked:text-blue-600 peer-checked:ring-2 peer-checked:ring-blue-400 transition-all font-bold text-sm"><i class="fas fa-graduation-cap mr-1"></i> Academic</span></label>
+                                <label class="cursor-pointer select-none"><input type="checkbox" class="peer hidden"> <span class="px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 peer-checked:bg-pink-100 peer-checked:text-pink-600 peer-checked:ring-2 peer-checked:ring-pink-400 transition-all font-bold text-sm"><i class="fas fa-theater-masks mr-1"></i> Cultural</span></label>
+                                <label class="cursor-pointer select-none"><input type="checkbox" class="peer hidden"> <span class="px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 peer-checked:bg-purple-100 peer-checked:text-purple-600 peer-checked:ring-2 peer-checked:ring-purple-400 transition-all font-bold text-sm"><i class="fas fa-headset mr-1"></i> Esports</span></label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 bg-purple-50 dark:bg-slate-700/50 p-6 rounded-2xl border border-purple-100 dark:border-slate-700">
+                         <h3 class="font-black text-xl text-purple-900 dark:text-white mb-4 flex items-center">
+                            <i class="fas fa-university text-purple-500 mr-2"></i> Festival Schools / Houses / Teams
+                        </h3>
+                        <div id="festival-entities-list" class="space-y-3 max-h-48 overflow-y-auto mb-4 p-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800">
+                            <p class="text-sm text-slate-400 text-center">Add entities to be used across all sub-events.</p>
+                        </div>
+                        <button onclick="openFestivalEntityModal()" class="w-full py-2 bg-purple-100 text-purple-600 rounded-xl text-sm font-bold hover:bg-purple-200 transition">
+                            <i class="fas fa-plus-circle mr-1"></i> Add Festival Entity
+                        </button>
+                    </div>
+                    <div class="mt-10 text-right">
+                        <button class="bg-purple-600 text-white px-10 py-4 rounded-2xl font-black text-lg hover:bg-purple-700 transition shadow-lg shadow-purple-500/30" onclick="nextFestStep(2)">
+                            Build Events <i class="fas fa-hammer ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="fest-step-2" class="wizard-step hidden">
+                     <div class="text-center py-20 text-slate-400">
+                         <i class="fas fa-hammer text-4xl mb-4"></i>
+                         <p>Festival Event Builder (Preserved from original)</p>
+                         <button class="mt-4 bg-purple-600 text-white px-4 py-2 rounded" onclick="nextFestStep(3)">Skip to Review</button>
+                     </div>
+                </div>
+                <div id="fest-step-3" class="wizard-step hidden">
+                    <div class="text-center py-20 text-slate-400">
+                         <i class="fas fa-check-circle text-4xl mb-4"></i>
+                         <p>Festival Review (Preserved from original)</p>
+                         <button class="mt-4 bg-purple-600 text-white px-4 py-2 rounded" onclick="console.log('Fest Launch')">Launch Fest</button>
+                     </div>
+                </div>
+                
+                <div id="fest-step-subevents" class="wizard-step hidden animate-fade-in">
+                    <div class="flex justify-between items-end mb-6">
+                        <div>
+                            <h2 class="text-3xl font-black text-purple-900 dark:text-white">Define Sub-Events</h2>
+                            <p class="text-slate-500 text-sm font-bold">Create the individual competitions for your festival.</p>
+                        </div>
+                        <button onclick="showSubEventModal()" class="bg-purple-100 text-purple-700 px-4 py-2 rounded-lg text-sm font-black hover:bg-purple-200 transition"><i class="fas fa-plus mr-2"></i>Add Sub-Event</button>
+                    </div>
+
+                    <div id="subevents-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 min-h-[200px] content-start">
+                        <div id="subevents-empty" class="col-span-full text-center py-12 bg-slate-50 dark:bg-slate-700/50 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-600">
+                            <i class="fas fa-clipboard-list text-4xl text-slate-300 mb-3"></i>
+                            <p class="text-slate-400 font-bold text-sm">No sub-events added yet.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-6 border-t border-slate-100 dark:border-slate-700">
+                        <button onclick="showFestStep(1)" class="text-slate-400 font-bold hover:text-slate-600 px-4">Back</button>
+                        <button onclick="nextFestStep(3)" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-3 rounded-xl font-black hover:shadow-lg hover:shadow-pink-500/30 transition transform hover:-translate-y-1">Next: Participants</button>
+                    </div>
+                </div>
+
+                <div id="fest-step-participants" class="wizard-step hidden animate-fade-in">
+                    <h2 class="text-3xl font-black text-purple-900 dark:text-white mb-2 text-center">Participants</h2>
+                    <p class="text-center text-slate-500 text-sm font-bold mb-8">Manage who is competing in each event.</p>
+
+                    <div id="participants-overview-container" class="space-y-4 mb-8">
+                        </div>
+
+                    <div class="flex justify-between items-center pt-6 border-t border-slate-100 dark:border-slate-700">
+                        <button onclick="nextFestStep(2)" class="text-slate-400 font-bold hover:text-slate-600 px-4">Back</button>
+                        <button onclick="nextFestStep(4)" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-3 rounded-xl font-black hover:shadow-lg hover:shadow-pink-500/30 transition transform hover:-translate-y-1">Next: Stages</button>
+                    </div>
+                </div>
+
+                <div id="fest-step-stages" class="wizard-step hidden animate-fade-in">
+                    <h2 class="text-3xl font-black text-purple-900 dark:text-white mb-2 text-center">Stages & Scoreboards</h2>
+                    <p class="text-center text-slate-500 text-sm font-bold mb-8">Define rounds and attach scoreboards.</p>
+
+                    <div id="stages-overview-container" class="space-y-6 mb-8 max-h-[400px] overflow-y-auto scrollbar-thin pr-2">
+                        </div>
+
+                    <div class="flex justify-between items-center pt-6 border-t border-slate-100 dark:border-slate-700">
+                        <button onclick="nextFestStep(3)" class="text-slate-400 font-bold hover:text-slate-600 px-4">Back</button>
+                        <button onclick="nextFestStep(5)" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-3 rounded-xl font-black hover:shadow-lg hover:shadow-pink-500/30 transition transform hover:-translate-y-1">Review Festival</button>
+                    </div>
+                </div>
+
+                <div id="fest-step-summary-new" class="wizard-step hidden animate-fade-in">
+                    <h2 class="text-3xl font-black text-purple-900 dark:text-white mb-6 text-center">Ready to Launch Festival?</h2>
+                    
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-purple-100 dark:border-slate-600 p-8 mb-8 max-w-3xl mx-auto relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-purple-500"></div>
+                        
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <div class="text-xs font-bold text-purple-500 uppercase tracking-wider mb-1">MEGA EVENT</div>
+                                <h3 class="text-3xl font-black text-slate-800 dark:text-white" id="fest-sum-name">My Festival</h3>
+                                <p class="text-sm font-bold text-slate-400" id="fest-sum-org">Organizer</p>
+                            </div>
+                            <div class="bg-purple-100 dark:bg-slate-700 px-4 py-2 rounded-lg text-sm font-bold text-purple-600 dark:text-purple-300">
+                                <i class="fas fa-calendar-alt mr-2"></i> <span id="fest-sum-dates">Dates</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-4 mb-6">
+                            <div class="p-4 bg-slate-50 dark:bg-slate-700 rounded-xl text-center">
+                                <div class="text-3xl font-black text-slate-700 dark:text-white" id="fest-sum-events-count">0</div>
+                                <div class="text-xs font-bold text-slate-400 uppercase">Sub-Events</div>
+                            </div>
+                            <div class="p-4 bg-slate-50 dark:bg-slate-700 rounded-xl text-center">
+                                <div class="text-3xl font-black text-slate-700 dark:text-white" id="fest-sum-stages-count">0</div>
+                                <div class="text-xs font-bold text-slate-400 uppercase">Total Stages</div>
+                            </div>
+                            <div class="p-4 bg-slate-50 dark:bg-slate-700 rounded-xl text-center">
+                                <div class="text-3xl font-black text-green-500" id="fest-sum-boards-count">0</div>
+                                <div class="text-xs font-bold text-slate-400 uppercase">Scoreboards</div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 bg-slate-50 dark:bg-slate-700 rounded-xl text-center mt-6">
+                            <div class="text-3xl font-black text-indigo-500" id="fest-sum-entities-count">0</div>
+                            <div class="text-xs font-bold text-slate-400 uppercase">Festival Entities Defined</div>
+                        </div>
+                        <div class="border-t border-slate-100 dark:border-slate-700 pt-4 mt-6">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase mb-3">Event Tree</h4>
+                            <div id="fest-sum-tree" class="space-y-1 text-sm font-medium text-slate-600 dark:text-slate-300 max-h-[150px] overflow-y-auto">
+                                </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-6 max-w-3xl mx-auto">
+                        <button onclick="nextFestStep(4)" class="text-slate-400 font-bold hover:text-slate-600 px-4">Back</button>
+                        <button onclick="createFestival()" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-10 py-4 rounded-2xl font-black text-xl shadow-xl shadow-purple-500/30 transition transform hover:-translate-y-1 w-full md:w-auto">
+                            🚀 Create Festival
+                        </button>
+                    </div>
+                </div>
+                </div>
+        </div>
+    </div>
+
+    <div id="subevent-modal" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-2xl p-6 animate-fade-in">
+            <h3 class="text-xl font-black text-purple-900 dark:text-white mb-4">Add Sub-Event</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Event Name</label>
+                    <input type="text" id="new-se-name" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 font-bold focus:border-purple-500 outline-none" placeholder="e.g. U17 Football Boys">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Category</label>
+                    <select id="new-se-cat" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 font-bold" onchange="updateSubEventTypeOptions()">
+                        <option value="sports">Sports</option>
+                        <option value="academic">Academic</option>
+                        <option value="cultural">Cultural</option>
+                        <option value="esports">Esports</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Type</label>
+                    <select id="new-se-type" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 font-bold">
+                        </select>
+                </div>
+            </div>
+            <div class="flex justify-end gap-3 mt-6">
+                <button onclick="document.getElementById('subevent-modal').classList.add('hidden')" class="text-slate-500 font-bold px-4 py-2 hover:bg-slate-100 rounded-lg">Cancel</button>
+                <button onclick="saveSubEvent()" class="bg-purple-600 text-white font-bold px-6 py-2 rounded-xl hover:bg-purple-700 shadow-lg shadow-purple-500/20">Add Event</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="fest-participants-modal" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-lg rounded-2xl shadow-2xl p-6 animate-fade-in h-[500px] flex flex-col">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-black text-purple-900 dark:text-white">Manage Participants</h3>
+                <span id="fpm-event-name" class="text-xs font-bold bg-purple-100 text-purple-600 px-2 py-1 rounded">Event</span>
+            </div>
+            
+            <div class="flex gap-2 mb-4">
+                <input type="text" id="fpm-input" class="w-3/5 p-2 rounded-lg bg-slate-50 border border-slate-200 text-sm font-bold focus:outline-none focus:border-purple-500" placeholder="Participant Name...">
+                
+                <select id="fpm-entity-select" class="w-2/5 p-2 rounded-lg bg-slate-50 border border-slate-200 text-sm font-bold focus:outline-none focus:border-purple-500 text-slate-600">
+                    <option value="">No Affiliation</option>
+                </select>
+
+                <button onclick="addFestParticipant()" class="bg-purple-600 text-white px-4 rounded-lg font-bold text-sm hover:bg-purple-700 transition">Add</button>
+            </div>
+
+            <div id="fpm-list" class="flex-grow overflow-y-auto bg-slate-50 dark:bg-slate-700/50 rounded-xl p-2 space-y-2">
+                </div>
+
+            <div class="flex justify-end gap-3 mt-4 pt-4 border-t border-slate-100 dark:border-slate-600">
+                <button onclick="closeFestParticipantsModal()" class="bg-slate-200 text-slate-600 font-bold px-6 py-2 rounded-xl hover:bg-slate-300">Done</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="entity-modal" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-2xl p-6 animate-fade-in">
+            <h3 class="text-zxl font-black text-blue-900 dark:text-white mb-4" id="entity-modal-title">Add Entity</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Name</label>
+                    <input type="text" id="entity-name" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 font-bold focus:border-red-500 outline-none" placeholder="e.g. Ravenclaw">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Short Code</label>
+                        <input type="text" id="entity-code" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 font-bold focus:border-red-500 outline-none" placeholder="e.g. RVCL">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Color</label>
+                        <input type="color" id="entity-color" class="w-full h-12 rounded-xl border border-slate-200 dark:border-slate-600 cursor-pointer" value="#4F46E5">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Type</label>
+                        <select id="entity-type" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 font-bold">
+                            <option value="School">School</option>
+                            <option value="House">House</option>
+                            <option value="Team">Team</option>
+                            <option value="Organisation">Organisation</option>
+                        </select>
+                    </div>
+                    <div>
+                         <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Logo URL (Optional)</label>
+                         <input type="text" id="entity-logo" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-sm focus:border-red-500 outline-none" placeholder="https://logo.com/img.png">
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-end gap-3 mt-6">
+                <button onclick="closeEntityModal()" class="text-slate-500 font-bold px-4 py-2 hover:bg-slate-100 rounded-lg">Cancel</button>
+                <button onclick="saveEntity()" class="bg-red-500 text-white font-bold px-6 py-2 rounded-xl hover:bg-red-600 shadow-lg shadow-red-500/20" id="entity-save-btn">Save Entity</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        // ==========================================
+        // 1. STATE MANAGEMENT
+        // ==========================================
+        const singleConfig = {
+            category: null, // sports, academic, cultural, esports
+            participantType: 'teams', // teams, individuals, houses
+            participants: [],
+            scoring: {},
+            layout: {
+                name: '',
+                theme: 'light',
+                customRows: [],
+                customColumns: []
+            },
+            // ADDED: Individual Entities Storage
+            entities: [] 
+        };
+
+        // ==========================================
+        // 2. MODE SWITCHING (Preserved & Adapted)
+        // ==========================================
+        function switchMode(mode) {
+            const singleBtn = document.getElementById('btn-mode-single');
+            const festBtn = document.getElementById('btn-mode-fest');
+            const singleFlow = document.getElementById('single-mode-flow');
+            const festFlow = document.getElementById('festival-mode-flow');
+            const topGradient = document.getElementById('top-gradient');
+            const progressBar = document.getElementById('progress-bar');
+            const stepper = document.getElementById('stepper-container');
+
+            if (mode === 'single') {
+                singleBtn.className = "px-6 py-3 rounded-xl font-bold text-sm transition-all bg-red-500 text-white shadow-md transform scale-105";
+                festBtn.className = "px-6 py-3 rounded-xl font-bold text-sm transition-all text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 dark:text-slate-400";
+                singleFlow.classList.remove('hidden');
+                festFlow.classList.add('hidden');
+                topGradient.className = "absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-400 via-yellow-400 to-blue-400 transition-all duration-500";
+                progressBar.classList.remove('bg-purple-500', 'shadow-[0_0_15px_rgba(168,85,247,0.5)]');
+                progressBar.classList.add('bg-red-500', 'shadow-[0_0_15px_rgba(239,68,68,0.5)]');
+                stepper.classList.remove('opacity-0');
+                // Reset to step 1 (New Logic calls showStep for dot updates)
+                showStep(1); 
+            } else {
+                singleBtn.className = "px-6 py-3 rounded-xl font-bold text-sm transition-all text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 dark:text-slate-400";
+                festBtn.className = "px-6 py-3 rounded-xl font-bold text-sm transition-all bg-purple-600 text-white shadow-md shadow-purple-500/30 transform scale-105";
+                singleFlow.classList.add('hidden');
+                festFlow.classList.remove('hidden');
+                topGradient.className = "absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 transition-all duration-500";
+                progressBar.classList.remove('bg-red-500', 'shadow-[0_0_15px_rgba(239,68,68,0.5)]');
+                progressBar.classList.add('bg-purple-500', 'shadow-[0_0_15px_rgba(168,85,247,0.5)]');
+                nextFestStep(1);
+                stepper.classList.add('opacity-0');
+            }
+        }
+
+        // ==========================================
+        // 3. SINGLE WIZARD NAVIGATION (Modified for 6 steps)
+        // ==========================================
+        let currentStep = 1;
+
+        // TASK 3: showStep and nextStep logic are modified to re-map 6 logical steps (1, 2, 3, 4, 5, 6)
+        
+        function showStep(step) {
+            // Map logical steps (integers passed by buttons) to actual DOM IDs
+            // Logical Steps: 1, 2, 3, 4, 5, 6 (new)
+            // Original steps were 1, 2, 3, 4, 5 (total 5)
+            // New Steps:
+            // Logical 1 (Category) -> DOM "step-1" (Dot 1)
+            // Logical 2 (Participants) -> DOM "step-2" (Dot 2)
+            // Logical 3 (Scoring) -> DOM "step-3" (Dot 3)
+            // Logical 4 (Layout) -> DOM "step-4" (Dot 4)
+            // Logical 5 (Board Select) -> DOM "step-layout-board-select" (Dot 5)
+            // Logical 6 (Review) -> DOM "step-5" (Dot 6)
+
+            let targetId = '';
+            let dotIndex = 0;
+            const totalDots = 6;
+
+            if(step === 1) { targetId = 'step-1'; dotIndex = 1; }
+            else if(step === 2) { targetId = 'step-2'; dotIndex = 2; }
+            else if(step === 3) { targetId = 'step-3'; dotIndex = 3; }
+            else if(step === 4) { targetId = 'step-4'; dotIndex = 4; }
+            else if(step === 5) { targetId = 'step-layout-board-select'; dotIndex = 5; } // New Step 5
+            else if(step === 6) { targetId = 'step-5'; dotIndex = 6; } // Original Step 5 is now 6
+
+            // Hide all possible steps including new one
+            document.querySelectorAll('#single-mode-flow .wizard-step').forEach(el => el.classList.add('hidden'));
+            
+            // Show target only if it exists
+            const targetEl = document.getElementById(targetId);
+            if (targetEl) {
+                targetEl.classList.remove('hidden');
+            } else {
+                 console.error(`Step ID not found for logical step ${step}. Target ID: ${targetId}`);
+                 return;
+            }
+
+            // Update Dots (Loop 6 times now)
+            for(let i=1; i<=totalDots; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if(dot) {
+                    if(i <= dotIndex) {
+                        dot.classList.remove('bg-slate-200');
+                        dot.classList.add('bg-red-500', 'shadow-lg');
+                    } else {
+                        dot.classList.add('bg-slate-200');
+                        dot.classList.remove('bg-red-500', 'shadow-lg');
+                    }
+                }
+            }
+            
+            // Update Bar
+            const progressBar = document.getElementById('progress-bar');
+            progressBar.style.width = `${(dotIndex/totalDots)*100}%`;
+            
+            // Update global currentStep for logic reference
+            window.currentStep = step;
+        }
+
+        // nextStep function to handle the new 6-step flow
+        function nextStep(step) {
+            // Step 2 is Participants, Step 5 is Board Select, Step 6 is Review
+            
+            if (step === 2) {
+                // From Category (1) to Participants (2)
+                if (!singleConfig.category) { alert("Please select a game type first."); return; }
+                showStep(2);
+                return;
+            }
+            
+            if (step === 3) { 
+                // Going to scoring (3)
+                 document.querySelectorAll('.cat-panel').forEach(p => p.classList.add('hidden'));
+                 document.getElementById(`panel-${singleConfig.category}`).classList.remove('hidden');
+                 if(singleConfig.category === 'sports') updateSportFields();
+                 if(singleConfig.category === 'academic') updateAcadFields();
+            }
+            
+            if (step === 5) { 
+                // From Layout (4) to Board Select (5)
+                // This is the new flow insertion point for Board Select
+                updateBoardTypeVisualsFinal(); // Updates visuals for the final step
+                showStep(5);
+                return;
+            }
+
+            if (step === 6) { 
+                // From Board Select (5) to Review (6)
+                generateSummary();
+            }
+
+            showStep(step); // For all other steps (3, 4, 6)
+        }
+
+        // prevStep function to handle the new 6-step flow
+        function prevStep(step) {
+            // Logical Steps: 1, 2, 3, 4, 5, 6
+            // The step parameter is the target logical step
+            if (step === 5) {
+                // Back from Review (6) to Board Select (5)
+                showStep(5);
+                return;
+            }
+            
+            if (step === 4) {
+                 // Back from Board Select (5) to Layout (4)
+                 showStep(4);
+                 return;
+            }
+            
+            if (step === 1) {
+                // Back from Participants (2) to Category (1)
+                showStep(1);
+                return;
+            }
+            
+            showStep(step); // For all other steps (3, 4)
+        }
+
+        // ==========================================
+        // 4. STEP 1: CATEGORY (Unmodified)
+        // ==========================================
+        function selectCategory(cat, el) {
+            singleConfig.category = cat;
+            
+            // Visual Selection
+            document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('ring-4', 'ring-red-400'));
+            el.classList.add('ring-4', 'ring-red-400');
+            
+            // Update Subtitle in Step 3
+            const subtitles = {
+                sports: 'Game Type: Sports',
+                academic: 'Game Type: Academic / Knowledge',
+                cultural: 'Game Type: Cultural / Arts',
+                esports: 'Game Type: Esports / Gaming'
+            };
+            document.getElementById('scoring-subtitle').textContent = subtitles[cat];
+
+            // Pre-configure Step 3 default unit
+            const units = { sports: 'Points', academic: 'Points', cultural: 'Score', esports: 'Rounds' };
+            document.getElementById('score-unit').value = units[cat];
+        }
+
+        // ==========================================
+        // 5. STEP 2: PARTICIPANTS (Modified)
+        // ==========================================
+        function setParticipantType(type) {
+            singleConfig.participantType = type;
+            
+            // Button Styles
+            ['teams', 'individuals', 'houses'].forEach(t => {
+                const btn = document.getElementById(`pt-${t}`);
+                if(t === type) {
+                    btn.className = "px-6 py-2 rounded-lg font-bold text-sm transition-all bg-white text-blue-900 shadow-sm ring-1 ring-slate-200";
+                } else {
+                    btn.className = "px-6 py-2 rounded-lg font-bold text-sm transition-all text-slate-500 hover:text-slate-700";
+                }
+            });
+
+            // Label Update
+            const labels = { teams: 'How many teams?', individuals: 'How many participants?', houses: 'How many houses?' };
+            document.getElementById('count-label').textContent = labels[type];
+            
+            // Clear list on switch
+            document.getElementById('participants-list').innerHTML = '';
+            singleConfig.participants = [];
+            
+            // ADDED: Toggle Individual Entities Section
+            const entitySection = document.getElementById('individual-entities-section');
+            if (type === 'individuals') {
+                entitySection.classList.remove('hidden');
+                renderSingleEntities(); // Render the list when visible
+            } else {
+                entitySection.classList.add('hidden');
+            }
+            
+        }
+
+        function generateParticipants(count) {
+            const container = document.getElementById('participants-list');
+            container.innerHTML = '';
+            singleConfig.participants = [];
+
+            for(let i=0; i<count; i++) {
+                addParticipant(i+1);
+            }
+        }
+
+        function addParticipant(num = null) {
+            const container = document.getElementById('participants-list');
+            const idx = container.children.length + 1;
+            const type = singleConfig.participantType;
+            
+            // Dynamic Placeholders
+            let namePH = type === 'teams' ? `Team ${idx}` : (type === 'houses' ? `House ${idx}` : `Player ${idx}`);
+            let codePH = type === 'teams' ? `T${idx}` : (type === 'houses' ? `H${idx}` : `P${idx}`);
+            
+            // ADDED: Create participant object
+            const participantId = `p-${Date.now()}-${idx}`;
+            singleConfig.participants.push({
+                id: participantId,
+                name: namePH,
+                color: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+                representsEntityId: null // New field
+            });
+
+            const div = document.createElement('div');
+            div.className = "bg-slate-50 dark:bg-slate-700 p-3 rounded-xl border border-slate-200 dark:border-slate-600 flex gap-2 items-center flex-wrap animate-fade-in";
+            div.setAttribute('data-participant-id', participantId);
+            
+            let representsDropdown = '';
+            if (type === 'individuals') {
+                representsDropdown = `
+                    <select onchange="updateParticipantEntity('${participantId}', this.value)" class="w-full mt-2 p-2 rounded-lg bg-white dark:bg-slate-800 text-xs font-medium text-slate-600 dark:text-slate-300 border-none">
+                        <option value="">Represents → (Optional)</option>
+                        ${singleConfig.entities.map(e => `<option value="${e.id}">${e.name} (${e.shortCode})</option>`).join('')}
+                    </select>
+                `;
+            }
+            
+            div.innerHTML = `
+                <div class="w-8 h-8 rounded-full bg-white dark:bg-slate-600 border border-slate-200 flex items-center justify-center font-bold text-xs text-slate-400">${idx}</div>
+                <input type="text" placeholder="${namePH}" value="${namePH}" onchange="updateParticipantName('${participantId}', this.value)" class="flex-grow bg-transparent text-sm font-bold text-slate-700 dark:text-white outline-none border-b border-transparent focus:border-red-400">
+                <input type="color" onchange="updateParticipantColor('${participantId}', this.value)" class="w-6 h-6 rounded overflow-hidden cursor-pointer border-none bg-transparent" value="${singleConfig.participants[singleConfig.participants.length - 1].color}">
+                <button onclick="removeParticipant('${participantId}', this.parentElement)" class="text-slate-300 hover:text-red-400"><i class="fas fa-times"></i></button>
+                ${representsDropdown}
+            `;
+            container.appendChild(div);
+        }
+        
+        // ADDED: Participant List Management Logic
+        function updateParticipantName(id, name) {
+            const part = singleConfig.participants.find(p => p.id === id);
+            if(part) part.name = name;
+        }
+        function updateParticipantColor(id, color) {
+            const part = singleConfig.participants.find(p => p.id === id);
+            if(part) part.color = color;
+        }
+        function updateParticipantEntity(id, entityId) {
+            const part = singleConfig.participants.find(p => p.id === id);
+            if(part) part.representsEntityId = entityId || null;
+        }
+        function removeParticipant(id, el) {
+            const idx = singleConfig.participants.findIndex(p => p.id === id);
+            if(idx !== -1) singleConfig.participants.splice(idx, 1);
+            el.remove();
+            // Re-render list to fix numbering (optional, but cleaner)
+            // regenerateParticipantsUI(); 
+        }
+        
+        // ADDED: Entity Management Logic
+        let activeEntityConfig = null; // Used to determine if adding new or editing existing
+        let currentEntityMode = 'single'; // 'single' or 'festival'
+
+        function openSingleEntityModal() {
+            currentEntityMode = 'single';
+            activeEntityConfig = null;
+            document.getElementById('entity-modal-title').textContent = 'Add Individual Entity';
+            document.getElementById('entity-save-btn').textContent = 'Add Entity';
+            document.getElementById('entity-modal').classList.remove('hidden');
+            // Clear fields
+            document.getElementById('entity-name').value = '';
+            document.getElementById('entity-code').value = '';
+            document.getElementById('entity-type').value = 'School';
+            document.getElementById('entity-color').value = '#4F46E5';
+            document.getElementById('entity-logo').value = '';
+        }
+        
+        function openFestivalEntityModal() {
+            currentEntityMode = 'festival';
+            activeEntityConfig = null;
+            document.getElementById('entity-modal-title').textContent = 'Add Festival Entity';
+            document.getElementById('entity-save-btn').textContent = 'Add Entity';
+            document.getElementById('entity-modal').classList.remove('hidden');
+            // Clear fields
+            document.getElementById('entity-name').value = '';
+            document.getElementById('entity-code').value = '';
+            document.getElementById('entity-type').value = 'School';
+            document.getElementById('entity-color').value = '#9333ea'; // Purple default for Fest
+            document.getElementById('entity-logo').value = '';
+        }
+
+        function closeEntityModal() {
+            document.getElementById('entity-modal').classList.add('hidden');
+        }
+
+        function saveEntity() {
+            const name = document.getElementById('entity-name').value.trim();
+            const shortCode = document.getElementById('entity-code').value.trim().toUpperCase();
+            const type = document.getElementById('entity-type').value;
+            const color = document.getElementById('entity-color').value;
+            const logoUrl = document.getElementById('entity-logo').value.trim();
+            
+            if (!name || !shortCode) {
+                alert("Name and Short Code are required.");
+                return;
+            }
+            
+            const newEntity = {
+                id: `ent-${Date.now()}`,
+                name, shortCode, type, color, logoUrl
+            };
+            
+            if (currentEntityMode === 'single') {
+                singleConfig.entities.push(newEntity);
+                renderSingleEntities();
+                // Update existing participant dropdowns
+                updateAllParticipantDropdowns();
+            } else if (currentEntityMode === 'festival') {
+                festivalConfig.entities.push(newEntity);
+                renderFestivalEntities();
+            }
+
+            closeEntityModal();
+        }
+        
+        function removeEntity(id) {
+            const list = currentEntityMode === 'single' ? singleConfig.entities : festivalConfig.entities;
+            const idx = list.findIndex(e => e.id === id);
+            if (idx !== -1) {
+                list.splice(idx, 1);
+                if (currentEntityMode === 'single') {
+                    renderSingleEntities();
+                    updateAllParticipantDropdowns();
+                } else if (currentEntityMode === 'festival') {
+                    renderFestivalEntities();
+                }
+            }
+        }
+
+        function renderSingleEntities() {
+            const container = document.getElementById('single-entities-list');
+            container.innerHTML = singleConfig.entities.length === 0 
+                ? '<p class="text-sm text-slate-400 text-center py-2">No entities defined yet.</p>'
+                : singleConfig.entities.map(e => `
+                    <div class="flex justify-between items-center p-2 rounded-lg bg-slate-100 dark:bg-slate-700">
+                        <div class="flex items-center">
+                            <div class="w-2 h-6 rounded-l-md mr-2" style="background-color: ${e.color};"></div>
+                            <span class="text-sm font-bold text-slate-700 dark:text-white">${e.name}</span>
+                            <span class="ml-2 text-xs font-medium text-slate-500">(${e.shortCode})</span>
+                            <span class="ml-2 text-xs font-bold text-blue-500">${e.type}</span>
+                        </div>
+                        <button onclick="removeEntity('${e.id}')" class="text-slate-400 hover:text-red-500"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                `).join('');
+        }
+        
+        function updateAllParticipantDropdowns() {
+            if (singleConfig.participantType !== 'individuals') return;
+            
+            document.querySelectorAll('#participants-list select').forEach(select => {
+                const participantId = select.closest('[data-participant-id]').getAttribute('data-participant-id');
+                const selectedId = select.value; // Preserve currently selected value
+                
+                select.innerHTML = `<option value="">Represents → (Optional)</option>` + 
+                    singleConfig.entities.map(e => 
+                        `<option value="${e.id}" ${e.id === selectedId ? 'selected' : ''}>${e.name} (${e.shortCode})</option>`
+                    ).join('');
+                
+                // If the selected entity was removed, update the config model
+                if (selectedId && !singleConfig.entities.find(e => e.id === selectedId)) {
+                    updateParticipantEntity(participantId, null);
+                }
+            });
+        }
+        
+        // Initial setup for the Individual entities section
+        document.addEventListener('DOMContentLoaded', () => {
+             renderSingleEntities(); 
+        });
+
+        // ==========================================
+        // 6. STEP 3: SCORING CONFIG (Unmodified)
+        // ==========================================
+        
+        // The previous nextStep override logic is now inside the new nextStep(3)
+
+        function updateSportFields() {
+            const type = document.getElementById('sport-type').value;
+            const container = document.getElementById('sport-specific-options');
+            
+            let html = '';
+            if (type === 'football' || type === 'basketball') {
+                html = `
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label class="text-[10px] font-bold uppercase text-slate-400">Periods</label><input type="number" value="2" class="w-full p-2 rounded bg-white dark:bg-slate-800 text-sm font-bold"></div>
+                        <div><label class="text-[10px] font-bold uppercase text-slate-400">Mins/Period</label><input type="number" value="${type==='football'?45:10}" class="w-full p-2 rounded bg-white dark:bg-slate-800 text-sm font-bold"></div>
+                    </div>
+                    <div class="mt-3 flex gap-4">
+                        <label class="text-xs font-bold text-slate-500"><input type="checkbox"> Track Fouls</label>
+                        <label class="text-xs font-bold text-slate-500"><input type="checkbox"> Track Cards</label>
+                    </div>
+                `;
+            } else if (type === 'custom') {
+                html = `<input type="text" placeholder="One-line summary of scoring rules..." class="w-full p-2 rounded bg-white dark:bg-slate-800 text-sm">`;
+            }
+            container.innerHTML = html;
+        }
+
+        function updateAcadFields() {
+            const type = document.querySelector('input[name="acad-type"]:checked').value;
+            const container = document.getElementById('acad-specific-options');
+            
+            if (type === 'quiz') {
+                container.innerHTML = `
+                    <div class="flex gap-4">
+                        <div class="w-1/2"><label class="text-[10px] font-bold uppercase text-slate-400">Points/Correct</label><input type="number" value="10" class="w-full p-2 rounded bg-white dark:bg-slate-800 text-sm font-bold"></div>
+                        <div class="w-1/2"><label class="text-[10px] font-bold uppercase text-slate-400">Neg. Marking</label><input type="number" value="0" class="w-full p-2 rounded bg-white dark:bg-slate-800 text-sm font-bold"></div>
+                    </div>
+                `;
+            } else if (type === 'debate') {
+                container.innerHTML = `
+                    <div><label class="text-[10px] font-bold uppercase text-slate-400">Number of Judges</label><input type="number" value="3" class="w-full p-2 rounded bg-white dark:bg-slate-800 text-sm font-bold"></div>
+                `;
+            } else {
+                container.innerHTML = `<p class="text-xs text-slate-500">Generic scoring will be applied.</p>`;
+            }
+        }
+
+        function addCriteriaRow() {
+            const tbody = document.getElementById('criteria-body');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="p-1"><input type="text" placeholder="Criteria" class="w-full bg-white dark:bg-slate-800 p-2 rounded text-sm font-bold border border-slate-200"></td>
+                <td class="p-1"><input type="number" value="10" class="w-full bg-white dark:bg-slate-800 p-2 rounded text-sm border border-slate-200"></td>
+                <td class="p-1 text-center"><button onclick="this.parentElement.parentElement.remove()" class="text-slate-400 hover:text-red-500"><i class="fas fa-times"></i></button></td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        // ==========================================
+        // 7. CUSTOM LAYOUT (Unmodified)
+        // ==========================================
+        function addCustomRow(containerId) {
+            const container = document.getElementById(containerId);
+            const id = Date.now();
+            container.insertAdjacentHTML('beforeend', `
+                <div class="flex gap-2 animate-pulse-fast" style="animation-iteration-count: 1">
+                    <input type="text" placeholder="Stat Name" class="flex-grow p-2 rounded text-xs font-bold bg-white dark:bg-slate-800 border border-slate-200">
+                    <button onclick="this.parentElement.remove()" class="text-red-400 px-2"><i class="fas fa-times"></i></button>
+                </div>
+            `);
+        }
+        function addCustomCol(containerId) {
+            const container = document.getElementById(containerId);
+            container.insertAdjacentHTML('beforeend', `
+                <div class="flex gap-2 animate-pulse-fast" style="animation-iteration-count: 1">
+                    <input type="text" placeholder="Col Name" class="flex-grow p-2 rounded text-xs font-bold bg-white dark:bg-slate-800 border border-slate-200">
+                    <button onclick="this.parentElement.remove()" class="text-red-400 px-2"><i class="fas fa-times"></i></button>
+                </div>
+            `);
+        }
+
+        // ==========================================
+        // 8. BOARD SELECTION (Step 5 - Moved and Adapted)
+        // ==========================================
+        
+        // Add boardTypes to config
+        singleConfig.boardTypes = [];
+
+        // The original logic for toggling board types remains the same, but the validation and visual updates are adapted for the new flow.
+        function validateBoardStepFinal() {
+            if (singleConfig.boardTypes.length === 0) {
+                document.getElementById('board-error-final').classList.remove('hidden');
+                return;
+            }
+            document.getElementById('board-error-final').classList.add('hidden');
+            nextStep(6); // Go to Summary (Logical Step 6)
+        }
+
+        function toggleBoardType(type, el) {
+            const idx = singleConfig.boardTypes.indexOf(type);
+            const checkIcon = el.querySelector('.check-icon');
+            
+            if (idx === -1) {
+                singleConfig.boardTypes.push(type);
+                el.classList.add('border-red-500', 'ring-2', 'ring-red-100');
+                el.classList.remove('border-slate-100', 'dark:border-slate-600');
+                checkIcon.classList.remove('opacity-0');
+                checkIcon.classList.add('opacity-100', 'scale-110');
+            } else {
+                singleConfig.boardTypes.splice(idx, 1);
+                el.classList.remove('border-red-500', 'ring-2', 'ring-red-100');
+                el.classList.add('border-slate-100', 'dark:border-slate-600');
+                checkIcon.classList.remove('opacity-100', 'scale-110');
+                checkIcon.classList.add('opacity-0');
+            }
+            
+            // Hide error if selection made
+            if(singleConfig.boardTypes.length > 0) {
+                document.getElementById('board-error-final').classList.add('hidden');
+            }
+        }
+
+        function updateBoardTypeVisualsFinal() {
+            // Update Badge
+            const badge = document.getElementById('category-badge-final');
+            badge.textContent = `Category: ${singleConfig.category.toUpperCase()}`;
+            
+            // Recommended Logic
+            const recs = {
+                sports: ['sports-scoreboard', 'leaderboard'],
+                academic: ['leaderboard', 'scoresheet'],
+                cultural: ['scoreboard', 'scoresheet'],
+                esports: ['sports-scoreboard', 'leaderboard']
+            };
+            
+            const recommended = recs[singleConfig.category] || [];
+            
+            document.querySelectorAll('#step-layout-board-select .board-type-card').forEach(card => {
+                const onclickVal = card.getAttribute('onclick');
+                const type = onclickVal.match(/'([^']+)'/)[1];
+                const tag = card.querySelector('.rec-tag');
+                
+                if(recommended.includes(type)) {
+                    tag.classList.remove('hidden');
+                } else {
+                    tag.classList.add('hidden');
+                }
+                
+                // Also ensure existing selections are visually marked when returning to the step
+                if (singleConfig.boardTypes.includes(type)) {
+                    card.classList.add('border-red-500', 'ring-2', 'ring-red-100');
+                    card.classList.remove('border-slate-100', 'dark:border-slate-600');
+                    card.querySelector('.check-icon').classList.remove('opacity-0');
+                    card.querySelector('.check-icon').classList.add('opacity-100', 'scale-110');
+                } else {
+                    card.classList.remove('border-red-500', 'ring-2', 'ring-red-100');
+                    card.classList.add('border-slate-100', 'dark:border-slate-600');
+                    card.querySelector('.check-icon').classList.remove('opacity-100', 'scale-110');
+                    card.querySelector('.check-icon').classList.add('opacity-0');
+                }
+            });
+        }
+        
+        // ==========================================
+        // 9. SUMMARY & CREATE (Step 6 - Modified)
+        // ==========================================
+        function generateSummary() {
+            // Populate summary fields based on collected data
+            document.getElementById('sum-cat').textContent = singleConfig.category || 'EVENT';
+            document.getElementById('sum-name').textContent = document.getElementById('layout-name').value || 'Untitled Event';
+            document.getElementById('sum-type').textContent = singleConfig.participantType.toUpperCase();
+            
+            // Count
+            // Use config.participants array instead of DOM children to get accurate count after removals
+            const count = singleConfig.participants.length;
+            document.getElementById('sum-count').textContent = `${count} ${singleConfig.participantType}`;
+            
+            // Preview list
+            const previewUL = document.getElementById('sum-part-preview');
+            previewUL.innerHTML = '';
+            for(let i=0; i<Math.min(3, count); i++) {
+                const part = singleConfig.participants[i];
+                let val = part.name;
+                
+                // ADDED: Display what the individual represents
+                if (singleConfig.participantType === 'individuals' && part.representsEntityId) {
+                    const entity = singleConfig.entities.find(e => e.id === part.representsEntityId);
+                    if (entity) {
+                        val += ` (${entity.shortCode})`;
+                    }
+                }
+                
+                previewUL.innerHTML += `<li>${val}</li>`;
+            }
+            if(count > 3) previewUL.innerHTML += `<li>+ ${count - 3} more...</li>`;
+
+            // Rules Summary
+            const rulesUL = document.getElementById('sum-rules');
+            const unit = document.getElementById('score-unit').value;
+            const neg = document.getElementById('allow-negative').checked;
+            rulesUL.innerHTML = `
+                <li><i class="fas fa-check text-green-500 mr-2"></i>Unit: ${unit}</li>
+                <li><i class="fas fa-${neg?'check text-green-500':'times text-red-400'} mr-2"></i>Negative Scores</li>
+            `;
+            
+            // ADDED: Board Types to Summary Rules
+            if (singleConfig.boardTypes.length > 0) {
+                 rulesUL.innerHTML += `<li><i class="fas fa-list-alt text-green-500 mr-2"></i>Boards: ${singleConfig.boardTypes.join(', ')}</li>`;
+            }
+
+            // Tags
+            const tagsDiv = document.getElementById('sum-tags');
+            const rows = document.getElementById('single-rows-container').children.length;
+            const cols = document.getElementById('single-cols-container').children.length;
+            let tagsHTML = '';
+            if(rows > 0) tagsHTML += `<span class="bg-indigo-100 text-indigo-600 px-2 py-1 rounded text-[10px] font-bold">${rows} Custom Rows</span>`;
+            if(cols > 0) tagsHTML += `<span class="bg-indigo-100 text-indigo-600 px-2 py-1 rounded text-[10px] font-bold">${cols} Custom Cols</span>`;
+            
+            // ADDED: Entity Tag
+            if(singleConfig.entities.length > 0) tagsHTML += `<span class="bg-blue-100 text-blue-600 px-2 py-1 rounded text-[10px] font-bold">${singleConfig.entities.length} Entities</span>`;
+            
+            tagsDiv.innerHTML = tagsHTML;
+        }
+
+        // Hijacked in Section 10 for Fest mode, but original functionality preserved here.
+        function createScoreboard() {
+            console.log("Final Config:", singleConfig);
+            alert("AstraScore: Scoreboard Created! (Check Console for Config Object)");
+            // window.location.href = '/admin/dashboard';
+        }
+
+        // ==========================================
+        // 10. FESTIVAL MODE LOGIC (ADDED)
+        // ==========================================
+        
+        let festivalConfig = {
+            name: '',
+            organizer: '',
+            dates: '',
+            subEvents: [],
+            // ADDED: Festival Entities Storage
+            entities: [] 
+        };
+        
+        let festCurrentModeStep = 1;
+        let activeStageAttachment = null; 
+
+        // Override existing nextFestStep to implement the new flow logic 
+        nextFestStep = function(stepNum) {
+            festCurrentModeStep = stepNum;
+            // Original steps: 1, 2, 3 (Placeholder)
+            // New steps: 1, 2 (SubEvents), 3 (Participants), 4 (Stages), 5 (Summary)
+            const steps = ['fest-step-1', 'fest-step-subevents', 'fest-step-participants', 'fest-step-stages', 'fest-step-summary-new'];
+            const oldSteps = ['fest-step-2', 'fest-step-3']; // Hidden placeholders
+
+            // Hide everything first
+            oldSteps.forEach(id => document.getElementById(id).classList.add('hidden'));
+            steps.forEach(id => document.getElementById(id).classList.add('hidden'));
+
+            // Update Progress Bar
+            const progress = (stepNum / 5) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+
+            // Logic per Step
+            if(stepNum === 1) {
+                document.getElementById('fest-step-1').classList.remove('hidden');
+            } else if (stepNum === 2) {
+                saveFestBasics();
+                renderSubEvents();
+                document.getElementById('fest-step-subevents').classList.remove('hidden');
+            } else if (stepNum === 3) {
+                renderParticipantsOverview();
+                document.getElementById('fest-step-participants').classList.remove('hidden');
+            } else if (stepNum === 4) {
+                renderStagesOverview();
+                document.getElementById('fest-step-stages').classList.remove('hidden');
+            } else if (stepNum === 5) {
+                renderFestivalSummary();
+                document.getElementById('fest-step-summary-new').classList.remove('hidden');
+            }
+        };
+
+        // Explicit function to jump steps (helper)
+        function showFestStep(n) { nextFestStep(n); }
+
+        // F1: Basics (Modified to save all inputs)
+        function saveFestBasics() {
+            festivalConfig.name = document.getElementById('fest-input-name').value;
+            festivalConfig.organizer = document.getElementById('fest-input-organizer').value;
+            // festivalConfig.location = document.getElementById('fest-input-location').value; // Not added to config in original
+            const start = document.getElementById('fest-input-start').value;
+            const end = document.getElementById('fest-input-end').value;
+            festivalConfig.dates = `${start} to ${end}`;
+        }
+        
+        // F1.5: Render Festival Entities (New)
+        function renderFestivalEntities() {
+            const container = document.getElementById('festival-entities-list');
+            container.innerHTML = festivalConfig.entities.length === 0 
+                ? '<p class="text-sm text-slate-400 text-center py-2">Add entities to be used across all sub-events.</p>'
+                : festivalConfig.entities.map(e => `
+                    <div class="flex justify-between items-center p-2 rounded-lg bg-slate-100 dark:bg-slate-700">
+                        <div class="flex items-center">
+                            <div class="w-2 h-6 rounded-l-md mr-2" style="background-color: ${e.color};"></div>
+                            <span class="text-sm font-bold text-slate-700 dark:text-white">${e.name}</span>
+                            <span class="ml-2 text-xs font-medium text-slate-500">(${e.shortCode})</span>
+                            <span class="ml-2 text-xs font-bold text-purple-500">${e.type}</span>
+                        </div>
+                        <button onclick="removeEntity('${e.id}')" class="text-slate-400 hover:text-red-500"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                `).join('');
+        }
+
+        // F2: Sub Events (Unmodified core logic)
+        function updateSubEventTypeOptions() {
+            const cat = document.getElementById('new-se-cat').value;
+            const typeSelect = document.getElementById('new-se-type');
+            typeSelect.innerHTML = '';
+            const opts = {
+                sports: ['Football', 'Cricket', 'Basketball', 'Volleyball', 'Athletics'],
+                academic: ['Quiz', 'Debate', 'Spelling Bee', 'Hackathon'],
+                cultural: ['Dance Solo', 'Dance Group', 'Singing', 'Drama', 'Fashion Show'],
+                esports: ['Valorant', 'BGMI/PUBG', 'FIFA', 'Rocket League']
+            };
+            opts[cat].forEach(o => {
+                typeSelect.innerHTML += `<option value="${o}">${o}</option>`;
+            });
+        }
+        
+        function showSubEventModal() {
+            updateSubEventTypeOptions(); // init
+            document.getElementById('new-se-name').value = '';
+            document.getElementById('subevent-modal').classList.remove('hidden');
+        }
+
+        function saveSubEvent() {
+            const name = document.getElementById('new-se-name').value;
+            const cat = document.getElementById('new-se-cat').value;
+            const type = document.getElementById('new-se-type').value;
+            if(!name) return;
+
+            festivalConfig.subEvents.push({
+                name, category: cat, type, 
+                participants: [], 
+                stages: []
+            });
+            
+            document.getElementById('subevent-modal').classList.add('hidden');
+            renderSubEvents();
+        }
+
+        function renderSubEvents() {
+            const container = document.getElementById('subevents-container');
+            if(festivalConfig.subEvents.length === 0) {
+                container.innerHTML = document.getElementById('subevents-empty').outerHTML;
+                return;
+            }
+            
+            container.innerHTML = '';
+            festivalConfig.subEvents.forEach((se, idx) => {
+                const colors = { sports: 'orange', academic: 'blue', cultural: 'pink', esports: 'purple' };
+                const c = colors[se.category];
+                
+                container.innerHTML += `
+                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border-l-4 border-${c}-500 shadow-sm hover:shadow-md transition relative group">
+                        <button onclick="deleteSubEvent(${idx})" class="absolute top-3 right-3 text-slate-300 hover:text-red-500"><i class="fas fa-trash"></i></button>
+                        <div class="text-[10px] font-bold uppercase text-${c}-500 mb-1 tracking-wide">${se.category} • ${se.type}</div>
+                        <h4 class="font-black text-lg text-slate-800 dark:text-white">${se.name}</h4>
+                        <div class="mt-3 flex gap-2 text-xs font-bold text-slate-400">
+                            <span><i class="fas fa-users mr-1"></i> ${se.participants.length} Participants</span>
+                            <span><i class="fas fa-layer-group mr-1"></i> ${se.stages.length} Stages</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function deleteSubEvent(idx) {
+            festivalConfig.subEvents.splice(idx, 1);
+            renderSubEvents();
+        }
+
+        // F3: Participants (Unmodified)
+        let currentManageEventIdx = null;
+        function renderParticipantsOverview() {
+            const container = document.getElementById('participants-overview-container');
+            container.innerHTML = '';
+            festivalConfig.subEvents.forEach((se, idx) => {
+                container.innerHTML += `
+                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl flex justify-between items-center shadow-sm">
+                        <div>
+                            <h4 class="font-black text-slate-800 dark:text-white">${se.name}</h4>
+                            <div class="text-xs text-slate-500 font-bold">${se.participants.length} Registered</div>
+                        </div>
+                        <button onclick="openFestParticipantsModal(${idx})" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-4 py-2 rounded-lg text-xs font-black hover:bg-purple-100 hover:text-purple-600 transition">Manage</button>
+                    </div>
+                `;
+            });
+        }
+
+        function openFestParticipantsModal(idx) {
+            currentManageEventIdx = idx;
+            document.getElementById('fpm-event-name').textContent = festivalConfig.subEvents[idx].name;
+            
+            // NEW: Populate the Entity Dropdown
+            const select = document.getElementById('fpm-entity-select');
+            select.innerHTML = '<option value="">No Affiliation</option>';
+            
+            festivalConfig.entities.forEach(ent => {
+                // We use the ID as value, and show Name + ShortCode
+                select.innerHTML += `<option value="${ent.id}">${ent.name} (${ent.shortCode})</option>`;
+            });
+
+            renderFestParticipantList();
+            document.getElementById('fest-participants-modal').classList.remove('hidden');
+        }
+
+        function closeFestParticipantsModal() {
+            document.getElementById('fest-participants-modal').classList.add('hidden');
+            renderParticipantsOverview(); // refresh counts
+        }
+
+        function addFestParticipant() {
+            const input = document.getElementById('fpm-input');
+            const select = document.getElementById('fpm-entity-select');
+            
+            const name = input.value.trim();
+            const entityId = select.value;
+
+            if(!name) return;
+
+            // CHANGED: Push an object instead of a string
+            festivalConfig.subEvents[currentManageEventIdx].participants.push({
+                name: name,
+                entityId: entityId || null // Store ID if selected, else null
+            });
+
+            input.value = '';
+            select.value = ''; // Reset dropdown
+            renderFestParticipantList();
+        }
+
+        function renderFestParticipantList() {
+            const list = document.getElementById('fpm-list');
+            const parts = festivalConfig.subEvents[currentManageEventIdx].participants;
+            list.innerHTML = '';
+            
+            parts.forEach((p, i) => {
+                // Look up entity details if an ID exists
+                let entityBadge = '';
+                if(p.entityId) {
+                    const ent = festivalConfig.entities.find(e => e.id === p.entityId);
+                    if(ent) {
+                        // Create a small colored badge
+                        entityBadge = `<span class="ml-2 text-[10px] px-2 py-0.5 rounded text-white" style="background-color: ${ent.color}">${ent.shortCode}</span>`;
+                    }
+                }
+
+                list.innerHTML += `
+                    <div class="flex justify-between items-center bg-white dark:bg-slate-600 p-2 rounded shadow-sm border border-slate-100 dark:border-slate-500">
+                        <div class="flex items-center">
+                            <span class="text-sm font-bold text-slate-700 dark:text-white">${p.name}</span>
+                            ${entityBadge}
+                        </div>
+                        <button onclick="removeFestParticipant(${i})" class="text-slate-300 hover:text-red-500"><i class="fas fa-times"></i></button>
+                    </div>
+                `;
+            });
+        }
+
+        function removeFestParticipant(i) {
+            festivalConfig.subEvents[currentManageEventIdx].participants.splice(i, 1);
+            renderFestParticipantList();
+        }
+
+        // F4: Stages (Unmodified)
+        function renderStagesOverview() {
+            const container = document.getElementById('stages-overview-container');
+            container.innerHTML = '';
+            festivalConfig.subEvents.forEach((se, sIdx) => {
+                let stagesHTML = '';
+                se.stages.forEach((st, stIdx) => {
+                    const hasBoard = st.scoreboardConfig ? true : false;
+                    stagesHTML += `
+                        <div class="flex items-center gap-3 mb-2 pl-4 border-l-2 border-slate-200 dark:border-slate-600 ml-2">
+                            <div class="flex-grow">
+                                <div class="text-sm font-bold text-slate-700 dark:text-white">${st.name}</div>
+                                <div class="text-[10px] text-slate-400 uppercase font-bold">${st.type}</div>
+                            </div>
+                            <button onclick="attachScoreboardToStage(${sIdx}, ${stIdx})" class="${hasBoard ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'} px-3 py-1 rounded text-[10px] font-black uppercase hover:brightness-95 transition">
+                                <i class="fas fa-${hasBoard ? 'check-circle' : 'plug'} mr-1"></i> ${hasBoard ? 'Configured' : 'Attach Board'}
+                            </button>
+                            <button onclick="deleteStage(${sIdx}, ${stIdx})" class="text-slate-300 hover:text-red-500"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML += `
+                    <div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="font-black text-slate-800 dark:text-white text-lg">${se.name}</h4>
+                            <button onclick="addStage(${sIdx})" class="text-xs font-bold text-purple-500 hover:text-purple-700">+ Add Stage</button>
+                        </div>
+                        <div class="space-y-1">
+                            ${stagesHTML}
+                        </div>
+                        ${se.stages.length === 0 ? '<p class="text-xs text-slate-400 italic pl-2">No stages defined.</p>' : ''}
+                    </div>
+                `;
+            });
+        }
+
+        function addStage(sIdx) {
+            const name = prompt("Enter Stage Name (e.g. Semi-Finals):");
+            if(!name) return;
+            festivalConfig.subEvents[sIdx].stages.push({
+                name,
+                type: 'Knockout', // Default, could be expanded
+                scoreboardConfig: null
+            });
+            renderStagesOverview();
+        }
+
+        function deleteStage(sIdx, stIdx) {
+            if(confirm("Delete this stage?")) {
+                festivalConfig.subEvents[sIdx].stages.splice(stIdx, 1);
+                renderStagesOverview();
+            }
+        }
+
+        // Attach Scoreboard Logic (Bridging Single & Fest)
+        function attachScoreboardToStage(sIdx, stIdx) {
+            activeStageAttachment = { sIdx, stIdx };
+            const subEvent = festivalConfig.subEvents[sIdx];
+            
+            // 1. Switch UI
+            document.getElementById('festival-mode-flow').classList.add('hidden');
+            document.getElementById('single-mode-flow').classList.remove('hidden');
+            
+            // 2. Pre-fill Single Config
+            singleConfig.category = subEvent.category;
+            singleConfig.participantType = 'teams'; 
+            
+            // NEW: Copy entities from Fest config to Single config so colors/logos work
+            singleConfig.entities = [...festivalConfig.entities]; 
+
+            // UPDATED MAPPING LOGIC
+            singleConfig.participants = subEvent.participants.map((p, i) => {
+                // Try to find the entity color if linked
+                let color = `#${Math.floor(Math.random()*16777215).toString(16)}`;
+                if (p.entityId) {
+                    const ent = festivalConfig.entities.find(e => e.id === p.entityId);
+                    if (ent) color = ent.color;
+                }
+
+                return {
+                    id: `att-p-${i}`,
+                    name: p.name, // Use .name property (since p is now an object)
+                    color: color, // Use entity color if available
+                    representsEntityId: p.entityId
+                };
+            });
+            
+            singleConfig.boardTypes = []; 
+            
+            // 3. Trigger Steps
+            setParticipantType(singleConfig.participantType);
+            
+            const container = document.getElementById('participants-list');
+            container.innerHTML = '';
+            singleConfig.participants.forEach((p, i) => addParticipant(i + 1));
+            
+            showStep(2); 
+        }
+
+        // Hijack the createScoreboard function to handle attachment
+        const originalCreateScoreboard = createScoreboard;
+        createScoreboard = function() {
+            if (activeStageAttachment) {
+                // We are in attachment mode
+                const { sIdx, stIdx } = activeStageAttachment;
+                
+                // Save the config to the festival object
+                festivalConfig.subEvents[sIdx].stages[stIdx].scoreboardConfig = JSON.parse(JSON.stringify(singleConfig));
+                
+                // Reset Mode
+                activeStageAttachment = null;
+                
+                // Alert
+                alert(`Scoreboard Attached to ${festivalConfig.subEvents[sIdx].name} - ${festivalConfig.subEvents[sIdx].stages[stIdx].name} Successfully!`);
+                
+                // Switch back to Festival Flow
+                document.getElementById('single-mode-flow').classList.add('hidden');
+                document.getElementById('festival-mode-flow').classList.remove('hidden');
+                
+                // Go back to Stages step
+                nextFestStep(4); 
+                
+            } else {
+                // Normal Single Mode
+                originalCreateScoreboard(); // Call the preserved original function
+            }
+        }
+
+        // F5: Summary (Modified to include entity count)
+        function renderFestivalSummary() {
+            document.getElementById('fest-sum-name').textContent = festivalConfig.name || 'Untitled Festival';
+            document.getElementById('fest-sum-org').textContent = festivalConfig.organizer || 'Unknown Organizer';
+            document.getElementById('fest-sum-dates').textContent = festivalConfig.dates;
+            
+            document.getElementById('fest-sum-events-count').textContent = festivalConfig.subEvents.length;
+            document.getElementById('fest-sum-entities-count').textContent = festivalConfig.entities.length; // ADDED
+            
+            let totalStages = 0;
+            let totalBoards = 0;
+            const treeDiv = document.getElementById('fest-sum-tree');
+            treeDiv.innerHTML = '';
+            
+            festivalConfig.subEvents.forEach(se => {
+                totalStages += se.stages.length;
+                const boards = se.stages.filter(s => s.scoreboardConfig).length;
+                totalBoards += boards;
+                
+                let stagesList = '';
+                se.stages.forEach(st => {
+                    stagesList += `<div class="pl-4 text-xs text-slate-400 flex items-center">
+                        <i class="fas fa-angle-right mr-2"></i> ${st.name} 
+                        ${st.scoreboardConfig ? '<i class="fas fa-check text-green-500 ml-2"></i>' : '<i class="fas fa-exclamation-triangle text-orange-400 ml-2"></i>'}
+                    </div>`;
+                });
+
+                treeDiv.innerHTML += `
+                    <div class="mb-2">
+                        <div class="flex items-center text-purple-900 dark:text-purple-300"><i class="fas fa-folder mr-2"></i> ${se.name}</div>
+                        ${stagesList}
+                    </div>
+                `;
+            });
+            
+            document.getElementById('fest-sum-stages-count').textContent = totalStages;
+            document.getElementById('fest-sum-boards-count').textContent = totalBoards;
+        }
+
+        function createFestival() {
+            console.log("FULL FESTIVAL CONFIG:", festivalConfig);
+            alert("Festival Created! See Console for JSON.");
+        }
+
+        // Initial State
+        switchMode('single');
+        
+    </script>
+</body>
+>>>>>>> 1d6dbaa (Added public and admin dash for festivals)
 </html>

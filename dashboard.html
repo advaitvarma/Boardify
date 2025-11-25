@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -315,4 +316,323 @@
         })();
     </script>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AstraScore</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { darkMode: 'class' }</script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap'); body { font-family: 'Outfit', sans-serif; }</style>
+    
+    <style>
+        /* 1. Background & Theming */
+        body#dashboard-page {
+            background: linear-gradient(135deg, #f8faff 0%, #f3f4f6 50%, #eff6ff 100%);
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Decorative Blobs */
+        body#dashboard-page::before {
+            content: '';
+            position: fixed;
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, rgba(167, 139, 250, 0.15) 0%, rgba(255,255,255,0) 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        body#dashboard-page::after {
+            content: '';
+            position: fixed;
+            bottom: -10%;
+            right: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(255,255,255,0) 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* 2. Navigation Glassmorphism */
+        nav {
+            background-color: rgba(255, 255, 255, 0.8) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03) !important;
+        }
+
+        /* 3. Typography & Logo */
+        nav a.text-2xl {
+            background: linear-gradient(to right, #1e3a8a, #4f46e5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: #1e40af;
+        }
+        nav a.text-2xl i {
+            -webkit-text-fill-color: #fbbf24;
+            filter: drop-shadow(0 2px 4px rgba(251, 191, 36, 0.3));
+        }
+
+        /* 4. Buttons & Inputs */
+        #new-event-btn {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important;
+            box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4) !important;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+        #new-event-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px -5px rgba(79, 70, 229, 0.5) !important;
+            filter: brightness(1.1);
+        }
+
+        #search-input, #category-filter {
+            background-color: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            box-shadow: 0 4px 20px -5px rgba(0,0,0,0.05) !important;
+            transition: all 0.2s ease;
+            color: #334155 !important;
+        }
+        #search-input:focus, #category-filter:focus {
+            border-color: #818cf8 !important;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1) !important;
+            outline: none;
+        }
+        
+        /* 5. Cards Styling (Matching specific request + Polish) */
+        .scoreboard-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.04);
+            border: 1px solid #f1f5f9;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .scoreboard-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -5px rgba(0,0,0,0.08);
+        }
+
+        /* 6. Custom Button Styles for Admin/View */
+        .btn-admin {
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            border: none;
+        }
+        .btn-admin:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+        
+        .btn-view {
+            background-color: #e2e8f0;
+            color: #475569;
+        }
+        .btn-view:hover {
+            background-color: #cbd5e1;
+            color: #1e293b;
+        }
+
+        /* 7. Dark Mode Overrides */
+        html.dark body#dashboard-page {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%) !important;
+        }
+        html.dark nav {
+            background-color: rgba(15, 23, 42, 0.85) !important;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        html.dark #search-input, html.dark #category-filter {
+            background-color: #1e293b !important;
+            border-color: #334155 !important;
+            color: white !important;
+        }
+        html.dark .scoreboard-card {
+            background-color: #1e293b;
+            border-color: #334155;
+            box-shadow: none;
+        }
+        html.dark .btn-view {
+            background-color: #334155;
+            color: #cbd5e1;
+        }
+        html.dark .btn-view:hover {
+            background-color: #475569;
+            color: white;
+        }
+        html.dark nav a.text-2xl {
+             background: none;
+             -webkit-text-fill-color: white;
+             color: white;
+        }
+    </style>
+</head>
+<body class="bg-yellow-50 dark:bg-slate-900 transition-colors duration-300 min-h-screen" id="dashboard-page">
+
+    <nav class="bg-white dark:bg-slate-800 shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-black text-blue-900 dark:text-white flex items-center gap-2">
+                <i class="fas fa-star text-yellow-400"></i> AstraScore
+            </a>
+            <div class="flex gap-4 items-center">
+                <a id="new-event-btn" href="create.html" class="inline-flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2.5 rounded-xl font-bold text-sm transition shadow-md shadow-red-500/30">
+                    <i class="fas fa-plus"></i>
+                    New Event
+                </a>
+                <button id="theme-toggle" class="w-10 h-10 rounded-full bg-blue-50 dark:bg-slate-700 text-blue-900 dark:text-white hover:bg-blue-100 transition"><i class="fas fa-moon"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-6 py-10">
+        
+        <div class="mb-8">
+            <h1 class="text-3xl md:text-4xl font-black text-slate-800 dark:text-white tracking-tight mb-2">Your Dashboard</h1>
+            <p class="text-slate-500 dark:text-slate-400 font-medium">Manage your active matches and tournaments.</p>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-4 mb-10">
+            <div class="relative flex-grow">
+                <i class="fas fa-search absolute left-4 top-4 text-blue-300"></i>
+                <input type="text" id="search-input" placeholder="Find your event..." class="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-white dark:bg-slate-800 border-2 border-transparent focus:border-blue-500 dark:text-white shadow-sm text-blue-900 font-bold placeholder-blue-200 transition">
+            </div>
+            <select id="category-filter" class="p-3.5 rounded-2xl bg-white dark:bg-slate-800 border-none shadow-sm dark:text-white cursor-pointer focus:ring-2 focus:ring-blue-500 text-blue-900 font-bold">
+                <option value="all">All Categories</option>
+                <option value="sports">Sports</option>
+                <option value="academic">Academic</option>
+                <option value="cultural">Cultural</option>
+                <option value="esports">Esports</option>
+            </select>
+        </div>
+
+        <div id="scoreboard-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <div class="scoreboard-card p-5 border-l-[6px] border-orange-500 dark:border-orange-500">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="bg-gray-100 text-gray-600 dark:bg-slate-700 dark:text-gray-300 text-xs font-black px-2.5 py-1.5 rounded-md uppercase tracking-wide">
+                        Football
+                    </span>
+                    <span class="bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 text-xs font-bold px-2.5 py-1.5 rounded-full uppercase tracking-wide">
+                        Live
+                    </span>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-1 leading-tight">Inter-High Football Final</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Inter-school</p>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3 mt-auto">
+                    <a href="admin.html?id=1" class="btn-admin col-span-2 text-center py-2.5 rounded-lg font-bold text-sm transition">
+                        Admin
+                    </a>
+                    <a href="match.html?id=1" class="btn-view col-span-1 text-center py-2.5 rounded-lg font-bold text-sm transition">
+                        View
+                    </a>
+                </div>
+            </div>
+
+            <div class="scoreboard-card p-5 border-l-[6px] border-blue-500 dark:border-blue-500">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="bg-gray-100 text-gray-600 dark:bg-slate-700 dark:text-gray-300 text-xs font-black px-2.5 py-1.5 rounded-md uppercase tracking-wide">
+                        Quiz
+                    </span>
+                    <span class="bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400 text-xs font-bold px-2.5 py-1.5 rounded-full uppercase tracking-wide">
+                        Upcoming
+                    </span>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-1 leading-tight">Science Wizard 2025</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">City</p>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3 mt-auto">
+                    <a href="admin.html?id=2" class="btn-admin col-span-2 text-center py-2.5 rounded-lg font-bold text-sm transition">
+                        Admin
+                    </a>
+                    <a href="match.html?id=2" class="btn-view col-span-1 text-center py-2.5 rounded-lg font-bold text-sm transition">
+                        View
+                    </a>
+                </div>
+            </div>
+
+            <div class="scoreboard-card p-5 border-l-[6px] border-orange-500 dark:border-orange-500">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="bg-gray-100 text-gray-600 dark:bg-slate-700 dark:text-gray-300 text-xs font-black px-2.5 py-1.5 rounded-md uppercase tracking-wide">
+                        Football
+                    </span>
+                    <span class="bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400 text-xs font-bold px-2.5 py-1.5 rounded-full uppercase tracking-wide">
+                        Upcoming
+                    </span>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-1 leading-tight">nnn</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">City League</p>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3 mt-auto">
+                    <a href="admin.html?id=3" class="btn-admin col-span-2 text-center py-2.5 rounded-lg font-bold text-sm transition">
+                        Admin
+                    </a>
+                    <a href="match.html?id=3" class="btn-view col-span-1 text-center py-2.5 rounded-lg font-bold text-sm transition">
+                        View
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+    
+    <script>
+        (function() {
+            const themeBtn = document.getElementById('theme-toggle');
+            const html = document.documentElement;
+            const icon = themeBtn.querySelector('i');
+
+            // Initialize
+            if (localStorage.getItem('theme') === 'dark' || 
+               (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                html.classList.add('dark');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                html.classList.remove('dark');
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+
+            // Toggle
+            themeBtn.addEventListener('click', () => {
+                if (html.classList.contains('dark')) {
+                    html.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                } else {
+                    html.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                }
+            });
+        })();
+    </script>
+</body>
+>>>>>>> 1d6dbaa (Added public and admin dash for festivals)
 </html>
