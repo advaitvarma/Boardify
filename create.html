@@ -1397,9 +1397,55 @@
         // Hijack the createScoreboard function to handle attachment
         let activeStageAttachment = null;
         const originalCreateScoreboard = () => {
-            console.log("Final Config:", singleConfig);
-            showTemporaryMessage("Scoreboard Created! (Check Console for Config Object)", "success");
-            // In a real app, this would navigate to the admin dashboard
+            // 1. Generate ID
+            const eventId = 'evt-' + Date.now();
+            
+            // 2. Determine Subcategory
+            let subcat = 'General';
+            if(singleConfig.category === 'sports') subcat = document.getElementById('sport-type')?.value || 'General';
+            else if(singleConfig.category === 'academic') subcat = document.querySelector('input[name="acad-type"]:checked')?.value || 'Quiz';
+            else if(singleConfig.category === 'esports') subcat = 'Esports'; 
+
+            // 3. Map Colors (Crucial for Dashboard to not crash)
+            const categoryColors = {
+                sports: 'orange',
+                academic: 'blue',
+                cultural: 'pink',
+                esports: 'purple'
+            };
+
+            // 4. Construct Event Object
+            const newEvent = {
+                id: eventId,
+                name: document.getElementById('layout-name').value || 'Untitled Event',
+                category: singleConfig.category || 'sports',
+                subcategory: subcat,
+                status: 'upcoming',
+                scale: singleConfig.participantType || 'Teams',
+                color: categoryColors[singleConfig.category] || 'slate', // Fallback color
+                config: singleConfig.scoring || {},
+                teams: singleConfig.participants.map(p => ({ 
+                    name: p.name, 
+                    score: 0, 
+                    color: p.color || '#3b82f6',
+                    id: p.id
+                })),
+                timer: { minutes: 0, seconds: 0, isRunning: false, period: "Period 1" },
+                logs: ["Event Created"]
+            };
+
+            // 5. Save to LocalStorage
+            try {
+                const existingEvents = JSON.parse(localStorage.getItem('astra_events')) || [];
+                existingEvents.push(newEvent);
+                localStorage.setItem('astra_events', JSON.stringify(existingEvents));
+                
+                showTemporaryMessage("Scoreboard Created! Redirecting...", "success");
+                setTimeout(() => { window.location.href = `admin.html?id=${eventId}`; }, 1000);
+            } catch (e) {
+                console.error("Save failed", e);
+                showTemporaryMessage("Error saving event", "error");
+            }
         };
 
         function createScoreboard() {

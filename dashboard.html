@@ -16,7 +16,9 @@
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
                         'float-delayed': 'float 6s ease-in-out 3s infinite',
-                        'fade-in-up': 'fadeInUp 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards', 
+                        'fade-in-up': 'fadeInUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'pop-in': 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
                     },
                     keyframes: {
                         float: {
@@ -24,8 +26,19 @@
                             '50%': { transform: 'translateY(-20px)' },
                         },
                         fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(15px)' },
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
                             '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        popIn: {
+                            '0%': { opacity: '0', transform: 'scale(0.9)' },
+                            '100%': { opacity: '1', transform: 'scale(1)' },
+                        }
+                    },
+                    colors: {
+                        glass: {
+                            light: 'rgba(255, 255, 255, 0.95)',
+                            dark: 'rgba(30, 41, 59, 0.8)',
+                            border: 'rgba(255, 255, 255, 0.5)',
                         }
                     }
                 }
@@ -38,434 +51,688 @@
         
         body {
             font-family: 'Outfit', sans-serif;
-            background-color: #f8fafc;
+            background-color: #f1f5f9; /* Slightly darker slate for better contrast in light mode */
             overflow-x: hidden;
         }
 
-        /* Animated Background */
+        /* --- Animated Background Elements --- */
         .blob {
             position: fixed;
-            filter: blur(90px);
+            filter: blur(80px);
             z-index: -1;
             animation: float 10s ease-in-out infinite;
-            pointer-events: none; /* CRITICAL FIX: Ensures background doesn't block clicks */
+            pointer-events: none;
+            transition: all 0.5s ease;
         }
         
         .blob-1 { 
-            top: -10%; left: -10%; width: 500px; height: 500px; 
-            background: #c084fc; 
-            opacity: 0.2; 
+            top: -10%; left: -10%; width: 600px; height: 600px; 
+            background: radial-gradient(circle, #c084fc 0%, rgba(192,132,252,0) 70%);
+            opacity: 0.25; 
             animation-delay: 0s; 
         }
         .blob-2 { 
-            bottom: -10%; right: -10%; width: 500px; height: 500px; 
-            background: #60a5fa; 
-            opacity: 0.2; 
+            bottom: -10%; right: -10%; width: 600px; height: 600px; 
+            background: radial-gradient(circle, #60a5fa 0%, rgba(96,165,250,0) 70%);
+            opacity: 0.25; 
             animation-delay: -5s; 
         }
         .blob-3 { 
-            top: 40%; left: 40%; width: 300px; height: 300px; 
-            background: #f472b6; 
-            opacity: 0.15; 
+            top: 40%; left: 40%; width: 400px; height: 400px; 
+            background: radial-gradient(circle, #f472b6 0%, rgba(244,114,182,0) 70%);
+            opacity: 0.2; 
             animation-delay: -2s; 
         }
 
-        /* Custom Scrollbar */
+        /* --- Custom Scrollbar --- */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; border: 2px solid transparent; background-clip: content-box; }
+        ::-webkit-scrollbar-thumb:hover { background-color: #94a3b8; }
+        .dark ::-webkit-scrollbar-thumb { background-color: #475569; }
 
-        /* Glass Cards */
+        /* --- Glassmorphism & Card Styles --- */
+        
+        /* ENHANCED GLASS CARD:
+           This makes light mode look less "plain" by adding a subtle white gradient
+           and a crisp border, while keeping dark mode deep and rich.
+        */
         .glass-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 1);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 
+                0 4px 6px -1px rgba(0, 0, 0, 0.05), 
+                0 2px 4px -1px rgba(0, 0, 0, 0.03),
+                inset 0 0 20px rgba(255, 255, 255, 0.5); /* Inner glow for depth */
         }
+        
         .dark .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: none;
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
         }
 
-        /* Card Hover Effects */
+        /* Interactive Card Hover Effects */
         .event-card {
-            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 1;
         }
+        
         .event-card:hover {
-            transform: translateY(-4px) scale(1.005);
-            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.08);
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 
+                0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+                0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            z-index: 10;
+            border-color: rgba(99, 102, 241, 0.3); /* Subtle indigo highlight on hover */
         }
-        .event-card:hover .card-icon {
-            transform: scale(1.1) rotate(5deg);
+        
+        .event-card:hover .card-icon-container {
+            transform: scale(1.15) rotate(5deg);
         }
+
+        .event-card:hover .action-buttons {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Utility Helpers */
+        .text-shadow-sm {
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        /* Hide scrollbar for category pills but keep functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-white transition-colors duration-300 min-h-screen relative">
+<body class="bg-slate-100 text-slate-900 dark:bg-slate-900 dark:text-white transition-colors duration-300 min-h-screen relative font-sans selection:bg-indigo-500 selection:text-white">
 
-    <!-- Background Blobs -->
+    <!-- Ambient Background Blobs -->
     <div class="blob blob-1 rounded-full mix-blend-multiply dark:mix-blend-screen"></div>
     <div class="blob blob-2 rounded-full mix-blend-multiply dark:mix-blend-screen"></div>
     <div class="blob blob-3 rounded-full mix-blend-multiply dark:mix-blend-screen"></div>
 
-    <!-- Navigation -->
-    <nav class="sticky top-0 z-50 glass-card border-b shadow-sm">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="index.html" class="group flex items-center gap-2 text-2xl font-black tracking-tight">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-200">
-                    <i class="fas fa-star text-sm"></i>
+    <!-- Navigation Bar -->
+    <nav class="sticky top-0 z-40 glass-card border-b border-white/50 dark:border-slate-700/50 shadow-sm transition-all duration-300">
+        <div class="container mx-auto px-4 md:px-6 py-4 flex justify-between items-center">
+            
+            <!-- Logo Section -->
+            <a href="index.html" class="group flex items-center gap-3 no-underline">
+                <div class="relative w-10 h-10">
+                    <div class="absolute inset-0 bg-blue-600 rounded-xl rotate-3 group-hover:rotate-6 transition-transform opacity-20"></div>
+                    <div class="relative w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform duration-200">
+                        <i class="fas fa-star text-sm"></i>
+                    </div>
                 </div>
-                <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-indigo-700 dark:from-blue-400 dark:to-indigo-400">
-                    AstraScore
-                </span>
+                <div class="flex flex-col">
+                    <span class="text-xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-indigo-700 dark:from-blue-400 dark:to-indigo-400">
+                        AstraScore
+                    </span>
+                    <span class="text-[0.65rem] font-bold text-slate-500 dark:text-slate-400 tracking-widest uppercase -mt-1">Dashboard</span>
+                </div>
             </a>
             
-            <div class="flex items-center gap-4">
-                <a href="create.html" class="hidden md:flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5">
+            <!-- Desktop Controls -->
+            <div class="flex items-center gap-3 md:gap-4">
+                <a href="create.html" class="hidden md:flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm">
                     <i class="fas fa-plus"></i>
                     <span>New Event</span>
                 </a>
                 
-                <button id="theme-toggle" class="w-10 h-10 rounded-xl glass-card flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 transition-all shadow-sm hover:shadow-md border border-slate-200 dark:border-slate-700">
-                    <i class="fas"></i>
+                <button id="theme-toggle" class="w-10 h-10 rounded-xl glass-card flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 transition-all shadow-sm hover:shadow-md border border-slate-200 dark:border-slate-700 group">
+                    <i class="fas fa-sun text-yellow-500 group-hover:rotate-90 transition-transform duration-500"></i>
                 </button>
             </div>
         </div>
     </nav>
 
-    <main class="container mx-auto px-4 md:px-6 py-8">
+    <!-- Main Content Area -->
+    <main class="container mx-auto px-4 md:px-6 py-8 min-h-[calc(100vh-80px)]">
         
-        <!-- Header Section -->
-        <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4 animate-fade-in-up">
+        <!-- Welcome Header -->
+        <div class="flex flex-col md:flex-row justify-between items-end mb-10 gap-6 animate-fade-in-up">
             <div>
-                <h1 class="text-4xl font-black tracking-tight mb-2 text-slate-800 dark:text-white">Dashboard</h1>
-                <p class="text-slate-500 dark:text-slate-400 font-medium">Welcome back! Here's what's happening today.</p>
+                <h1 class="text-4xl md:text-5xl font-black tracking-tight mb-2 text-slate-800 dark:text-white drop-shadow-sm">
+                    Dashboard
+                </h1>
+                <p class="text-slate-500 dark:text-slate-400 font-medium text-lg max-w-lg">
+                    Manage your events, track live scores, and customize your tournaments all in one place.
+                </p>
+            </div>
+            
+            <!-- Date Display -->
+            <div class="hidden md:block text-right">
+                <p class="text-sm font-bold text-slate-400 uppercase tracking-widest" id="current-date-label">Today</p>
+                <p class="text-2xl font-bold text-slate-700 dark:text-slate-200" id="current-date-display">...</p>
             </div>
         </div>
 
-        <!-- Stats Overview -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-            <!-- Stats items populated by JS -->
+        <!-- Statistics Cards -->
+        <!-- These will be populated by JS, ensuring they look vibrant -->
+        <div id="stats-container" class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12">
+            <!-- Loading Skeleton -->
+            <div class="glass-card h-24 rounded-2xl animate-pulse"></div>
+            <div class="glass-card h-24 rounded-2xl animate-pulse delay-75"></div>
+            <div class="glass-card h-24 rounded-2xl animate-pulse delay-100"></div>
+            <div class="glass-card h-24 rounded-2xl animate-pulse delay-150"></div>
         </div>
 
-        <!-- Filters & Search -->
-        <div class="glass-card p-2 rounded-2xl flex flex-col md:flex-row gap-2 mb-8 shadow-sm animate-fade-in-up" style="animation-delay: 0.05s;">
-            <div class="relative flex-grow group">
-                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
+        <!-- Control Bar: Search & Filters -->
+        <div class="glass-card p-3 rounded-2xl flex flex-col md:flex-row gap-3 mb-8 shadow-sm animate-fade-in-up border border-white/60 dark:border-white/5" style="animation-delay: 0.1s;">
+            <div class="relative flex-grow group z-10">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <i class="fas fa-search text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
+                </div>
                 <input type="text" id="search-input" placeholder="Search events, teams, or leagues..." 
-                    class="w-full pl-11 pr-4 py-3 rounded-xl bg-transparent border border-transparent focus:bg-white dark:focus:bg-slate-800 focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all text-slate-700 dark:text-white placeholder-slate-400">
+                    class="w-full pl-11 pr-4 py-3.5 rounded-xl bg-slate-50/50 dark:bg-slate-800/50 border border-transparent focus:bg-white dark:focus:bg-slate-800 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all text-slate-700 dark:text-white placeholder-slate-400 font-medium">
             </div>
-            <div class="flex gap-2 overflow-x-auto pb-2 md:pb-0 no-scrollbar" id="category-pills">
+            
+            <!-- Filter Pills -->
+            <div class="flex gap-2 overflow-x-auto pb-2 md:pb-0 no-scrollbar items-center pl-1" id="category-pills">
                 <!-- Pills populated by JS -->
             </div>
         </div>
 
         <!-- Events Grid -->
-        <div id="events-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div id="events-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20">
             <!-- Events populated by JS -->
         </div>
 
         <!-- Empty State (Hidden by default) -->
-        <div id="empty-state" class="hidden flex-col items-center justify-center py-20 text-center animate-fade-in-up">
-            <div class="w-24 h-24 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center mb-4 text-4xl text-slate-300 dark:text-slate-600 shadow-sm">
-                <i class="fas fa-search"></i>
+        <div id="empty-state" class="hidden flex-col items-center justify-center py-24 text-center animate-fade-in-up">
+            <div class="relative mb-6">
+                <div class="absolute inset-0 bg-blue-500 blur-2xl opacity-20 rounded-full"></div>
+                <div class="relative w-28 h-28 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center text-5xl text-slate-300 dark:text-slate-600 shadow-xl border border-slate-100 dark:border-slate-700">
+                    <i class="fas fa-search-minus"></i>
+                </div>
             </div>
-            <h3 class="text-xl font-bold text-slate-700 dark:text-slate-200 mb-2">No events found</h3>
-            <p class="text-slate-500 dark:text-slate-400 max-w-xs mx-auto">We couldn't find any matches matching your criteria. Try adjusting your filters.</p>
-            <button onclick="resetFilters()" class="mt-6 text-blue-600 dark:text-blue-400 font-bold hover:underline">Clear all filters</button>
+            <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-3">No events found</h3>
+            <p class="text-slate-500 dark:text-slate-400 max-w-sm mx-auto leading-relaxed">
+                We couldn't find any matches based on your current filters or search query.
+            </p>
+            <button onclick="resetFilters()" class="mt-8 px-6 py-3 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-white rounded-xl font-bold hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors flex items-center gap-2">
+                <i class="fas fa-times-circle"></i> Clear Filters
+            </button>
         </div>
 
     </main>
 
     <!-- Floating Action Button (Mobile) -->
-    <a href="create.html" class="md:hidden fixed bottom-6 right-6 w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg shadow-blue-600/40 flex items-center justify-center text-2xl z-40 hover:scale-110 transition-transform">
+    <a href="create.html" class="md:hidden fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full shadow-lg shadow-blue-600/40 flex items-center justify-center text-2xl z-40 hover:scale-110 active:scale-95 transition-all">
         <i class="fas fa-plus"></i>
     </a>
 
-    <script>
-        // --- DATA (Updated with Fixed Hyperlinks) ---
-        const events = [
-            {
-                id: 'demo-football',
-                title: "Inter-High Football Final",
-                category: "sports",
-                subCategory: "Football",
-                type: "Inter-school",
-                status: "live",
-                color: "orange",
-                viewLink: "board.html?id=demo-football",
-                adminLink: "admin.html?id=demo-football"
-            },
-            {
-                id: 'demo-quiz',
-                title: "Science Wizard 2025",
-                category: "academic",
-                subCategory: "Quiz",
-                type: "City",
-                status: "upcoming",
-                color: "blue",
-                viewLink: "board.html?id=demo-quiz",
-                adminLink: "admin.html?id=demo-quiz"
-            },
-            {
-                id: 3,
-                title: "nnn",
-                category: "sports",
-                subCategory: "Football",
-                type: "City League",
-                status: "upcoming",
-                color: "orange",
-                viewLink: "match.html?id=3",
-                adminLink: "admin.html?id=3"
-            }
-        ];
+    <!-- CUSTOM CONFIRMATION MODAL -->
+    <div id="delete-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 modal-overlay opacity-0" id="modal-backdrop" onclick="closeDeleteModal()"></div>
+        
+        <!-- Modal Content -->
+        <div class="relative w-full max-w-sm bg-white dark:bg-slate-800 rounded-3xl shadow-2xl p-6 transform scale-90 opacity-0 transition-all duration-300" id="modal-content">
+            <div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-500 flex items-center justify-center text-2xl mx-auto mb-4 border-4 border-red-50 dark:border-red-900/10">
+                <i class="fas fa-trash-alt"></i>
+            </div>
+            
+            <h3 class="text-xl font-black text-center text-slate-800 dark:text-white mb-2">Delete Event?</h3>
+            <p class="text-center text-slate-500 dark:text-slate-400 text-sm mb-6 leading-relaxed">
+                Are you sure you want to remove <span id="modal-event-name" class="font-bold text-slate-700 dark:text-slate-300">this event</span>? This action cannot be undone and all data will be lost.
+            </p>
+            
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="closeDeleteModal()" class="py-3 px-4 rounded-xl font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+                    Cancel
+                </button>
+                <button onclick="confirmDelete()" class="py-3 px-4 rounded-xl font-bold text-white bg-red-500 hover:bg-red-600 shadow-lg shadow-red-500/30 transition-all hover:-translate-y-0.5">
+                    Delete It
+                </button>
+            </div>
+        </div>
+    </div>
 
-        // --- STYLE MAPPINGS ---
+    <!-- JAVASCRIPT -->
+    <script>
+        /**
+         * ASTRASCORE DASHBOARD LOGIC
+         * Enhanced for visual appeal and robust functionality.
+         */
+
+        // ---------------------------------------------------------
+        // 1. THEME & UI INIT
+        // ---------------------------------------------------------
+        (function() {
+            try {
+                // Set Date
+                const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                document.getElementById('current-date-display').textContent = new Date().toLocaleDateString('en-US', dateOptions);
+
+                // Theme Logic
+                const themeBtn = document.getElementById('theme-toggle');
+                const html = document.documentElement;
+                const icon = themeBtn ? themeBtn.querySelector('i') : null;
+
+                function updateIcon() {
+                    if(!icon) return;
+                    if (html.classList.contains('dark')) {
+                        icon.className = 'fas fa-moon text-blue-300 transform rotate-0';
+                    } else {
+                        icon.className = 'fas fa-sun text-yellow-500 text-lg transform rotate-0';
+                    }
+                }
+
+                // Check Storage
+                if (localStorage.getItem('astra_theme') === 'dark' || 
+                   (!localStorage.getItem('astra_theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    html.classList.add('dark');
+                }
+                updateIcon();
+
+                if(themeBtn) {
+                    themeBtn.addEventListener('click', () => {
+                        html.classList.toggle('dark');
+                        const isDark = html.classList.contains('dark');
+                        localStorage.setItem('astra_theme', isDark ? 'dark' : 'light');
+                        
+                        // Animate Icon
+                        icon.style.transform = 'rotate(360deg) scale(0.5)';
+                        icon.style.opacity = '0';
+                        setTimeout(() => {
+                            updateIcon();
+                            icon.style.transform = 'rotate(0deg) scale(1)';
+                            icon.style.opacity = '1';
+                        }, 200);
+                    });
+                }
+            } catch (e) { console.warn("Init warning:", e); }
+        })();
+
+
+        // ---------------------------------------------------------
+        // 2. CONFIGURATION & STYLES
+        // ---------------------------------------------------------
+        
+        // Revised Color System: Using Gradients for Icons to match "Creation Page" feel
         const styles = {
-            orange: {
-                bg: "bg-orange-100 dark:bg-orange-900/30",
-                text: "text-orange-700 dark:text-orange-400",
-                border: "bg-orange-500",
-                badge: "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400"
+            orange: { 
+                gradient: "bg-gradient-to-br from-orange-400 to-red-500", 
+                lightBg: "bg-orange-50", 
+                text: "text-orange-600",
+                border: "border-orange-200",
+                shadow: "shadow-orange-500/20"
             },
-            blue: {
-                bg: "bg-blue-100 dark:bg-blue-900/30",
-                text: "text-blue-700 dark:text-blue-400",
-                border: "bg-blue-500",
-                badge: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+            blue: { 
+                gradient: "bg-gradient-to-br from-blue-400 to-indigo-500", 
+                lightBg: "bg-blue-50", 
+                text: "text-blue-600",
+                border: "border-blue-200",
+                shadow: "shadow-blue-500/20"
             },
-            emerald: {
-                bg: "bg-emerald-100 dark:bg-emerald-900/30",
-                text: "text-emerald-700 dark:text-emerald-400",
-                border: "bg-emerald-500",
-                badge: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
+            emerald: { 
+                gradient: "bg-gradient-to-br from-emerald-400 to-teal-500", 
+                lightBg: "bg-emerald-50", 
+                text: "text-emerald-600",
+                border: "border-emerald-200",
+                shadow: "shadow-emerald-500/20"
             },
-            purple: {
-                bg: "bg-purple-100 dark:bg-purple-900/30",
-                text: "text-purple-700 dark:text-purple-400",
-                border: "bg-purple-500",
-                badge: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400"
+            purple: { 
+                gradient: "bg-gradient-to-br from-purple-400 to-fuchsia-500", 
+                lightBg: "bg-purple-50", 
+                text: "text-purple-600",
+                border: "border-purple-200",
+                shadow: "shadow-purple-500/20"
             },
-            rose: {
-                bg: "bg-rose-100 dark:bg-rose-900/30",
-                text: "text-rose-700 dark:text-rose-400",
-                border: "bg-rose-500",
-                badge: "bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400"
+            rose: { 
+                gradient: "bg-gradient-to-br from-rose-400 to-pink-500", 
+                lightBg: "bg-rose-50", 
+                text: "text-rose-600",
+                border: "border-rose-200",
+                shadow: "shadow-rose-500/20"
             },
-            red: {
-                bg: "bg-red-100 dark:bg-red-900/30",
-                text: "text-red-700 dark:text-red-400",
-                border: "bg-red-500",
-                badge: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+            red: { 
+                gradient: "bg-gradient-to-br from-red-500 to-rose-600", 
+                lightBg: "bg-red-50", 
+                text: "text-red-600",
+                border: "border-red-200",
+                shadow: "shadow-red-500/20"
             },
-            slate: {
-                bg: "bg-slate-100 dark:bg-slate-800",
-                text: "text-slate-700 dark:text-slate-400",
-                border: "bg-slate-500",
-                badge: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400"
+            slate: { 
+                gradient: "bg-gradient-to-br from-slate-500 to-slate-600", 
+                lightBg: "bg-slate-50", 
+                text: "text-slate-600",
+                border: "border-slate-200",
+                shadow: "shadow-slate-500/20"
             }
         };
 
-        // --- ICONS MAPPING ---
         const categoryIcons = {
-            'sports': 'fa-trophy',
-            'academic': 'fa-graduation-cap',
-            'cultural': 'fa-theater-masks',
-            'esports': 'fa-gamepad',
+            'sports': 'fa-basketball-ball', 
+            'academic': 'fa-graduation-cap', 
+            'cultural': 'fa-music',
+            'esports': 'fa-headset', 
             'other': 'fa-star'
         };
 
-        const subCategoryIcons = {
-            'Football': 'fa-futbol',
-            'Basketball': 'fa-basketball',
-            'Quiz': 'fa-brain',
-            'Debate': 'fa-microphone',
-            'Esports': 'fa-headset'
-        };
 
-        // --- STATE ---
+        // ---------------------------------------------------------
+        // 3. DATA MANAGEMENT
+        // ---------------------------------------------------------
+        let events = [];
         let currentFilter = 'all';
         let searchQuery = '';
+        let eventToDeleteId = null; // Stores ID for modal
 
-        // --- DOM ELEMENTS ---
-        const grid = document.getElementById('events-grid');
-        const emptyState = document.getElementById('empty-state');
-        const searchInput = document.getElementById('search-input');
-        const categoryPillsContainer = document.getElementById('category-pills');
-        const statsContainer = document.querySelector('.grid.grid-cols-2');
+        function loadEvents() {
+            try {
+                const stored = localStorage.getItem('astra_events');
+                if (stored) {
+                    const rawData = JSON.parse(stored);
+                    events = rawData.map(e => ({
+                        id: e.id,
+                        title: e.name || "Untitled Event",
+                        category: e.category || "other",
+                        subCategory: e.subcategory || "General",
+                        type: e.scale || "Local",
+                        status: e.status || "upcoming",
+                        color: (styles[e.color] ? e.color : 'slate'),
+                        date: e.date || new Date().toISOString(),
+                        viewLink: `board.html?id=${e.id}`,
+                        adminLink: `admin.html?id=${e.id}`
+                    }));
+                } else {
+                    events = []; 
+                }
+            } catch (err) {
+                console.error("Error loading events:", err);
+                events = [];
+            }
+        }
 
-        // --- RENDER FUNCTIONS ---
+        function saveEvents() {
+            // Convert back to format expected by other pages if needed, 
+            // but here we just need to filter the raw list from storage usually.
+            // For simplicity, we assume we are managing the 'astra_events' array structure.
+            // We need to find the original raw object to remove it properly to not break other properties.
+            const stored = localStorage.getItem('astra_events');
+            if(stored) {
+                let rawData = JSON.parse(stored);
+                rawData = rawData.filter(e => e.id !== eventToDeleteId);
+                localStorage.setItem('astra_events', JSON.stringify(rawData));
+            }
+            // Reload local state
+            loadEvents();
+        }
+
+
+        // ---------------------------------------------------------
+        // 4. RENDERING LOGIC
+        // ---------------------------------------------------------
 
         function renderStats() {
+            const container = document.getElementById('stats-container');
+            if(!container) return;
+
             const total = events.length;
             const live = events.filter(e => e.status === 'live').length;
             const upcoming = events.filter(e => e.status === 'upcoming').length;
             const completed = events.filter(e => e.status === 'completed').length;
 
-            const stats = [
-                { label: 'Total Events', value: total, icon: 'fa-layer-group', colorKey: 'blue' },
-                { label: 'Live Now', value: live, icon: 'fa-bolt', colorKey: 'red' },
-                { label: 'Upcoming', value: upcoming, icon: 'fa-calendar', colorKey: 'orange' },
-                { label: 'Completed', value: completed, icon: 'fa-check-circle', colorKey: 'emerald' },
+            const statItems = [
+                { label: 'Total Events', val: total, icon: 'fa-layer-group', color: 'blue' },
+                { label: 'Live Now', val: live, icon: 'fa-bolt', color: 'red' },
+                { label: 'Upcoming', val: upcoming, icon: 'fa-calendar-alt', color: 'orange' },
+                { label: 'Completed', val: completed, icon: 'fa-check-double', color: 'emerald' },
             ];
 
-            statsContainer.innerHTML = stats.map((stat, index) => {
-                const colorStyle = styles[stat.colorKey];
+            container.innerHTML = statItems.map((stat, i) => {
+                const s = styles[stat.color] || styles.slate;
                 return `
-                <div class="glass-card p-4 rounded-2xl flex items-center gap-4 animate-fade-in-up" style="animation-delay: ${index * 0.05}s">
-                    <div class="w-12 h-12 rounded-xl ${colorStyle.bg} ${colorStyle.text} flex items-center justify-center text-xl shadow-sm">
+                <div class="glass-card p-5 rounded-2xl flex items-center gap-5 animate-fade-in-up hover:scale-105 transition-transform duration-300 cursor-default border-l-4 ${s.border.replace('bg-', 'border-').replace('200','400')}" style="animation-delay: ${i * 0.1}s; border-left-color: var(--tw-border-opacity, 1);">
+                    <div class="w-14 h-14 rounded-2xl ${s.gradient} text-white flex items-center justify-center text-xl shadow-lg ${s.shadow}">
                         <i class="fas ${stat.icon}"></i>
                     </div>
                     <div>
-                        <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">${stat.label}</p>
-                        <p class="text-2xl font-black text-slate-800 dark:text-white">${stat.value}</p>
+                        <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">${stat.label}</p>
+                        <p class="text-3xl font-black text-slate-800 dark:text-white leading-none">${stat.val}</p>
                     </div>
-                </div>
-            `}).join('');
+                </div>`;
+            }).join('');
         }
 
         function renderFilters() {
-            const categories = ['all', 'sports', 'academic', 'cultural', 'esports'];
+            const container = document.getElementById('category-pills');
+            if(!container) return;
+            const cats = ['all', 'sports', 'academic', 'cultural', 'esports', 'other'];
             
-            categoryPillsContainer.innerHTML = categories.map(cat => `
+            container.innerHTML = cats.map(cat => {
+                const isActive = currentFilter === cat;
+                return `
                 <button onclick="setFilter('${cat}')" 
-                    class="px-5 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap 
-                    ${currentFilter === cat 
-                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30 scale-105' 
-                        : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 shadow-sm border border-slate-100 dark:border-slate-700'}">
-                    ${cat.charAt(0).toUpperCase() + cat.slice(1)}
+                    class="px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap relative overflow-hidden group
+                    ${isActive 
+                        ? 'bg-slate-800 dark:bg-white text-white dark:text-slate-900 shadow-lg scale-105' 
+                        : 'bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'}">
+                    <span class="relative z-10 flex items-center gap-2">
+                        ${isActive ? '<i class="fas fa-check text-xs"></i>' : ''}
+                        ${cat.charAt(0).toUpperCase() + cat.slice(1)}
+                    </span>
+                    ${isActive ? '' : '<div class="absolute inset-0 bg-slate-100 dark:bg-slate-700 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>'}
                 </button>
-            `).join('');
+            `}).join('');
         }
 
         function renderEvents() {
+            const grid = document.getElementById('events-grid');
+            const empty = document.getElementById('empty-state');
+            if(!grid || !empty) return;
+
             grid.innerHTML = '';
-            
-            const filtered = events.filter(event => {
-                const matchesSearch = event.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                                      event.subCategory.toLowerCase().includes(searchQuery.toLowerCase());
-                const matchesFilter = currentFilter === 'all' || event.category === currentFilter;
-                return matchesSearch && matchesFilter;
+
+            const filtered = events.filter(e => {
+                const searchMatch = (e.title || '').toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                    (e.subCategory || '').toLowerCase().includes(searchQuery.toLowerCase());
+                const filterMatch = currentFilter === 'all' || e.category === currentFilter;
+                return searchMatch && filterMatch;
             });
 
-            if (filtered.length === 0) {
+            // Handle Empty State
+            if(filtered.length === 0) {
                 grid.classList.add('hidden');
-                emptyState.classList.remove('hidden');
-                emptyState.classList.add('flex');
-            } else {
-                grid.classList.remove('hidden');
-                emptyState.classList.add('hidden');
-                emptyState.classList.remove('flex');
-
-                filtered.forEach((event, index) => {
-                    const icon = subCategoryIcons[event.subCategory] || categoryIcons[event.category] || 'fa-star';
-                    const colorStyle = styles[event.color]; // Get full class strings
-
-                    // Status Badge Logic
-                    let statusBadge = '';
-                    if(event.status === 'live') statusBadge = `<span class="flex items-center gap-1.5 bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-400 text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wide border border-red-200 dark:border-transparent"><span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>Live</span>`;
-                    else if(event.status === 'upcoming') statusBadge = `<span class="bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wide border border-blue-200 dark:border-transparent">Upcoming</span>`;
-                    else statusBadge = `<span class="bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400 text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wide border border-slate-200 dark:border-transparent">Ended</span>`;
-
-                    const card = document.createElement('div');
-                    card.className = `glass-card event-card p-6 rounded-2xl relative overflow-hidden animate-fade-in-up flex flex-col`;
-                    // Faster stagger delay (0.05s) for snappy feel
-                    card.style.animationDelay = `${index * 0.05}s`;
-                    
-                    card.innerHTML = `
-                        <div class="absolute left-0 top-0 bottom-0 w-1.5 ${colorStyle.border}"></div>
-                        
-                        <div class="flex justify-between items-start mb-4 pl-3">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-xl ${colorStyle.bg} ${colorStyle.text} flex items-center justify-center card-icon transition-transform duration-300 shadow-sm">
-                                    <i class="fas ${icon} text-sm"></i>
-                                </div>
-                                <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">${event.subCategory}</span>
-                            </div>
-                            ${statusBadge}
-                        </div>
-
-                        <div class="pl-3 mb-6 flex-grow">
-                            <h3 class="text-xl font-bold text-slate-800 dark:text-white leading-tight mb-1 group-hover:text-blue-600 transition-colors">${event.title}</h3>
-                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">${event.type}</p>
-                        </div>
-
-                        <div class="pl-3 grid grid-cols-2 gap-3 mt-auto">
-                            <a href="${event.adminLink}" class="relative z-10 flex items-center justify-center gap-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-slate-900/20 dark:shadow-white/10 hover:-translate-y-0.5 hover:shadow-xl transition-all">
-                                <i class="fas fa-cog"></i> Admin
-                            </a>
-                            <a href="${event.viewLink}" class="relative z-10 flex items-center justify-center gap-2 bg-slate-100 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 py-2.5 rounded-xl font-bold text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-transparent">
-                                <i class="fas fa-eye"></i> View
-                            </a>
-                        </div>
-                    `;
-                    grid.appendChild(card);
-                });
+                empty.classList.remove('hidden');
+                empty.classList.add('flex');
+                return;
             }
-        }
 
-        // --- EVENT HANDLERS ---
+            grid.classList.remove('hidden');
+            empty.classList.add('hidden');
+            empty.classList.remove('flex');
 
-        function setFilter(category) {
-            currentFilter = category;
-            renderFilters();
-            renderEvents();
-        }
+            // Render Cards
+            filtered.forEach((e, i) => {
+                const s = styles[e.color] || styles.slate;
+                const iconClass = categoryIcons[e.category] || 'fa-star';
 
-        function resetFilters() {
-            searchQuery = '';
-            currentFilter = 'all';
-            searchInput.value = '';
-            renderFilters();
-            renderEvents();
-        }
-
-        searchInput.addEventListener('input', (e) => {
-            searchQuery = e.target.value;
-            renderEvents();
-        });
-
-        // --- INIT & THEME ---
-        
-        (function() {
-            const themeBtn = document.getElementById('theme-toggle');
-            const html = document.documentElement;
-            const icon = themeBtn.querySelector('i');
-
-            function updateThemeUI() {
-                if (html.classList.contains('dark')) {
-                    // Moon icon for Dark Mode
-                    icon.className = 'fas fa-moon text-blue-300';
+                // Status Badge Logic
+                let badge = '';
+                if(e.status === 'live') {
+                    badge = `<div class="flex items-center gap-1.5 bg-red-500 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wide shadow-md shadow-red-500/30">
+                                <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>Live
+                             </div>`;
+                } else if(e.status === 'upcoming') {
+                    badge = `<div class="bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wide border border-blue-200 dark:border-blue-700/50">
+                                Upcoming
+                             </div>`;
                 } else {
-                    // Sun icon for Light Mode (styled to look like a sun, not a gear)
-                    icon.className = 'fas fa-sun text-yellow-500 text-lg';
+                    badge = `<div class="bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wide">
+                                Ended
+                             </div>`;
                 }
-            }
 
-            // Initialize Theme - DEFAULT TO LIGHT unless explicitly set to Dark
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                html.classList.add('dark');
-            } else {
-                html.classList.remove('dark');
-            }
-            updateThemeUI();
+                const div = document.createElement('div');
+                div.className = "glass-card event-card rounded-3xl p-0 flex flex-col animate-fade-in-up group overflow-hidden border border-slate-100 dark:border-slate-700";
+                div.style.animationDelay = `${i * 0.07}s`;
+                
+                // Enhanced Card HTML Structure
+                div.innerHTML = `
+                    <!-- Top Section with Gradient Accent -->
+                    <div class="relative p-6 pb-2">
+                        <!-- Decorative bg blob inside card for light mode interest -->
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/0 to-${e.color}-500/5 dark:to-${e.color}-500/10 rounded-bl-full -mr-4 -mt-4 transition-all group-hover:scale-110"></div>
+                        
+                        <div class="flex justify-between items-start mb-4 relative z-10">
+                            <!-- Icon with Gradient Background -->
+                            <div class="card-icon-container w-14 h-14 rounded-2xl ${s.gradient} flex items-center justify-center text-white shadow-lg ${s.shadow} transition-transform duration-500 ease-out">
+                                <i class="fas ${iconClass} text-xl"></i>
+                            </div>
+                            
+                            <!-- Options / Status -->
+                            <div class="flex flex-col items-end gap-2">
+                                ${badge}
+                                <button onclick="openDeleteModal('${e.id}', '${e.title.replace(/'/g, "\\'")}')" class="text-slate-300 hover:text-red-500 transition-colors p-1 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 duration-300" title="Delete Event">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Content -->
+                        <div class="relative z-10">
+                            <span class="inline-block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1 pl-0.5">
+                                ${e.subCategory}
+                            </span>
+                            <h3 class="text-2xl font-black text-slate-800 dark:text-white leading-tight mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
+                                ${e.title}
+                            </h3>
+                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400 flex items-center gap-2 mb-4">
+                                <i class="fas fa-users text-xs opacity-70"></i> ${e.type}
+                            </p>
+                        </div>
+                    </div>
 
-            // Toggle theme
-            themeBtn.addEventListener('click', () => {
-                html.classList.toggle('dark');
-                const isDark = html.classList.contains('dark');
-                localStorage.setItem('theme', isDark ? 'dark' : 'light');
-                updateThemeUI();
+                    <!-- Divider -->
+                    <div class="h-px w-full bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-700 to-transparent my-2"></div>
+
+                    <!-- Action Footer -->
+                    <div class="p-4 pt-2 mt-auto grid grid-cols-2 gap-3">
+                        <a href="${e.adminLink}" class="group/btn flex items-center justify-center gap-2 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 py-3 rounded-xl font-bold text-sm border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all">
+                            <i class="fas fa-cog text-slate-400 group-hover/btn:text-slate-600 dark:group-hover/btn:text-slate-200 transition-colors"></i> 
+                            <span>Admin</span>
+                        </a>
+                        <a href="${e.viewLink}" class="flex items-center justify-center gap-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 py-3 rounded-xl font-bold text-sm shadow-md shadow-slate-900/10 dark:shadow-white/5 hover:transform hover:-translate-y-0.5 transition-all">
+                            <span>View</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                `;
+                grid.appendChild(div);
             });
+        }
 
-            // Initial Render
+
+        // ---------------------------------------------------------
+        // 5. INTERACTION & EVENTS
+        // ---------------------------------------------------------
+
+        // Filter Handlers
+        window.setFilter = function(cat) {
+            currentFilter = cat;
+            renderFilters();
+            renderEvents();
+        }
+
+        window.resetFilters = function() {
+            currentFilter = 'all';
+            searchQuery = '';
+            const searchEl = document.getElementById('search-input');
+            if(searchEl) searchEl.value = '';
+            renderFilters();
+            renderEvents();
+        }
+
+        // Search Listener
+        const searchEl = document.getElementById('search-input');
+        if(searchEl) {
+            searchEl.addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                renderEvents();
+            });
+        }
+
+        // DELETE MODAL LOGIC
+        const modal = document.getElementById('delete-modal');
+        const modalBackdrop = document.getElementById('modal-backdrop');
+        const modalContent = document.getElementById('modal-content');
+        const modalEventName = document.getElementById('modal-event-name');
+
+        window.openDeleteModal = function(id, title) {
+            eventToDeleteId = id;
+            if(modalEventName) modalEventName.textContent = title;
+            
+            modal.classList.remove('hidden');
+            // Small delay to allow display:block to apply before opacity transition
+            setTimeout(() => {
+                modalBackdrop.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-90', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        window.closeDeleteModal = function() {
+            modalBackdrop.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-90', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                eventToDeleteId = null;
+            }, 300);
+        }
+
+        window.confirmDelete = function() {
+            if (eventToDeleteId) {
+                saveEvents(); // This actually deletes it based on the global ID
+                closeDeleteModal();
+                
+                // Show a mini toast notification (optional enhancement for UX)
+                renderEvents();
+                renderStats();
+            }
+        }
+
+
+        // ---------------------------------------------------------
+        // 6. INITIALIZATION & RECOVERY
+        // ---------------------------------------------------------
+        document.addEventListener('DOMContentLoaded', () => {
+            loadEvents();
             renderStats();
             renderFilters();
             renderEvents();
-        })();
+
+            // Intersection Observer for scroll animations (if list is long)
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+        });
 
     </script>
 </body>
