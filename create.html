@@ -71,9 +71,14 @@
             z-index: -1;
             opacity: 0.6;
         }
+        
+        /* Custom Theme Previews */
+        .theme-card.neon { background: #0f172a; border: 2px solid #00ff9d; color: #00ff9d; }
+        .theme-card.ocean { background: linear-gradient(135deg, #00c6ff, #0072ff); color: white; border: 2px solid #fff; }
+        .theme-card.forest { background: linear-gradient(135deg, #134e5e, #71b280); color: #e2e8f0; border: 2px solid #71b280; }
+        .theme-card.sunset { background: linear-gradient(135deg, #ff512f, #dd2476); color: white; border: 2px solid #ffcccc; }
     </style>
 </head>
-<!-- UPDATED: Dynamic Background Animation & Dark Mode Fix -->
 <body class="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 transition-colors duration-500 min-h-screen flex flex-col bg-[length:400%_400%] animate-gradient-xy" id="create-page">
 
     <!-- Decorative background elements -->
@@ -82,9 +87,9 @@
 
     <!-- HEADER/LOGO -->
     <header class="w-full px-6 py-4 flex justify-between items-center z-10 backdrop-blur-sm bg-white/30 dark:bg-slate-900/30 sticky top-0">
-        <div class="flex items-center cursor-pointer hover:opacity-80 transition">
-            <!-- Logo matching the uploaded image -->
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- LINKED LOGO TO INDEX.HTML -->
+        <a href="index.html" class="flex items-center cursor-pointer hover:opacity-80 transition group">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="group-hover:rotate-12 transition-transform duration-300">
                 <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z" fill="url(#astrascore_gradient)"/>
                 <path d="M12 4C7.582 4 4 7.582 4 12s3.582 8 8 8 8-3.582 8-8-3.582-8-8-8zm0 12l-4-4 4-4 4 4-4 4z" fill="#fff"/>
                 <defs>
@@ -95,8 +100,8 @@
                 </defs>
             </svg>
             <span class="ml-2 text-xl font-black text-astra-blue dark:text-white tracking-tight">AstraScore</span>
-        </div>
-        <!-- UPDATED: Toggle on documentElement for proper dark mode -->
+        </a>
+        <!-- Toggle on documentElement for proper dark mode -->
         <button onclick="document.documentElement.classList.toggle('dark')" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition">
             <i class="fas fa-moon text-slate-500 dark:text-slate-300 hover:text-astra-blue transition text-lg"></i>
         </button>
@@ -141,7 +146,6 @@
                 <div id="step-1" class="wizard-step animate-scale-in">
                     <h2 class="text-4xl font-black text-blue-900 dark:text-white mb-8 text-center">What's the <span class="text-gradient">game</span>?</h2>
                     <div class="grid grid-cols-2 gap-6">
-                        <!-- Card Enhancements: better hover, ring color update -->
                         <div class="cat-card cursor-pointer p-6 rounded-2xl bg-orange-50 dark:bg-slate-700 text-center hover:scale-[1.02] transition border-2 border-transparent hover:border-orange-400 hover:shadow-xl hover:shadow-orange-500/20 active:ring-4 active:ring-orange-200" onclick="selectCategory('sports', this)">
                             <i class="fas fa-trophy text-5xl text-orange-500 mb-4"></i>
                             <h3 class="font-black text-xl text-blue-900 dark:text-white">Sports</h3>
@@ -159,87 +163,11 @@
                             <h3 class="font-black text-xl text-blue-900 dark:text-white">Esports</h3>
                         </div>
                     </div>
-                    <div class="mt-10 text-right">
-                        <!-- Updated CTA button with matching gradient -->
+                    <div class="mt-10 flex justify-between items-center">
+                        <a href="dashboard.html" class="text-slate-400 font-bold hover:text-astra-blue transition flex items-center gap-2 group">
+                            <i class="fas fa-arrow-left group-hover:-translate-x-1 transition-transform"></i> Back to Dashboard
+                        </a>
                         <button onclick="nextStep(2)" class="next-btn bg-gradient-to-r from-astra-blue to-astra-purple text-white px-10 py-4 rounded-xl font-black text-lg transition shadow-lg shadow-astra-blue/30 hover:shadow-xl hover:shadow-astra-purple/40 transform hover:-translate-y-0.5 active:scale-[0.98]">Next <i class="fas fa-arrow-right ml-2"></i></button>
-                    </div>
-                </div>
-
-                <!-- Step 5: Board Selection (Moved in code, remains logical step 5) -->
-                <div id="step-layout-board-select" class="wizard-step hidden animate-scale-in">
-                    <div class="flex justify-center mb-4">
-                        <span id="category-badge-final" class="bg-blue-100 text-astra-blue px-4 py-1 rounded-full text-xs font-black uppercase tracking-wide shadow-md">Category: Selected</span>
-                    </div>
-                    <h2 class="text-3xl font-black text-blue-900 dark:text-white mb-2 text-center">Choose your board <span class="text-gradient">type(s)</span></h2>
-                    <p class="text-center text-slate-500 dark:text-slate-400 text-sm font-bold mb-8">Select all that apply. (Final Setup Step)</p>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-                        <!-- Board Card Style Enhancement: Stronger border on select -->
-                        <div class="board-type-card cursor-pointer p-4 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 hover:shadow-lg hover:border-astra-blue transition relative group active:scale-[0.98]" onclick="toggleBoardType('leaderboard', this)">
-                            <div class="absolute top-3 right-3 opacity-0 check-icon text-green-500 transition-all duration-300"><i class="fas fa-check-circle text-xl"></i></div>
-                            <div class="h-16 bg-slate-100 dark:bg-slate-600 rounded-lg mb-3 flex flex-col justify-center gap-1 p-2 opacity-70 group-hover:opacity-100 transition-opacity">
-                                <div class="h-2 w-3/4 bg-slate-300 dark:bg-slate-500 rounded"></div>
-                                <div class="h-2 w-full bg-slate-300 dark:bg-slate-500 rounded"></div>
-                                <div class="h-2 w-5/6 bg-slate-300 dark:bg-slate-500 rounded"></div>
-                            </div>
-                            <h3 class="font-black text-blue-900 dark:text-white">Leaderboard</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Participants ranked in rows by score.</p>
-                            <div class="rec-tag hidden mt-2 inline-block bg-green-100 text-green-600 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Recommended</div>
-                        </div>
-
-                        <div class="board-type-card cursor-pointer p-4 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 hover:shadow-lg hover:border-astra-blue transition relative group active:scale-[0.98]" onclick="toggleBoardType('scoresheet', this)">
-                            <div class="absolute top-3 right-3 opacity-0 check-icon text-green-500 transition-all duration-300"><i class="fas fa-check-circle text-xl"></i></div>
-                            <div class="h-16 bg-slate-100 dark:bg-slate-600 rounded-lg mb-3 grid grid-cols-3 gap-1 p-2 opacity-70 group-hover:opacity-100 transition-opacity">
-                                <div class="bg-slate-300 dark:bg-slate-500 rounded"></div><div class="bg-slate-300 dark:bg-slate-500 rounded"></div><div class="bg-slate-300 dark:bg-slate-500 rounded"></div>
-                                <div class="bg-slate-300 dark:bg-slate-500 rounded"></div><div class="bg-slate-300 dark:bg-slate-500 rounded"></div><div class="bg-slate-300 dark:bg-slate-500 rounded"></div>
-                            </div>
-                            <h3 class="font-black text-blue-900 dark:text-white">Scoresheet</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Multi-column grid for rounds & judges.</p>
-                            <div class="rec-tag hidden mt-2 inline-block bg-green-100 text-green-600 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Recommended</div>
-                        </div>
-
-                        <div class="board-type-card cursor-pointer p-4 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 hover:shadow-lg hover:border-astra-blue transition relative group active:scale-[0.98]" onclick="toggleBoardType('scoreboard', this)">
-                            <div class="absolute top-3 right-3 opacity-0 check-icon text-green-500 transition-all duration-300"><i class="fas fa-check-circle text-xl"></i></div>
-                            <div class="h-16 bg-slate-100 dark:bg-slate-600 rounded-lg mb-3 flex justify-center items-center gap-2 p-2 opacity-70 group-hover:opacity-100 transition-opacity">
-                                <div class="w-8 h-8 bg-slate-300 dark:bg-slate-500 rounded-full"></div>
-                                <div class="w-8 h-8 bg-slate-300 dark:bg-slate-500 rounded-full"></div>
-                                <div class="w-8 h-8 bg-slate-300 dark:bg-slate-500 rounded-full"></div>
-                            </div>
-                            <h3 class="font-black text-blue-900 dark:text-white">Scoreboard</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Large display blocks for participants.</p>
-                            <div class="rec-tag hidden mt-2 inline-block bg-green-100 text-green-600 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Recommended</div>
-                        </div>
-
-                        <div class="board-type-card cursor-pointer p-4 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 hover:shadow-lg hover:border-astra-blue transition relative group active:scale-[0.98]" onclick="toggleBoardType('sports-scoreboard', this)">
-                            <div class="absolute top-3 right-3 opacity-0 check-icon text-green-500 transition-all duration-300"><i class="fas fa-check-circle text-xl"></i></div>
-                            <div class="h-16 bg-slate-100 dark:bg-slate-600 rounded-lg mb-3 flex items-center justify-between px-4 opacity-70 group-hover:opacity-100 transition-opacity">
-                                <div class="text-xs font-bold text-slate-400 bg-slate-300 dark:bg-slate-500 px-3 py-1 rounded">0</div>
-                                <div class="text-[10px] font-bold bg-astra-purple text-white px-2 py-0.5 rounded-full">10:00</div>
-                                <div class="text-xs font-bold text-slate-400 bg-slate-300 dark:bg-slate-500 px-3 py-1 rounded">0</div>
-                            </div>
-                            <h3 class="font-black text-blue-900 dark:text-white">Sports Board</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Head-to-head scorebug with timer.</p>
-                            <div class="rec-tag hidden mt-2 inline-block bg-green-100 text-green-600 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Recommended</div>
-                        </div>
-
-                        <div class="board-type-card cursor-pointer p-4 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 hover:shadow-lg hover:border-astra-blue transition relative group active:scale-[0.98]" onclick="toggleBoardType('counter', this)">
-                            <div class="absolute top-3 right-3 opacity-0 check-icon text-green-500 transition-all duration-300"><i class="fas fa-check-circle text-xl"></i></div>
-                            <div class="h-16 bg-slate-100 dark:bg-slate-600 rounded-lg mb-3 flex justify-center items-center opacity-70 group-hover:opacity-100 transition-opacity">
-                                <div class="w-10 h-10 rounded-full bg-astra-blue dark:bg-slate-500 flex items-center justify-center text-white font-bold text-2xl shadow-lg">+</div>
-                            </div>
-                            <h3 class="font-black text-blue-900 dark:text-white">Counter</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Simple click counter/tally.</p>
-                            <div class="rec-tag hidden mt-2 inline-block bg-green-100 text-green-600 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Recommended</div>
-                        </div>
-                    </div>
-
-                    <div id="board-error-final" class="hidden text-center text-red-500 text-sm font-bold mb-4 animate-pulse">
-                        <i class="fas fa-exclamation-circle mr-1"></i> Please choose at least one board type.
-                    </div>
-
-                    <div class="flex justify-between items-center pt-6 border-t border-slate-100 dark:border-slate-700">
-                        <button onclick="prevStep(4)" class="text-slate-400 font-bold hover:text-astra-purple px-4 transition active:scale-[0.98]">Back</button>
-                        <button onclick="validateBoardStepFinal()" class="bg-gradient-to-r from-astra-blue to-astra-purple text-white px-8 py-3 rounded-xl font-black hover:shadow-lg hover:shadow-astra-purple/30 transition transform hover:-translate-y-0.5 active:scale-[0.98]">Next: Review</button>
                     </div>
                 </div>
 
@@ -248,26 +176,9 @@
                     <h2 class="text-3xl font-black text-blue-900 dark:text-white mb-6 text-center">Who's <span class="text-gradient">playing</span>?</h2>
 
                     <div class="flex justify-center mb-8">
-                        <!-- Participant Type Switch Style Enhancement -->
                         <div class="bg-slate-100 dark:bg-slate-700/50 p-1 rounded-full inline-flex border border-slate-200 dark:border-slate-700 shadow-inner">
                             <button onclick="setParticipantType('teams')" id="pt-teams" class="px-6 py-2 rounded-full font-bold text-sm transition-all bg-white text-astra-blue shadow-md dark:bg-slate-800 dark:text-white">Teams</button>
                             <button onclick="setParticipantType('individuals')" id="pt-individuals" class="px-6 py-2 rounded-full font-bold text-sm transition-all text-slate-500 hover:text-astra-blue dark:hover:text-white">Individuals</button>
-                            <button onclick="setParticipantType('houses')" id="pt-houses" class="px-6 py-2 rounded-full font-bold text-sm transition-all text-slate-500 hover:text-astra-blue dark:hover:text-white">Houses</button>
-                        </div>
-                    </div>
-
-                    <!-- Entity Management Section -->
-                    <div id="individual-entities-section" class="mb-8 hidden">
-                        <div class="bg-blue-50/50 dark:bg-slate-700/50 p-6 rounded-2xl border border-blue-100 dark:border-slate-700 shadow-inner">
-                            <h3 class="font-black text-xl text-astra-blue dark:text-white mb-4 flex items-center">
-                                <i class="fas fa-school text-astra-blue mr-2"></i> Manage Schools / Houses / Teams <span class="text-xs text-slate-400 font-medium ml-2">(Optional)</span>
-                            </h3>
-                            <div id="single-entities-list" class="space-y-3 max-h-48 overflow-y-auto mb-4 p-2 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800">
-                                </div>
-                            <!-- Button style matching new gradient action style -->
-                            <button onclick="openSingleEntityModal()" class="w-full py-2 bg-gradient-to-r from-blue-100 to-blue-200 text-astra-blue rounded-xl text-sm font-bold hover:from-blue-200 transition active:scale-[0.99] shadow-md">
-                                <i class="fas fa-plus-circle mr-1"></i> Add Entity
-                            </button>
                         </div>
                     </div>
 
@@ -282,10 +193,30 @@
                     </div>
 
                     <div id="participants-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[300px] overflow-y-auto pr-2 mb-6 scrollbar-thin">
-                        </div>
+                    </div>
 
                     <div class="text-center mb-8">
                         <button onclick="addParticipant()" class="text-sm font-bold text-astra-purple hover:text-astra-blue transition active:scale-[0.98]"><i class="fas fa-plus-circle mr-1"></i> Add Participant</button>
+                    </div>
+
+                    <!-- Entity Management Section (Moved Below Participants) -->
+                    <div id="individual-entities-section" class="mb-8 hidden animate-fade-in border-t border-slate-100 dark:border-slate-700 pt-6">
+                        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                            <div class="flex justify-between items-center mb-4">
+                                <div>
+                                    <h3 class="font-bold text-lg text-slate-700 dark:text-white flex items-center">
+                                        <i class="fas fa-university text-astra-blue mr-2"></i> Affiliations / Schools
+                                    </h3>
+                                    <p class="text-xs text-slate-500 font-medium">Link individuals to schools or teams (Optional)</p>
+                                </div>
+                                <button onclick="openSingleEntityModal()" class="text-xs bg-blue-50 text-astra-blue px-3 py-2 rounded-lg font-bold hover:bg-blue-100 transition border border-blue-100 dark:bg-slate-700 dark:text-blue-300 dark:border-slate-600 dark:hover:bg-slate-600">
+                                    <i class="fas fa-plus mr-1"></i> Add New
+                                </button>
+                            </div>
+                            <div id="single-entities-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-40 overflow-y-auto pr-1">
+                                <!-- Entities will be injected here as compact cards -->
+                            </div>
+                        </div>
                     </div>
 
                     <div class="flex justify-between items-center pt-6 border-t border-slate-100 dark:border-slate-700">
@@ -320,11 +251,10 @@
                                 <option value="cricket">Cricket</option>
                                 <option value="basketball">Basketball</option>
                                 <option value="volleyball">Volleyball</option>
-                                <option value="custom">Custom Sport</option>
+                                <option value="custom">Other / Manual Scoreboard</option>
                             </select>
                         </div>
-                        <div id="sport-specific-options" class="bg-orange-50/50 dark:bg-slate-700/50 p-4 rounded-xl border border-orange-100 dark:border-slate-700">
-                            </div>
+                        <div id="sport-specific-options" class="bg-orange-50/50 dark:bg-slate-700/50 p-4 rounded-xl border border-orange-100 dark:border-slate-700"></div>
                     </div>
 
                     <div id="panel-academic" class="cat-panel hidden space-y-6">
@@ -333,51 +263,62 @@
                             <label class="cursor-pointer"><input type="radio" name="acad-type" value="debate" onchange="updateAcadFields()" class="accent-astra-blue"> <span class="font-bold text-slate-600 dark:text-slate-300">Debate</span></label>
                             <label class="cursor-pointer"><input type="radio" name="acad-type" value="other" onchange="updateAcadFields()" class="accent-astra-blue"> <span class="font-bold text-slate-600 dark:text-slate-300">Other</span></label>
                         </div>
-                        <div id="acad-specific-options" class="bg-blue-50/50 dark:bg-slate-700/50 p-4 rounded-xl border border-blue-100 dark:border-slate-700">
-                             </div>
+                        <div id="acad-specific-options" class="bg-blue-50/50 dark:bg-slate-700/50 p-4 rounded-xl border border-blue-100 dark:border-slate-700"></div>
                     </div>
 
                     <div id="panel-cultural" class="cat-panel hidden space-y-6">
                         <div>
                             <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Event Sub-Type</label>
-                            <select class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border-2 border-transparent font-bold text-slate-700 dark:text-white focus:ring-2 focus:ring-pink-500 transition">
-                                <option>Dance</option>
-                                <option>Music / Singing</option>
-                                <option>Drama</option>
-                                <option>Fashion Show</option>
+                            <select id="cult-subtype" onchange="updateCulturalFields()" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border-2 border-transparent font-bold text-slate-700 dark:text-white focus:ring-2 focus:ring-pink-500 transition">
+                                <option value="dance">Dance</option>
+                                <option value="music">Music / Singing</option>
+                                <option value="drama">Drama</option>
+                                <option value="fashion">Fashion Show</option>
+                                <option value="other">Other / Manual Scoreboard</option>
                             </select>
                         </div>
-                        <div class="flex gap-6">
-                             <label class="flex items-center gap-2"><input type="radio" name="cult-perf" value="solo" class="accent-pink-500" checked> <span class="font-bold text-sm dark:text-white">Solo</span></label>
-                             <label class="flex items-center gap-2"><input type="radio" name="cult-perf" value="group" class="accent-pink-500"> <span class="font-bold text-sm dark:text-white">Group</span></label>
+                        <div id="cult-specific-options">
+                            <div class="flex gap-6 mb-4">
+                                <label class="flex items-center gap-2"><input type="radio" name="cult-perf" value="solo" class="accent-pink-500" checked> <span class="font-bold text-sm dark:text-white">Solo</span></label>
+                                <label class="flex items-center gap-2"><input type="radio" name="cult-perf" value="group" class="accent-pink-500"> <span class="font-bold text-sm dark:text-white">Group</span></label>
+                            </div>
+                            <div class="bg-pink-50/50 dark:bg-slate-700/50 p-4 rounded-xl border border-pink-100 dark:border-slate-700">
+                                <h4 class="font-bold text-pink-600 mb-2 text-sm">Judging Criteria</h4>
+                                <table class="w-full text-sm" id="criteria-table">
+                                    <thead><tr class="text-left text-slate-400 text-xs uppercase"><th>Criteria Name</th><th class="w-20">Max</th><th></th></tr></thead>
+                                    <tbody id="criteria-body"></tbody>
+                                </table>
+                                <button onclick="addCriteriaRow()" class="mt-2 text-xs font-bold text-pink-500 hover:text-pink-700 transition active:scale-[0.98]">+ Add Criteria</button>
+                            </div>
                         </div>
-                        <div class="bg-pink-50/50 dark:bg-slate-700/50 p-4 rounded-xl border border-pink-100 dark:border-slate-700">
-                            <h4 class="font-bold text-pink-600 mb-2 text-sm">Judging Criteria</h4>
-                            <table class="w-full text-sm" id="criteria-table">
-                                <thead><tr class="text-left text-slate-400 text-xs uppercase"><th>Criteria Name</th><th class="w-20">Max</th><th></th></tr></thead>
-                                <tbody id="criteria-body"></tbody>
-                            </table>
-                            <button onclick="addCriteriaRow()" class="mt-2 text-xs font-bold text-pink-500 hover:text-pink-700 transition active:scale-[0.98]">+ Add Criteria</button>
+                        <div id="cult-manual-options" class="hidden">
+                             <input type="text" placeholder="Description of scoring rules..." class="w-full p-2 rounded bg-white dark:bg-slate-800 text-sm border border-slate-200 dark:border-slate-600">
                         </div>
                     </div>
 
                     <div id="panel-esports" class="cat-panel hidden space-y-6">
                         <div>
                             <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Game Title</label>
-                            <select class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border-2 border-transparent font-bold text-slate-700 dark:text-white focus:ring-2 focus:ring-astra-purple transition">
-                                <option>Valorant / CS2 (FPS)</option>
-                                <option>BGMI / Warzone (Battle Royale)</option>
-                                <option>FIFA / Rocket League</option>
-                                <option>MOBA (Dota/LoL)</option>
+                            <select id="esports-game" onchange="updateEsportsFields()" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border-2 border-transparent font-bold text-slate-700 dark:text-white focus:ring-2 focus:ring-astra-purple transition">
+                                <option value="fps">Valorant / CS2 (FPS)</option>
+                                <option value="br">BGMI / Warzone (Battle Royale)</option>
+                                <option value="sports">FIFA / Rocket League</option>
+                                <option value="moba">MOBA (Dota/LoL)</option>
+                                <option value="other">Other / Manual Scoreboard</option>
                             </select>
                         </div>
-                         <div class="bg-purple-50/50 dark:bg-slate-700/50 p-4 rounded-xl border border-purple-100 dark:border-slate-700">
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Series Type</label>
-                            <div class="flex gap-4 mb-4">
-                                <label class="cursor-pointer font-bold text-sm text-slate-600 dark:text-slate-300"><input type="radio" name="series" value="bo1" class="accent-astra-purple"> BO1</label>
-                                <label class="cursor-pointer font-bold text-sm text-slate-600 dark:text-slate-300"><input type="radio" name="series" value="bo3" class="accent-astra-purple" checked> BO3</label>
-                                <label class="cursor-pointer font-bold text-sm text-slate-600 dark:text-slate-300"><input type="radio" name="series" value="bo5" class="accent-astra-purple"> BO5</label>
+                        <div id="esports-specific-options">
+                             <div class="bg-purple-50/50 dark:bg-slate-700/50 p-4 rounded-xl border border-purple-100 dark:border-slate-700">
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Series Type</label>
+                                <div class="flex gap-4 mb-4">
+                                    <label class="cursor-pointer font-bold text-sm text-slate-600 dark:text-slate-300"><input type="radio" name="series" value="bo1" class="accent-astra-purple"> BO1</label>
+                                    <label class="cursor-pointer font-bold text-sm text-slate-600 dark:text-slate-300"><input type="radio" name="series" value="bo3" class="accent-astra-purple" checked> BO3</label>
+                                    <label class="cursor-pointer font-bold text-sm text-slate-600 dark:text-slate-300"><input type="radio" name="series" value="bo5" class="accent-astra-purple"> BO5</label>
+                                </div>
                             </div>
+                        </div>
+                        <div id="esports-manual-options" class="hidden">
+                             <input type="text" placeholder="Description of game rules..." class="w-full p-2 rounded bg-white dark:bg-slate-800 text-sm border border-slate-200 dark:border-slate-600">
                         </div>
                     </div>
 
@@ -397,13 +338,20 @@
                                 <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Scoreboard Name</label>
                                 <input type="text" id="layout-name" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border-2 border-transparent font-bold text-lg text-blue-900 dark:text-white focus:ring-2 focus:ring-astra-blue transition" placeholder="e.g. Summer Cup Finals">
                             </div>
+                            
+                            <!-- Enhanced Theme Selection -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Visual Theme</label>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <div class="p-3 rounded-xl border-2 border-astra-blue bg-white dark:bg-slate-800 cursor-pointer text-center font-bold text-sm dark:text-white shadow-md">Light Mode</div>
-                                    <div class="p-3 rounded-xl border-2 border-slate-200 dark:border-slate-600 bg-slate-900 text-white cursor-pointer text-center font-bold text-sm opacity-60 hover:opacity-80 transition">Dark Mode</div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Visual Theme</label>
+                                <div class="grid grid-cols-2 gap-3" id="theme-grid">
+                                    <div onclick="selectTheme('light', this)" class="p-3 rounded-xl border-2 border-astra-blue bg-white dark:bg-slate-800 cursor-pointer text-center font-bold text-sm dark:text-white shadow-md theme-option">Light</div>
+                                    <div onclick="selectTheme('dark', this)" class="p-3 rounded-xl border-2 border-slate-200 dark:border-slate-600 bg-slate-900 text-white cursor-pointer text-center font-bold text-sm opacity-60 hover:opacity-100 transition theme-option">Dark</div>
+                                    <div onclick="selectTheme('neon', this)" class="p-3 rounded-xl theme-card neon cursor-pointer text-center font-bold text-sm opacity-60 hover:opacity-100 transition theme-option">Neon</div>
+                                    <div onclick="selectTheme('ocean', this)" class="p-3 rounded-xl theme-card ocean cursor-pointer text-center font-bold text-sm opacity-60 hover:opacity-100 transition theme-option">Ocean</div>
+                                    <div onclick="selectTheme('forest', this)" class="p-3 rounded-xl theme-card forest cursor-pointer text-center font-bold text-sm opacity-60 hover:opacity-100 transition theme-option">Forest</div>
+                                    <div onclick="selectTheme('sunset', this)" class="p-3 rounded-xl theme-card sunset cursor-pointer text-center font-bold text-sm opacity-60 hover:opacity-100 transition theme-option">Sunset</div>
                                 </div>
                             </div>
+                            
                              <div>
                                 <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Display Options</label>
                                 <div class="space-y-2">
@@ -436,7 +384,68 @@
                     </div>
                 </div>
 
-                <!-- Step 6: Review (Logical Step 6) -->
+                <!-- Step 5: Board Selection -->
+                <div id="step-layout-board-select" class="wizard-step hidden animate-scale-in">
+                    <div class="flex justify-center mb-4">
+                        <span id="category-badge-final" class="bg-blue-100 text-astra-blue px-4 py-1 rounded-full text-xs font-black uppercase tracking-wide shadow-md">Category: Selected</span>
+                    </div>
+                    <h2 class="text-3xl font-black text-blue-900 dark:text-white mb-2 text-center">Choose your board <span class="text-gradient">type(s)</span></h2>
+                    <p class="text-center text-slate-500 dark:text-slate-400 text-sm font-bold mb-8">Select all that apply.</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                        <div class="board-type-card cursor-pointer p-4 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 hover:shadow-lg hover:border-astra-blue transition relative group active:scale-[0.98]" onclick="toggleBoardType('leaderboard', this)">
+                            <div class="absolute top-3 right-3 opacity-0 check-icon text-green-500 transition-all duration-300"><i class="fas fa-check-circle text-xl"></i></div>
+                            <div class="h-16 bg-slate-100 dark:bg-slate-600 rounded-lg mb-3 flex flex-col justify-center gap-1 p-2 opacity-70 group-hover:opacity-100 transition-opacity">
+                                <div class="h-2 w-3/4 bg-slate-300 dark:bg-slate-500 rounded"></div>
+                                <div class="h-2 w-full bg-slate-300 dark:bg-slate-500 rounded"></div>
+                                <div class="h-2 w-5/6 bg-slate-300 dark:bg-slate-500 rounded"></div>
+                            </div>
+                            <h3 class="font-black text-blue-900 dark:text-white">Leaderboard</h3>
+                            <div class="rec-tag hidden mt-2 inline-block bg-green-100 text-green-600 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Recommended</div>
+                        </div>
+
+                        <div class="board-type-card cursor-pointer p-4 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 hover:shadow-lg hover:border-astra-blue transition relative group active:scale-[0.98]" onclick="toggleBoardType('scoresheet', this)">
+                            <div class="absolute top-3 right-3 opacity-0 check-icon text-green-500 transition-all duration-300"><i class="fas fa-check-circle text-xl"></i></div>
+                            <div class="h-16 bg-slate-100 dark:bg-slate-600 rounded-lg mb-3 grid grid-cols-3 gap-1 p-2 opacity-70 group-hover:opacity-100 transition-opacity">
+                                <div class="bg-slate-300 dark:bg-slate-500 rounded"></div><div class="bg-slate-300 dark:bg-slate-500 rounded"></div><div class="bg-slate-300 dark:bg-slate-500 rounded"></div>
+                            </div>
+                            <h3 class="font-black text-blue-900 dark:text-white">Scoresheet</h3>
+                            <div class="rec-tag hidden mt-2 inline-block bg-green-100 text-green-600 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Recommended</div>
+                        </div>
+
+                        <div class="board-type-card cursor-pointer p-4 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 hover:shadow-lg hover:border-astra-blue transition relative group active:scale-[0.98]" onclick="toggleBoardType('scoreboard', this)">
+                            <div class="absolute top-3 right-3 opacity-0 check-icon text-green-500 transition-all duration-300"><i class="fas fa-check-circle text-xl"></i></div>
+                            <div class="h-16 bg-slate-100 dark:bg-slate-600 rounded-lg mb-3 flex justify-center items-center gap-2 p-2 opacity-70 group-hover:opacity-100 transition-opacity">
+                                <div class="w-8 h-8 bg-slate-300 dark:bg-slate-500 rounded-full"></div>
+                                <div class="w-8 h-8 bg-slate-300 dark:bg-slate-500 rounded-full"></div>
+                            </div>
+                            <h3 class="font-black text-blue-900 dark:text-white">Scoreboard</h3>
+                            <div class="rec-tag hidden mt-2 inline-block bg-green-100 text-green-600 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Recommended</div>
+                        </div>
+
+                        <div class="board-type-card cursor-pointer p-4 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 hover:shadow-lg hover:border-astra-blue transition relative group active:scale-[0.98]" onclick="toggleBoardType('sports-scoreboard', this)">
+                            <div class="absolute top-3 right-3 opacity-0 check-icon text-green-500 transition-all duration-300"><i class="fas fa-check-circle text-xl"></i></div>
+                            <div class="h-16 bg-slate-100 dark:bg-slate-600 rounded-lg mb-3 flex items-center justify-between px-4 opacity-70 group-hover:opacity-100 transition-opacity">
+                                <div class="text-xs font-bold text-slate-400 bg-slate-300 dark:bg-slate-500 px-3 py-1 rounded">0</div>
+                                <div class="text-[10px] font-bold bg-astra-purple text-white px-2 py-0.5 rounded-full">10:00</div>
+                                <div class="text-xs font-bold text-slate-400 bg-slate-300 dark:bg-slate-500 px-3 py-1 rounded">0</div>
+                            </div>
+                            <h3 class="font-black text-blue-900 dark:text-white">Sports Board</h3>
+                            <div class="rec-tag hidden mt-2 inline-block bg-green-100 text-green-600 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Recommended</div>
+                        </div>
+                    </div>
+
+                    <div id="board-error-final" class="hidden text-center text-red-500 text-sm font-bold mb-4 animate-pulse">
+                        <i class="fas fa-exclamation-circle mr-1"></i> Please choose at least one board type.
+                    </div>
+
+                    <div class="flex justify-between items-center pt-6 border-t border-slate-100 dark:border-slate-700">
+                        <button onclick="prevStep(4)" class="text-slate-400 font-bold hover:text-astra-purple px-4 transition active:scale-[0.98]">Back</button>
+                        <button onclick="validateBoardStepFinal()" class="bg-gradient-to-r from-astra-blue to-astra-purple text-white px-8 py-3 rounded-xl font-black hover:shadow-lg hover:shadow-astra-purple/30 transition transform hover:-translate-y-0.5 active:scale-[0.98]">Next: Review</button>
+                    </div>
+                </div>
+
+                <!-- Step 6: Review -->
                 <div id="step-5" class="wizard-step hidden animate-scale-in">
                      <h2 class="text-3xl font-black text-blue-900 dark:text-white mb-6 text-center">Ready to <span class="text-gradient">Launch</span>?</h2>
 
@@ -455,19 +464,16 @@
                             <div>
                                 <div class="text-xs font-bold text-slate-400 uppercase mb-1">Participants</div>
                                 <div class="font-bold text-lg text-slate-700 dark:text-slate-200" id="sum-count">8 Teams</div>
-                                <ul class="text-xs text-slate-500 mt-1 list-disc pl-4" id="sum-part-preview">
-                                    </ul>
+                                <ul class="text-xs text-slate-500 mt-1 list-disc pl-4" id="sum-part-preview"></ul>
                             </div>
                              <div>
                                 <div class="text-xs font-bold text-slate-400 uppercase mb-1">Scoring</div>
-                                <ul class="text-sm font-medium text-slate-600 dark:text-slate-300 space-y-1" id="sum-rules">
-                                    </ul>
+                                <ul class="text-sm font-medium text-slate-600 dark:text-slate-300 space-y-1" id="sum-rules"></ul>
                             </div>
                         </div>
 
                         <div class="border-t border-slate-100 dark:border-slate-700 pt-4">
-                            <div class="flex gap-2 flex-wrap" id="sum-tags">
-                                </div>
+                            <div class="flex gap-2 flex-wrap" id="sum-tags"></div>
                         </div>
                      </div>
 
@@ -478,14 +484,12 @@
                         </button>
                     </div>
                 </div>
-
             </div>
 
             <!-- Festival Mode Flow -->
             <div id="festival-mode-flow" class="hidden">
-                <!-- Fest Step 1: Details (REDESIGNED) -->
+                <!-- Fest Step 1: Details -->
                 <div id="fest-step-1" class="wizard-step animate-scale-in">
-                    <!-- Clean Header Section -->
                     <div class="text-center mb-8">
                         <div class="w-16 h-16 bg-gradient-to-br from-astra-purple to-astra-pink rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg shadow-purple-500/30">
                             <i class="fas fa-calendar-star text-3xl text-white"></i>
@@ -494,7 +498,6 @@
                         <p class="text-slate-500 dark:text-slate-400 font-medium">Let's build something legendary.</p>
                     </div>
 
-                    <!-- Clean Input Card -->
                     <div class="max-w-3xl mx-auto bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm p-8 rounded-3xl border border-white dark:border-slate-700 shadow-xl">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div class="md:col-span-2">
@@ -538,7 +541,7 @@
                             </div>
                         </div>
 
-                        <!-- Entity Accordion (Clean) -->
+                        <!-- Entity Accordion -->
                         <div class="border-t border-slate-100 dark:border-slate-700 pt-6">
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="font-bold text-sm text-astra-purple dark:text-purple-300 flex items-center">
@@ -562,7 +565,7 @@
                     </div>
                 </div>
 
-                <!-- Step 2: Sub-Events (New UI: fest-step-subevents) -->
+                <!-- Step 2: Sub-Events -->
                 <div id="fest-step-subevents" class="wizard-step hidden animate-scale-in">
                     <div class="flex justify-between items-end mb-6">
                         <div>
@@ -585,13 +588,12 @@
                     </div>
                 </div>
 
-                <!-- Step 3: Participants (fest-step-participants) -->
+                <!-- Step 3: Participants -->
                 <div id="fest-step-participants" class="wizard-step hidden animate-scale-in">
                     <h2 class="text-3xl font-black text-astra-purple dark:text-white mb-2 text-center"><span class="text-gradient">Participants</span></h2>
                     <p class="text-center text-slate-500 text-sm font-bold mb-8">Manage who is competing in each event.</p>
 
-                    <div id="participants-overview-container" class="space-y-4 mb-8">
-                        </div>
+                    <div id="participants-overview-container" class="space-y-4 mb-8"></div>
 
                     <div class="flex justify-between items-center pt-6 border-t border-slate-100 dark:border-slate-700">
                         <button onclick="nextFestStep(2)" class="text-slate-400 font-bold hover:text-astra-purple px-4 transition active:scale-[0.98]">Back</button>
@@ -599,13 +601,12 @@
                     </div>
                 </div>
 
-                <!-- Step 4: Stages (fest-step-stages) -->
+                <!-- Step 4: Stages -->
                 <div id="fest-step-stages" class="wizard-step hidden animate-scale-in">
                     <h2 class="text-3xl font-black text-astra-purple dark:text-white mb-2 text-center">Stages & <span class="text-gradient">Scoreboards</span></h2>
                     <p class="text-center text-slate-500 text-sm font-bold mb-8">Define rounds and attach scoreboards.</p>
 
-                    <div id="stages-overview-container" class="space-y-6 mb-8 max-h-[400px] overflow-y-auto scrollbar-thin pr-2">
-                        </div>
+                    <div id="stages-overview-container" class="space-y-6 mb-8 max-h-[400px] overflow-y-auto scrollbar-thin pr-2"></div>
 
                     <div class="flex justify-between items-center pt-6 border-t border-slate-100 dark:border-slate-700">
                         <button onclick="nextFestStep(3)" class="text-slate-400 font-bold hover:text-astra-purple px-4 transition active:scale-[0.98]">Back</button>
@@ -613,7 +614,7 @@
                     </div>
                 </div>
 
-                <!-- Step 5: Summary (fest-step-summary-new) -->
+                <!-- Step 5: Summary -->
                 <div id="fest-step-summary-new" class="wizard-step hidden animate-scale-in">
                     <h2 class="text-3xl font-black text-astra-purple dark:text-white mb-6 text-center">Ready to <span class="text-gradient">Launch Festival</span>?</h2>
 
@@ -652,8 +653,7 @@
                         </div>
                         <div class="border-t border-slate-100 dark:border-slate-700 pt-4 mt-6">
                             <h4 class="text-xs font-bold text-slate-400 uppercase mb-3">Event Tree</h4>
-                            <div id="fest-sum-tree" class="space-y-1 text-sm font-medium text-slate-600 dark:text-slate-300 max-h-[150px] overflow-y-auto pr-2 scrollbar-thin">
-                                </div>
+                            <div id="fest-sum-tree" class="space-y-1 text-sm font-medium text-slate-600 dark:text-slate-300 max-h-[150px] overflow-y-auto pr-2 scrollbar-thin"></div>
                         </div>
                     </div>
 
@@ -665,45 +665,99 @@
                     </div>
                 </div>
 
-                <!-- Placeholder steps (hidden but included for completeness) -->
                 <div id="fest-step-2" class="wizard-step hidden"></div>
                 <div id="fest-step-3" class="wizard-step hidden"></div>
             </div>
         </div>
     </div>
 
-    <!-- MODALS (Updated styles for consistency) -->
-
+    <!-- Enhanced Sub-Event Modal -->
     <div id="subevent-modal" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-2xl p-6 animate-scale-in">
-            <h3 class="text-xl font-black text-astra-purple dark:text-white mb-4">Add Sub-Event</h3>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Event Name</label>
-                    <input type="text" id="new-se-name" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 font-bold focus:border-astra-purple outline-none focus:ring-1 focus:ring-astra-purple transition" placeholder="e.g. U17 Football Boys">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Category</label>
-                    <select id="new-se-cat" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 font-bold focus:border-astra-purple outline-none focus:ring-1 focus:ring-astra-purple transition" onchange="updateSubEventTypeOptions()">
-                        <option value="sports">Sports</option>
-                        <option value="academic">Academic</option>
-                        <option value="cultural">Cultural</option>
-                        <option value="esports">Esports</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Type</label>
-                    <select id="new-se-type" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 font-bold focus:border-astra-purple outline-none focus:ring-1 focus:ring-astra-purple transition">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-2xl rounded-2xl shadow-2xl p-6 animate-scale-in h-[85vh] flex flex-col">
+            <h3 class="text-2xl font-black text-astra-purple dark:text-white mb-4">Add Sub-Event Details</h3>
+            
+            <!-- Tabs -->
+            <div class="flex gap-2 mb-4 border-b border-slate-100 dark:border-slate-700 pb-2">
+                <button onclick="switchSubEventTab('basics')" id="tab-se-basics" class="px-4 py-2 text-sm font-bold rounded-lg bg-purple-50 text-astra-purple dark:bg-slate-700 dark:text-purple-300">Basics</button>
+                <button onclick="switchSubEventTab('scoring')" id="tab-se-scoring" class="px-4 py-2 text-sm font-bold rounded-lg text-slate-500 hover:text-astra-purple dark:text-slate-400">Scoring</button>
+                <button onclick="switchSubEventTab('layout')" id="tab-se-layout" class="px-4 py-2 text-sm font-bold rounded-lg text-slate-500 hover:text-astra-purple dark:text-slate-400">Layout</button>
+            </div>
+
+            <div class="flex-grow overflow-y-auto pr-2 scrollbar-thin">
+                <!-- Tab: Basics -->
+                <div id="se-tab-basics" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Event Name</label>
+                        <input type="text" id="new-se-name" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 font-bold focus:border-astra-purple outline-none focus:ring-1 focus:ring-astra-purple transition" placeholder="e.g. U17 Football Boys">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Category</label>
+                        <select id="new-se-cat" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 font-bold focus:border-astra-purple outline-none focus:ring-1 focus:ring-astra-purple transition" onchange="updateSubEventTypeOptions()">
+                            <option value="sports">Sports</option>
+                            <option value="academic">Academic</option>
+                            <option value="cultural">Cultural</option>
+                            <option value="esports">Esports</option>
                         </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Type</label>
+                        <select id="new-se-type" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 font-bold focus:border-astra-purple outline-none focus:ring-1 focus:ring-astra-purple transition">
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Tab: Scoring -->
+                <div id="se-tab-scoring" class="hidden space-y-4">
+                     <p class="text-xs font-bold text-slate-400 uppercase">Specific Game Rules</p>
+                     
+                     <div class="grid grid-cols-2 gap-4">
+                         <div>
+                             <label class="text-[10px] font-bold text-slate-400 uppercase">Unit</label>
+                             <input type="text" id="se-score-unit" value="Points" class="w-full p-2 rounded bg-slate-50 dark:bg-slate-700 font-bold border border-slate-200 dark:border-slate-600">
+                         </div>
+                         <div class="flex items-center mt-6">
+                              <label class="flex items-center cursor-pointer">
+                                <input type="checkbox" id="se-allow-negative" class="w-4 h-4 rounded text-astra-purple accent-astra-purple">
+                                <span class="ml-2 text-xs font-bold text-slate-600 dark:text-slate-300">Negative Scores?</span>
+                            </label>
+                         </div>
+                     </div>
+
+                     <!-- Dynamic Options Container -->
+                     <div id="se-specific-options-container" class="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-xl border border-slate-100 dark:border-slate-600">
+                         <p class="text-xs text-slate-400 italic">Select options based on category...</p>
+                     </div>
+                </div>
+
+                <!-- Tab: Layout -->
+                <div id="se-tab-layout" class="hidden space-y-6">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Preferred Board Type</label>
+                        <div class="grid grid-cols-2 gap-3">
+                             <div class="p-3 border-2 border-slate-200 dark:border-slate-600 rounded-lg text-center text-xs font-bold text-slate-500 cursor-pointer hover:border-astra-purple hover:text-astra-purple transition se-board-opt" onclick="selectSeBoard('leaderboard', this)">Leaderboard</div>
+                             <div class="p-3 border-2 border-slate-200 dark:border-slate-600 rounded-lg text-center text-xs font-bold text-slate-500 cursor-pointer hover:border-astra-purple hover:text-astra-purple transition se-board-opt" onclick="selectSeBoard('scoreboard', this)">Scoreboard</div>
+                             <div class="p-3 border-2 border-slate-200 dark:border-slate-600 rounded-lg text-center text-xs font-bold text-slate-500 cursor-pointer hover:border-astra-purple hover:text-astra-purple transition se-board-opt" onclick="selectSeBoard('sports-scoreboard', this)">Sports Board</div>
+                             <div class="p-3 border-2 border-slate-200 dark:border-slate-600 rounded-lg text-center text-xs font-bold text-slate-500 cursor-pointer hover:border-astra-purple hover:text-astra-purple transition se-board-opt" onclick="selectSeBoard('scoresheet', this)">Scoresheet</div>
+                        </div>
+                        <input type="hidden" id="se-board-pref">
+                    </div>
+
+                    <div class="bg-purple-50/50 dark:bg-slate-700/30 p-4 rounded-xl border border-purple-100 dark:border-slate-600">
+                         <h4 class="text-xs font-bold text-astra-purple uppercase mb-2">Custom Fields</h4>
+                         <div id="se-custom-rows" class="space-y-2 mb-2"></div>
+                         <button onclick="addSeCustomRow()" class="w-full py-2 border-2 border-dashed border-purple-300 dark:border-slate-500 rounded-lg text-xs font-bold text-astra-purple hover:bg-purple-100 dark:hover:bg-slate-600 transition">+ Add Custom Row</button>
+                    </div>
                 </div>
             </div>
-            <div class="flex justify-end gap-3 mt-6">
-                <button onclick="document.getElementById('subevent-modal').classList.add('hidden')" class="text-slate-500 font-bold px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition active:scale-[0.98]">Cancel</button>
-                <button onclick="saveSubEvent()" class="bg-gradient-to-r from-astra-purple to-astra-pink text-white font-bold px-6 py-2 rounded-xl hover:shadow-lg hover:shadow-pink-500/30 transition active:scale-[0.98]">Add Event</button>
+
+            <div class="flex justify-between gap-3 mt-6 pt-4 border-t border-slate-100 dark:border-slate-700">
+                 <button onclick="document.getElementById('subevent-modal').classList.add('hidden')" class="text-slate-500 font-bold px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition active:scale-[0.98]">Cancel</button>
+                 <button onclick="saveSubEvent()" class="bg-gradient-to-r from-astra-purple to-astra-pink text-white font-bold px-8 py-3 rounded-xl hover:shadow-lg hover:shadow-pink-500/30 transition active:scale-[0.98] transform hover:-translate-y-0.5">Save Sub-Event</button>
             </div>
         </div>
     </div>
 
+    <!-- Participants Modal -->
     <div id="fest-participants-modal" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-800 w-full max-w-lg rounded-2xl shadow-2xl p-6 animate-scale-in h-[500px] flex flex-col">
             <div class="flex justify-between items-center mb-4">
@@ -713,16 +767,13 @@
 
             <div class="flex gap-2 mb-4">
                 <input type="text" id="fpm-input" class="w-3/5 p-2 rounded-lg bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 text-sm font-bold focus:outline-none focus:ring-1 focus:ring-astra-purple transition" placeholder="Participant Name...">
-
                 <select id="fpm-entity-select" class="w-2/5 p-2 rounded-lg bg-slate-50 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 text-sm font-bold focus:outline-none focus:ring-1 focus:ring-astra-purple text-slate-600 dark:text-slate-300 transition">
                     <option value="">No Affiliation</option>
                 </select>
-
                 <button onclick="addFestParticipant()" class="bg-astra-purple text-white px-4 rounded-lg font-bold text-sm hover:bg-astra-blue transition active:scale-[0.98] shadow-md">Add</button>
             </div>
 
-            <div id="fpm-list" class="flex-grow overflow-y-auto bg-slate-50 dark:bg-slate-700/50 rounded-xl p-2 space-y-2 scrollbar-thin">
-                </div>
+            <div id="fpm-list" class="flex-grow overflow-y-auto bg-slate-50 dark:bg-slate-700/50 rounded-xl p-2 space-y-2 scrollbar-thin"></div>
 
             <div class="flex justify-end gap-3 mt-4 pt-4 border-t border-slate-100 dark:border-slate-600">
                 <button onclick="closeFestParticipantsModal()" class="bg-slate-200 text-slate-600 font-bold px-6 py-2 rounded-xl hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600 transition active:scale-[0.98]">Done</button>
@@ -730,6 +781,7 @@
         </div>
     </div>
 
+    <!-- Entity Modal -->
     <div id="entity-modal" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-2xl p-6 animate-scale-in">
             <h3 class="text-zxl font-black text-blue-900 dark:text-white mb-4" id="entity-modal-title">Add Entity</h3>
@@ -770,45 +822,13 @@
             </div>
         </div>
     </div>
+    
     <script>
-        // ==========================================
-        // 1. STATE MANAGEMENT
-        // ==========================================
-        const singleConfig = {
-            category: null, // sports, academic, cultural, esports
-            participantType: 'teams', // teams, individuals, houses
-            participants: [],
-            scoring: {},
-            layout: {
-                name: '',
-                theme: 'light',
-                customRows: [],
-                customColumns: []
-            },
-            boardTypes: [], // ADDED
-            entities: []
-        };
+        const singleConfig = { category: null, participantType: 'teams', participants: [], scoring: {}, layout: { name: '', theme: 'light', customRows: [], customColumns: [] }, boardTypes: [], entities: [] };
+        let festivalConfig = { name: '', organizer: '', dates: '', subEvents: [], entities: [] };
 
-        // Festival config
-        let festivalConfig = {
-            name: '',
-            organizer: '',
-            dates: '',
-            subEvents: [],
-            entities: []
-        };
+        function handleEnter(event, nextStepFn) { if (event.key === "Enter") { event.preventDefault(); nextStepFn(); } }
 
-        // Helper for Enter Key in inputs
-        function handleEnter(event, nextStepFn) {
-            if (event.key === "Enter") {
-                event.preventDefault();
-                nextStepFn();
-            }
-        }
-
-        // ==========================================
-        // 2. MODE SWITCHING (Adapted for new styles)
-        // ==========================================
         function switchMode(mode) {
             const singleBtn = document.getElementById('btn-mode-single');
             const festBtn = document.getElementById('btn-mode-fest');
@@ -820,1059 +840,264 @@
             if (mode === 'single') {
                 singleBtn.className = "px-6 py-3 rounded-full font-bold text-sm transition-all bg-gradient-to-r from-astra-blue to-astra-purple text-white shadow-lg shadow-blue-400/50 hover:opacity-90 active:scale-[0.98]";
                 festBtn.className = "px-6 py-3 rounded-full font-bold text-sm transition-all text-slate-500 hover:text-astra-blue dark:text-slate-400 hover:bg-white dark:hover:bg-slate-700 active:scale-[0.98]";
-
                 singleFlow.classList.remove('hidden');
                 festFlow.classList.add('hidden');
-
-                // Update Progress Bar color for single mode
                 progressBar.classList.remove('bg-purple-500', 'shadow-[0_0_15px_rgba(168,85,247,0.5)]');
                 progressBar.classList.add('bg-astra-blue', 'shadow-md', 'shadow-blue-400/50');
-
-                // Show stepper and reset to step 1
                 stepper.classList.remove('opacity-0');
-                stepper.classList.add('transition-opacity', 'duration-500');
                 showStep(1);
             } else {
                 singleBtn.className = "px-6 py-3 rounded-full font-bold text-sm transition-all text-slate-500 hover:text-astra-purple dark:text-slate-400 hover:bg-white dark:hover:bg-slate-700 active:scale-[0.98]";
                 festBtn.className = "px-6 py-3 rounded-full font-bold text-sm transition-all bg-gradient-to-r from-astra-purple to-astra-pink text-white shadow-lg shadow-purple-500/50 hover:opacity-90 active:scale-[0.98]";
-
                 singleFlow.classList.add('hidden');
                 festFlow.classList.remove('hidden');
-
-                // Update Progress Bar color for festival mode
                 progressBar.classList.remove('bg-astra-blue', 'shadow-md', 'shadow-blue-400/50');
                 progressBar.classList.add('bg-astra-purple', 'shadow-md', 'shadow-purple-400/50');
-
-                // Hide stepper for festival mode (or just use custom flow dots)
                 stepper.classList.add('opacity-0');
                 nextFestStep(1);
             }
         }
 
-        // ==========================================
-        // 3. SINGLE WIZARD NAVIGATION (Modified for 6 steps)
-        // ==========================================
         let currentStep = 1;
+        document.addEventListener('keydown', function(event) {
+            const activeTag = document.activeElement.tagName;
+            if (['INPUT', 'TEXTAREA', 'SELECT'].includes(activeTag)) return;
+            if (event.key === 'ArrowRight') {
+                const visibleStep = document.querySelector('.wizard-step:not(.hidden)');
+                if (visibleStep) { const nextBtn = visibleStep.querySelector('button[onclick*="nextStep"], button.next-btn, button[onclick*="createScoreboard"]'); if (nextBtn) nextBtn.click(); }
+            }
+            if (event.key === 'ArrowLeft') { const visibleStep = document.querySelector('.wizard-step:not(.hidden)'); if (visibleStep) { const prevBtn = visibleStep.querySelector('button[onclick*="prevStep"]'); if (prevBtn) prevBtn.click(); } }
+        });
 
         function showStep(step) {
-            let targetId = '';
-            let dotIndex = 0;
-            const totalDots = 6;
-
+            let targetId = ''; let dotIndex = 0;
             if(step === 1) { targetId = 'step-1'; dotIndex = 1; }
             else if(step === 2) { targetId = 'step-2'; dotIndex = 2; }
             else if(step === 3) { targetId = 'step-3'; dotIndex = 3; }
             else if(step === 4) { targetId = 'step-4'; dotIndex = 4; }
-            else if(step === 5) { targetId = 'step-layout-board-select'; dotIndex = 5; } // New Step 5
-            else if(step === 6) { targetId = 'step-5'; dotIndex = 6; } // Original Step 5 is now 6
-
+            else if(step === 5) { targetId = 'step-layout-board-select'; dotIndex = 5; }
+            else if(step === 6) { targetId = 'step-5'; dotIndex = 6; }
             document.querySelectorAll('#single-mode-flow .wizard-step').forEach(el => el.classList.add('hidden'));
-
             const targetEl = document.getElementById(targetId);
-            if (targetEl) {
-                targetEl.classList.remove('hidden');
-                // Re-apply scale-in animation on step change
-                targetEl.style.animation = 'none';
-                void targetEl.offsetWidth; // Trigger reflow
-                targetEl.style.animation = 'scaleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
-            } else {
-                 console.error(`Step ID not found for logical step ${step}. Target ID: ${targetId}`);
-                 return;
-            }
-
-            // Update Dots (Enhanced styles)
-            for(let i=1; i<=totalDots; i++) {
-                const dot = document.getElementById(`dot-${i}`);
-                if(dot) {
-                    dot.classList.remove('bg-astra-blue', 'shadow-md', 'scale-125', 'bg-slate-300', 'dark:bg-slate-700');
-                    if(i <= dotIndex) {
-                        dot.classList.add('bg-astra-blue', 'shadow-md');
-                    } else {
-                        dot.classList.add('bg-slate-300', 'dark:bg-slate-700');
-                    }
-                    if(i === dotIndex) {
-                        dot.classList.add('scale-125');
-                    } else {
-                        dot.classList.remove('scale-125');
-                    }
-                }
-            }
-
-            // Update Bar
-            const progressBar = document.getElementById('progress-bar');
-            progressBar.style.width = `${(dotIndex/totalDots)*100}%`;
-
+            if (targetEl) { targetEl.classList.remove('hidden'); targetEl.style.animation = 'none'; void targetEl.offsetWidth; targetEl.style.animation = 'scaleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards'; }
+            for(let i=1; i<=6; i++) { const dot = document.getElementById(`dot-${i}`); if(dot) { dot.classList.remove('bg-astra-blue', 'shadow-md', 'scale-125', 'bg-slate-300', 'dark:bg-slate-700'); if(i <= dotIndex) { dot.classList.add('bg-astra-blue', 'shadow-md'); } else { dot.classList.add('bg-slate-300', 'dark:bg-slate-700'); } if(i === dotIndex) { dot.classList.add('scale-125'); } } }
+            document.getElementById('progress-bar').style.width = `${(dotIndex/6)*100}%`;
             window.currentStep = step;
         }
 
         function nextStep(step) {
-            if (step === 2) {
-                if (!singleConfig.category) { alert("Please select a game type first."); return; }
-                showStep(2);
-                return;
-            }
-
-            if (step === 3) {
-                 document.querySelectorAll('.cat-panel').forEach(p => p.classList.add('hidden'));
-                 document.getElementById(`panel-${singleConfig.category}`).classList.remove('hidden');
-                 if(singleConfig.category === 'sports') updateSportFields();
-                 if(singleConfig.category === 'academic') updateAcadFields();
-            }
-
-            if (step === 5) {
-                updateBoardTypeVisualsFinal();
-                showStep(5);
-                return;
-            }
-
-            if (step === 6) {
-                generateSummary();
-            }
-
+            if (step === 2) { if (!singleConfig.category) { alert("Please select a game type first."); return; } showStep(2); return; }
+            if (step === 3) { document.querySelectorAll('.cat-panel').forEach(p => p.classList.add('hidden')); document.getElementById(`panel-${singleConfig.category}`).classList.remove('hidden'); if(singleConfig.category === 'sports') updateSportFields(); if(singleConfig.category === 'academic') updateAcadFields(); if(singleConfig.category === 'cultural') updateCulturalFields(); if(singleConfig.category === 'esports') updateEsportsFields(); }
+            if (step === 5) { updateBoardTypeVisualsFinal(); showStep(5); return; }
+            if (step === 6) { generateSummary(); }
             showStep(step);
         }
+        function prevStep(step) { showStep(step); }
 
-        function prevStep(step) {
-            showStep(step);
-        }
-
-        // ==========================================
-        // 4. STEP 1: CATEGORY (Adapted for new selection ring color)
-        // ==========================================
         function selectCategory(cat, el) {
             singleConfig.category = cat;
-
-            // Visual Selection
-            document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('ring-4', 'ring-astra-blue'));
-            el.classList.add('ring-4', 'ring-astra-blue');
-
-            // Update Subtitle in Step 3
-            const subtitles = {
-                sports: 'Game Type: Sports',
-                academic: 'Game Type: Academic / Knowledge',
-                cultural: 'Game Type: Cultural / Arts',
-                esports: 'Game Type: Esports / Gaming'
-            };
+            document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('ring-4', 'ring-astra-blue')); el.classList.add('ring-4', 'ring-astra-blue');
+            const subtitles = { sports: 'Game Type: Sports', academic: 'Game Type: Academic / Knowledge', cultural: 'Game Type: Cultural / Arts', esports: 'Game Type: Esports / Gaming' };
             document.getElementById('scoring-subtitle').textContent = subtitles[cat];
-
-            // Pre-configure Step 3 default unit
             const units = { sports: 'Points', academic: 'Points', cultural: 'Score', esports: 'Rounds' };
             document.getElementById('score-unit').value = units[cat];
         }
 
-        // ==========================================
-        // 5. STEP 2: PARTICIPANTS
-        // ==========================================
         function setParticipantType(type) {
             singleConfig.participantType = type;
-
-            // Button Styles (Updated styles for consistency)
-            ['teams', 'individuals', 'houses'].forEach(t => {
-                const btn = document.getElementById(`pt-${t}`);
-                if(t === type) {
-                    btn.className = "px-6 py-2 rounded-full font-bold text-sm transition-all bg-white text-astra-blue shadow-md dark:bg-slate-800 dark:text-white";
-                } else {
-                    btn.className = "px-6 py-2 rounded-full font-bold text-sm transition-all text-slate-500 hover:text-astra-blue dark:hover:text-white";
-                }
-            });
-
-            // Label Update
-            const labels = { teams: 'How many teams?', individuals: 'How many participants?', houses: 'How many houses?' };
-            document.getElementById('count-label').textContent = labels[type];
-
-            // Clear list on switch
-            document.getElementById('participants-list').innerHTML = '';
-            singleConfig.participants = [];
-
-            // Toggle Individual Entities Section
+            ['teams', 'individuals'].forEach(t => { const btn = document.getElementById(`pt-${t}`); if(t === type) { btn.className = "px-6 py-2 rounded-full font-bold text-sm transition-all bg-white text-astra-blue shadow-md dark:bg-slate-800 dark:text-white"; } else { btn.className = "px-6 py-2 rounded-full font-bold text-sm transition-all text-slate-500 hover:text-astra-blue dark:hover:text-white"; } });
+            document.getElementById('count-label').textContent = type === 'teams' ? 'How many teams?' : 'How many participants?';
+            document.getElementById('participants-list').innerHTML = ''; singleConfig.participants = [];
             const entitySection = document.getElementById('individual-entities-section');
-            if (type === 'individuals') {
-                entitySection.classList.remove('hidden');
-                renderSingleEntities();
-            } else {
-                entitySection.classList.add('hidden');
-            }
+            if (type === 'individuals') { entitySection.classList.remove('hidden'); renderSingleEntities(); } else { entitySection.classList.add('hidden'); }
         }
 
-        function generateParticipants(count) {
-            const container = document.getElementById('participants-list');
-            container.innerHTML = '';
-            singleConfig.participants = [];
-
-            for(let i=0; i<count; i++) {
-                addParticipant(i+1);
-            }
-        }
+        function generateParticipants(count) { document.getElementById('participants-list').innerHTML = ''; singleConfig.participants = []; for(let i=0; i<count; i++) addParticipant(i+1); }
 
         function addParticipant(num = null) {
-            const container = document.getElementById('participants-list');
-            const idx = container.children.length + 1;
-            const type = singleConfig.participantType;
-
-            // Dynamic Placeholders
-            let namePH = type === 'teams' ? `Team ${idx}` : (type === 'houses' ? `House ${idx}` : `Player ${idx}`);
-            // let codePH = type === 'teams' ? `T${idx}` : (type === 'houses' ? `H${idx}` : `P${idx}`); // unused in UI
-
-            // ADDED: Create participant object
-            const participantId = `p-${Date.now()}-${idx}`;
-            // Use a specific color palette for better initial visuals
-            const defaultColors = ['#4F46E5', '#9333ea', '#10b981', '#f97316', '#ef4444', '#06b6d4'];
-            const defaultColor = defaultColors[(idx - 1) % defaultColors.length];
-
-            singleConfig.participants.push({
-                id: participantId,
-                name: namePH,
-                color: defaultColor,
-                representsEntityId: null
-            });
-
-            const div = document.createElement('div');
-            div.className = "bg-slate-50 dark:bg-slate-700 p-3 rounded-xl border border-slate-200 dark:border-slate-600 flex gap-2 items-center flex-wrap animate-fade-in transition-shadow hover:shadow-md";
-            div.setAttribute('data-participant-id', participantId);
-
+            const container = document.getElementById('participants-list'); const idx = container.children.length + 1; const type = singleConfig.participantType;
+            let namePH = type === 'teams' ? `Team ${idx}` : `Player ${idx}`; const participantId = `p-${Date.now()}-${idx}`;
+            const defaultColors = ['#4F46E5', '#9333ea', '#10b981', '#f97316', '#ef4444', '#06b6d4']; const defaultColor = defaultColors[(idx - 1) % defaultColors.length];
+            singleConfig.participants.push({ id: participantId, name: namePH, color: defaultColor, representsEntityId: null });
+            const div = document.createElement('div'); div.className = "bg-slate-50 dark:bg-slate-700 p-3 rounded-xl border border-slate-200 dark:border-slate-600 flex gap-2 items-center flex-wrap animate-fade-in transition-shadow hover:shadow-md"; div.setAttribute('data-participant-id', participantId);
             let representsDropdown = '';
-            if (type === 'individuals') {
-                representsDropdown = `
-                    <select onchange="updateParticipantEntity('${participantId}', this.value)" class="w-full mt-2 p-2 rounded-lg bg-white dark:bg-slate-800 text-xs font-medium text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 focus:ring-1 focus:ring-astra-blue">
-                        <option value="">Represents → (Optional)</option>
-                        ${singleConfig.entities.map(e => `<option value="${e.id}">${e.name} (${e.shortCode})</option>`).join('')}
-                    </select>
-                `;
-            }
-
-            div.innerHTML = `
-                <div class="w-8 h-8 rounded-full bg-white dark:bg-slate-600 border border-slate-200 flex items-center justify-center font-bold text-xs text-slate-400">${idx}</div>
-                <input type="text" placeholder="${namePH}" value="${namePH}" onchange="updateParticipantName('${participantId}', this.value)" class="flex-grow bg-transparent text-sm font-bold text-slate-700 dark:text-white outline-none border-b border-transparent focus:border-astra-blue transition">
-                <input type="color" onchange="updateParticipantColor('${participantId}', this.value)" class="w-6 h-6 rounded-full overflow-hidden cursor-pointer border-none bg-transparent" value="${singleConfig.participants[singleConfig.participants.length - 1].color}">
-                <button onclick="removeParticipant('${participantId}', this.parentElement)" class="text-slate-300 hover:text-red-400 transition active:scale-[0.9]"><i class="fas fa-times"></i></button>
-                ${representsDropdown}
-            `;
-            container.appendChild(div);
+            if (type === 'individuals') { representsDropdown = `<select onchange="updateParticipantEntity('${participantId}', this.value)" class="w-full mt-2 p-2 rounded-lg bg-white dark:bg-slate-800 text-xs font-medium text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 focus:ring-1 focus:ring-astra-blue"><option value="">Represents → (Optional)</option>${singleConfig.entities.map(e => `<option value="${e.id}">${e.name} (${e.shortCode})</option>`).join('')}</select>`; }
+            div.innerHTML = `<div class="w-8 h-8 rounded-full bg-white dark:bg-slate-600 border border-slate-200 flex items-center justify-center font-bold text-xs text-slate-400">${idx}</div><input type="text" placeholder="${namePH}" value="${namePH}" onchange="updateParticipantName('${participantId}', this.value)" class="flex-grow bg-transparent text-sm font-bold text-slate-700 dark:text-white outline-none border-b border-transparent focus:border-astra-blue transition"><input type="color" onchange="updateParticipantColor('${participantId}', this.value)" class="w-6 h-6 rounded-full overflow-hidden cursor-pointer border-none bg-transparent" value="${defaultColor}"><button onclick="removeParticipant('${participantId}', this.parentElement)" class="text-slate-300 hover:text-red-400 transition active:scale-[0.9]"><i class="fas fa-times"></i></button>${representsDropdown}`; container.appendChild(div);
         }
 
-        function updateParticipantName(id, name) {
-            const part = singleConfig.participants.find(p => p.id === id);
-            if(part) part.name = name;
-        }
-        function updateParticipantColor(id, color) {
-            const part = singleConfig.participants.find(p => p.id === id);
-            if(part) part.color = color;
-        }
-        function updateParticipantEntity(id, entityId) {
-            const part = singleConfig.participants.find(p => p.id === id);
-            if(part) part.representsEntityId = entityId || null;
-        }
-        function removeParticipant(id, el) {
-            const idx = singleConfig.participants.findIndex(p => p.id === id);
-            if(idx !== -1) singleConfig.participants.splice(idx, 1);
-            el.remove();
-        }
+        function updateParticipantName(id, name) { const part = singleConfig.participants.find(p => p.id === id); if(part) part.name = name; }
+        function updateParticipantColor(id, color) { const part = singleConfig.participants.find(p => p.id === id); if(part) part.color = color; }
+        function updateParticipantEntity(id, entityId) { const part = singleConfig.participants.find(p => p.id === id); if(part) part.representsEntityId = entityId || null; }
+        function removeParticipant(id, el) { const idx = singleConfig.participants.findIndex(p => p.id === id); if(idx !== -1) singleConfig.participants.splice(idx, 1); el.remove(); }
 
-        // ADDED: Entity Management Logic
-        let activeEntityConfig = null;
-        let currentEntityMode = 'single';
-
-        function openSingleEntityModal() {
-            currentEntityMode = 'single';
-            activeEntityConfig = null;
-            document.getElementById('entity-modal-title').textContent = 'Add Individual Entity';
-            document.getElementById('entity-save-btn').textContent = 'Add Entity';
-            document.getElementById('entity-save-btn').className = 'bg-astra-blue text-white font-bold px-6 py-2 rounded-xl hover:bg-astra-purple shadow-lg shadow-blue-500/30 transition active:scale-[0.98]';
-            document.getElementById('entity-color').value = '#4F46E5';
-            document.getElementById('entity-modal').classList.remove('hidden');
-            document.getElementById('entity-name').value = '';
-            document.getElementById('entity-code').value = '';
-            document.getElementById('entity-type').value = 'School';
-            document.getElementById('entity-logo').value = '';
-        }
-
-        function openFestivalEntityModal() {
-            currentEntityMode = 'festival';
-            activeEntityConfig = null;
-            document.getElementById('entity-modal-title').textContent = 'Add Festival Entity';
-            document.getElementById('entity-save-btn').textContent = 'Add Entity';
-            document.getElementById('entity-save-btn').className = 'bg-astra-purple text-white font-bold px-6 py-2 rounded-xl hover:bg-astra-pink shadow-lg shadow-purple-500/30 transition active:scale-[0.98]';
-            document.getElementById('entity-color').value = '#9333ea';
-            document.getElementById('entity-modal').classList.remove('hidden');
-            document.getElementById('entity-name').value = '';
-            document.getElementById('entity-code').value = '';
-            document.getElementById('entity-type').value = 'School';
-            document.getElementById('entity-logo').value = '';
-        }
-
-        function closeEntityModal() {
-            document.getElementById('entity-modal').classList.add('hidden');
-        }
-
+        let activeEntityConfig = null; let currentEntityMode = 'single';
+        function openSingleEntityModal() { currentEntityMode = 'single'; document.getElementById('entity-modal-title').textContent = 'Add Individual Entity'; document.getElementById('entity-save-btn').className = 'bg-astra-blue text-white font-bold px-6 py-2 rounded-xl hover:bg-astra-purple shadow-lg shadow-blue-500/30 transition active:scale-[0.98]'; document.getElementById('entity-modal').classList.remove('hidden'); document.getElementById('entity-name').value = ''; document.getElementById('entity-code').value = ''; }
+        function openFestivalEntityModal() { currentEntityMode = 'festival'; document.getElementById('entity-modal-title').textContent = 'Add Festival Entity'; document.getElementById('entity-save-btn').className = 'bg-astra-purple text-white font-bold px-6 py-2 rounded-xl hover:bg-astra-pink shadow-lg shadow-purple-500/30 transition active:scale-[0.98]'; document.getElementById('entity-modal').classList.remove('hidden'); document.getElementById('entity-name').value = ''; document.getElementById('entity-code').value = ''; }
+        function closeEntityModal() { document.getElementById('entity-modal').classList.add('hidden'); }
         function saveEntity() {
-            const name = document.getElementById('entity-name').value.trim();
-            const shortCode = document.getElementById('entity-code').value.trim().toUpperCase();
-            const type = document.getElementById('entity-type').value;
-            const color = document.getElementById('entity-color').value;
-            const logoUrl = document.getElementById('entity-logo').value.trim();
-
-            if (!name || !shortCode) {
-                // Use a custom message box instead of alert()
-                showTemporaryMessage("Name and Short Code are required.", "error");
-                return;
-            }
-
-            const newEntity = {
-                id: `ent-${Date.now()}`,
-                name, shortCode, type, color, logoUrl
-            };
-
-            if (currentEntityMode === 'single') {
-                singleConfig.entities.push(newEntity);
-                renderSingleEntities();
-                updateAllParticipantDropdowns();
-            } else if (currentEntityMode === 'festival') {
-                festivalConfig.entities.push(newEntity);
-                renderFestivalEntities();
-            }
-
+            const name = document.getElementById('entity-name').value.trim(); const shortCode = document.getElementById('entity-code').value.trim().toUpperCase(); const type = document.getElementById('entity-type').value; const color = document.getElementById('entity-color').value; const logoUrl = document.getElementById('entity-logo').value.trim();
+            if (!name || !shortCode) { showTemporaryMessage("Name and Short Code are required.", "error"); return; }
+            const newEntity = { id: `ent-${Date.now()}`, name, shortCode, type, color, logoUrl };
+            if (currentEntityMode === 'single') { singleConfig.entities.push(newEntity); renderSingleEntities(); updateAllParticipantDropdowns(); } else { festivalConfig.entities.push(newEntity); renderFestivalEntities(); }
             closeEntityModal();
         }
+        function removeEntity(id) { const list = currentEntityMode === 'single' ? singleConfig.entities : festivalConfig.entities; const idx = list.findIndex(e => e.id === id); if (idx !== -1) { list.splice(idx, 1); if (currentEntityMode === 'single') { renderSingleEntities(); updateAllParticipantDropdowns(); } else { renderFestivalEntities(); } } }
+        function renderSingleEntities() { const container = document.getElementById('single-entities-list'); container.innerHTML = singleConfig.entities.length === 0 ? '<p class="col-span-full text-xs text-slate-400 text-center py-4 border border-dashed border-slate-200 dark:border-slate-600 rounded-lg">No entities defined yet.</p>' : singleConfig.entities.map(e => `<div class="flex justify-between items-center p-2 rounded-lg bg-slate-100 dark:bg-slate-700 transition hover:shadow-inner border border-transparent hover:border-slate-200 dark:hover:border-slate-600"><div class="flex items-center overflow-hidden"><div class="w-1.5 h-6 rounded-full mr-2 shadow-sm flex-shrink-0" style="background-color: ${e.color};"></div><div class="flex flex-col"><span class="text-xs font-bold text-slate-700 dark:text-white truncate max-w-[100px]">${e.name}</span><span class="text-[10px] font-medium text-slate-500">${e.shortCode}</span></div></div><button onclick="removeEntity('${e.id}')" class="text-slate-300 hover:text-red-500 transition active:scale-[0.9] ml-2"><i class="fas fa-times-circle"></i></button></div>`).join(''); }
+        function updateAllParticipantDropdowns() { if (singleConfig.participantType !== 'individuals') return; document.querySelectorAll('#participants-list select').forEach(select => { const participantId = select.closest('[data-participant-id]').getAttribute('data-participant-id'); const selectedId = select.value; select.innerHTML = `<option value="">Represents → (Optional)</option>` + singleConfig.entities.map(e => `<option value="${e.id}" ${e.id === selectedId ? 'selected' : ''}>${e.name} (${e.shortCode})</option>`).join(''); if (selectedId && !singleConfig.entities.find(e => e.id === selectedId)) { updateParticipantEntity(participantId, null); } }); }
 
-        function removeEntity(id) {
-            const list = currentEntityMode === 'single' ? singleConfig.entities : festivalConfig.entities;
-            const idx = list.findIndex(e => e.id === id);
-            if (idx !== -1) {
-                list.splice(idx, 1);
-                if (currentEntityMode === 'single') {
-                    renderSingleEntities();
-                    updateAllParticipantDropdowns();
-                } else if (currentEntityMode === 'festival') {
-                    renderFestivalEntities();
-                }
-            }
+        document.addEventListener('DOMContentLoaded', () => { renderSingleEntities(); switchMode('single'); });
+
+        function updateSportFields() { const type = document.getElementById('sport-type').value; const container = document.getElementById('sport-specific-options'); let html = ''; if (type === 'football' || type === 'basketball') { html = `<div class="grid grid-cols-2 gap-4"><div><label class="text-[10px] font-bold uppercase text-slate-400">Periods</label><input type="number" value="2" class="w-full p-2 rounded bg-white dark:bg-slate-800 text-sm font-bold border border-slate-200 dark:border-slate-600"></div><div><label class="text-[10px] font-bold uppercase text-slate-400">Mins/Period</label><input type="number" value="${type==='football'?45:10}" class="w-full p-2 rounded bg-white dark:bg-slate-800 text-sm font-bold border border-slate-200 dark:border-slate-600"></div></div><div class="mt-3 flex gap-4"><label class="text-xs font-bold text-slate-500 dark:text-slate-400"><input type="checkbox" class="accent-orange-500"> Track Fouls</label><label class="text-xs font-bold text-slate-500 dark:text-slate-400"><input type="checkbox" class="accent-orange-500"> Track Cards</label></div>`; } else if (type === 'custom' || type === 'other') { html = `<input type="text" placeholder="One-line summary of scoring rules (Manual Scoreboard)..." class="w-full p-2 rounded bg-white dark:bg-slate-800 text-sm border border-slate-200 dark:border-slate-600">`; } else { html = `<div class="text-xs text-slate-500 italic">Standard ${type} rules applied.</div>`; } container.innerHTML = html; }
+        function updateAcadFields() { const type = document.querySelector('input[name="acad-type"]:checked').value; const container = document.getElementById('acad-specific-options'); if (type === 'quiz') { container.innerHTML = `<div class="flex gap-4"><div class="w-1/2"><label class="text-[10px] font-bold uppercase text-slate-400">Points/Correct</label><input type="number" value="10" class="w-full p-2 rounded bg-white dark:bg-slate-800 text-sm font-bold border border-slate-200 dark:border-slate-600"></div><div class="w-1/2"><label class="text-[10px] font-bold uppercase text-slate-400">Neg. Marking</label><input type="number" value="0" class="w-full p-2 rounded bg-white dark:bg-slate-800 text-sm font-bold border border-slate-200 dark:border-slate-600"></div></div>`; } else if (type === 'debate') { container.innerHTML = `<div><label class="text-[10px] font-bold uppercase text-slate-400">Number of Judges</label><input type="number" value="3" class="w-full p-2 rounded bg-white dark:bg-slate-800 text-sm font-bold border border-slate-200 dark:border-slate-600"></div>`; } else { container.innerHTML = `<input type="text" placeholder="Description of custom academic event..." class="w-full p-2 rounded bg-white dark:bg-slate-800 text-sm border border-slate-200 dark:border-slate-600">`; } }
+        function updateCulturalFields() { const type = document.getElementById('cult-subtype').value; const specificOpts = document.getElementById('cult-specific-options'); const manualOpts = document.getElementById('cult-manual-options'); if(type === 'other') { specificOpts.classList.add('hidden'); manualOpts.classList.remove('hidden'); } else { specificOpts.classList.remove('hidden'); manualOpts.classList.add('hidden'); } }
+        function updateEsportsFields() { const type = document.getElementById('esports-game').value; const specificOpts = document.getElementById('esports-specific-options'); const manualOpts = document.getElementById('esports-manual-options'); if(type === 'other') { specificOpts.classList.add('hidden'); manualOpts.classList.remove('hidden'); } else { specificOpts.classList.remove('hidden'); manualOpts.classList.add('hidden'); } }
+        function addCriteriaRow() { const tbody = document.getElementById('criteria-body'); const tr = document.createElement('tr'); tr.innerHTML = `<td class="p-1"><input type="text" placeholder="Criteria" class="w-full bg-white dark:bg-slate-800 p-2 rounded text-sm font-bold border border-slate-200 dark:border-slate-600 focus:border-pink-500"></td><td class="p-1"><input type="number" value="10" class="w-full bg-white dark:bg-slate-800 p-2 rounded text-sm border border-slate-200 dark:border-slate-600 focus:border-pink-500"></td><td class="p-1 text-center"><button onclick="this.parentElement.parentElement.remove()" class="text-slate-400 hover:text-red-500 transition active:scale-[0.9]"><i class="fas fa-times"></i></button></td>`; tbody.appendChild(tr); }
+        
+        // Theme Selection
+        function selectTheme(theme, el) {
+            singleConfig.layout.theme = theme;
+            document.querySelectorAll('.theme-option').forEach(t => t.classList.remove('ring-4', 'ring-blue-500'));
+            el.classList.add('ring-4', 'ring-blue-500');
         }
 
-        function renderSingleEntities() {
-            const container = document.getElementById('single-entities-list');
-            container.innerHTML = singleConfig.entities.length === 0
-                ? '<p class="text-sm text-slate-400 text-center py-2">No entities defined yet.</p>'
-                : singleConfig.entities.map(e => `
-                    <div class="flex justify-between items-center p-2 rounded-lg bg-slate-100 dark:bg-slate-700 transition hover:shadow-inner">
-                        <div class="flex items-center">
-                            <div class="w-2 h-6 rounded-l-md mr-2 shadow-md" style="background-color: ${e.color};"></div>
-                            <span class="text-sm font-bold text-slate-700 dark:text-white">${e.name}</span>
-                            <span class="ml-2 text-xs font-medium text-slate-500">(${e.shortCode})</span>
-                            <span class="ml-2 text-xs font-bold text-astra-blue">${e.type}</span>
-                        </div>
-                        <button onclick="removeEntity('${e.id}')" class="text-slate-400 hover:text-red-500 transition active:scale-[0.9]"><i class="fas fa-trash-alt"></i></button>
-                    </div>
-                `).join('');
-        }
-
-        function updateAllParticipantDropdowns() {
-            if (singleConfig.participantType !== 'individuals') return;
-
-            document.querySelectorAll('#participants-list select').forEach(select => {
-                const participantId = select.closest('[data-participant-id]').getAttribute('data-participant-id');
-                const selectedId = select.value;
-
-                select.innerHTML = `<option value="">Represents → (Optional)</option>` +
-                    singleConfig.entities.map(e =>
-                        `<option value="${e.id}" ${e.id === selectedId ? 'selected' : ''}>${e.name} (${e.shortCode})</option>`
-                    ).join('');
-
-                if (selectedId && !singleConfig.entities.find(e => e.id === selectedId)) {
-                    updateParticipantEntity(participantId, null);
-                }
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-             renderSingleEntities();
-             // Initialise mode to single and step 1
-             switchMode('single');
-        });
-
-        // ==========================================
-        // 6. STEP 3: SCORING CONFIG
-        // ==========================================
-        function updateSportFields() {
-            const type = document.getElementById('sport-type').value;
-            const container = document.getElementById('sport-specific-options');
-
-            let html = '';
-            if (type === 'football' || type === 'basketball') {
-                html = `
-                    <div class="grid grid-cols-2 gap-4">
-                        <div><label class="text-[10px] font-bold uppercase text-slate-400">Periods</label><input type="number" value="2" class="w-full p-2 rounded bg-white dark:bg-slate-800 text-sm font-bold border border-slate-200 dark:border-slate-600"></div>
-                        <div><label class="text-[10px] font-bold uppercase text-slate-400">Mins/Period</label><input type="number" value="${type==='football'?45:10}" class="w-full p-2 rounded bg-white dark:bg-slate-800 text-sm font-bold border border-slate-200 dark:border-slate-600"></div>
-                    </div>
-                    <div class="mt-3 flex gap-4">
-                        <label class="text-xs font-bold text-slate-500 dark:text-slate-400"><input type="checkbox" class="accent-orange-500"> Track Fouls</label>
-                        <label class="text-xs font-bold text-slate-500 dark:text-slate-400"><input type="checkbox" class="accent-orange-500"> Track Cards</label>
-                    </div>
-                `;
-            } else if (type === 'custom') {
-                html = `<input type="text" placeholder="One-line summary of scoring rules..." class="w-full p-2 rounded bg-white dark:bg-slate-800 text-sm border border-slate-200 dark:border-slate-600">`;
-            }
-            container.innerHTML = html;
-        }
-
-        function updateAcadFields() {
-            const type = document.querySelector('input[name="acad-type"]:checked').value;
-            const container = document.getElementById('acad-specific-options');
-
-            if (type === 'quiz') {
-                container.innerHTML = `
-                    <div class="flex gap-4">
-                        <div class="w-1/2"><label class="text-[10px] font-bold uppercase text-slate-400">Points/Correct</label><input type="number" value="10" class="w-full p-2 rounded bg-white dark:bg-slate-800 text-sm font-bold border border-slate-200 dark:border-slate-600"></div>
-                        <div class="w-1/2"><label class="text-[10px] font-bold uppercase text-slate-400">Neg. Marking</label><input type="number" value="0" class="w-full p-2 rounded bg-white dark:bg-slate-800 text-sm font-bold border border-slate-200 dark:border-slate-600"></div>
-                    </div>
-                `;
-            } else if (type === 'debate') {
-                container.innerHTML = `
-                    <div><label class="text-[10px] font-bold uppercase text-slate-400">Number of Judges</label><input type="number" value="3" class="w-full p-2 rounded bg-white dark:bg-slate-800 text-sm font-bold border border-slate-200 dark:border-slate-600"></div>
-                `;
-            } else {
-                container.innerHTML = `<p class="text-xs text-slate-500">Generic scoring will be applied.</p>`;
-            }
-        }
-
-        function addCriteriaRow() {
-            const tbody = document.getElementById('criteria-body');
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td class="p-1"><input type="text" placeholder="Criteria" class="w-full bg-white dark:bg-slate-800 p-2 rounded text-sm font-bold border border-slate-200 dark:border-slate-600 focus:border-pink-500"></td>
-                <td class="p-1"><input type="number" value="10" class="w-full bg-white dark:bg-slate-800 p-2 rounded text-sm border border-slate-200 dark:border-slate-600 focus:border-pink-500"></td>
-                <td class="p-1 text-center"><button onclick="this.parentElement.parentElement.remove()" class="text-slate-400 hover:text-red-500 transition active:scale-[0.9]"><i class="fas fa-times"></i></button></td>
-            `;
-            tbody.appendChild(tr);
-        }
-
-        // ==========================================
-        // 7. CUSTOM LAYOUT
-        // ==========================================
-        function addCustomRow(containerId) {
-            const container = document.getElementById(containerId);
-            container.insertAdjacentHTML('beforeend', `
-                <div class="flex gap-2 animate-scale-in">
-                    <input type="text" placeholder="Stat Name" class="flex-grow p-2 rounded text-xs font-bold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 focus:ring-1 focus:ring-astra-blue">
+        // Custom Fields with Type Selection
+        function getCustomFieldHTML(type) {
+            return `
+                <div class="flex gap-2 animate-scale-in items-center">
+                    <input type="text" placeholder="${type === 'Row' ? 'Stat Name' : 'Col Name'}" class="flex-grow p-2 rounded text-xs font-bold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 focus:ring-1 focus:ring-astra-blue">
+                    <select class="p-2 rounded text-xs font-bold bg-slate-100 dark:bg-slate-700 border-none outline-none w-24">
+                        <option value="text">Text</option>
+                        <option value="number">Number</option>
+                        <option value="grade">Grade</option>
+                        <option value="boolean">Check</option>
+                    </select>
                     <button onclick="this.parentElement.remove()" class="text-red-400 px-2 hover:text-red-600 transition active:scale-[0.9]"><i class="fas fa-times"></i></button>
                 </div>
-            `);
-        }
-        function addCustomCol(containerId) {
-            const container = document.getElementById(containerId);
-            container.insertAdjacentHTML('beforeend', `
-                <div class="flex gap-2 animate-scale-in">
-                    <input type="text" placeholder="Col Name" class="flex-grow p-2 rounded text-xs font-bold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 focus:ring-1 focus:ring-astra-blue">
-                    <button onclick="this.parentElement.remove()" class="text-red-400 px-2 hover:text-red-600 transition active:scale-[0.9]"><i class="fas fa-times"></i></button>
-                </div>
-            `);
-        }
-
-        // ==========================================
-        // 8. BOARD SELECTION
-        // ==========================================
-        function validateBoardStepFinal() {
-            if (singleConfig.boardTypes.length === 0) {
-                document.getElementById('board-error-final').classList.remove('hidden');
-                return;
-            }
-            document.getElementById('board-error-final').classList.add('hidden');
-            nextStep(6);
-        }
-
-        function toggleBoardType(type, el) {
-            const idx = singleConfig.boardTypes.indexOf(type);
-            const checkIcon = el.querySelector('.check-icon');
-
-            if (idx === -1) {
-                singleConfig.boardTypes.push(type);
-                el.classList.add('border-astra-blue', 'ring-2', 'ring-blue-100');
-                el.classList.remove('border-slate-200', 'dark:border-slate-600');
-                checkIcon.classList.remove('opacity-0');
-                checkIcon.classList.add('opacity-100', 'scale-110');
-            } else {
-                singleConfig.boardTypes.splice(idx, 1);
-                el.classList.remove('border-astra-blue', 'ring-2', 'ring-blue-100');
-                el.classList.add('border-slate-200', 'dark:border-slate-600');
-                checkIcon.classList.remove('opacity-100', 'scale-110');
-                checkIcon.classList.add('opacity-0');
-            }
-
-            if(singleConfig.boardTypes.length > 0) {
-                document.getElementById('board-error-final').classList.add('hidden');
-            }
-        }
-
-        function updateBoardTypeVisualsFinal() {
-            const badge = document.getElementById('category-badge-final');
-            badge.textContent = `Category: ${singleConfig.category.toUpperCase()}`;
-
-            const recs = {
-                sports: ['sports-scoreboard', 'leaderboard'],
-                academic: ['leaderboard', 'scoresheet'],
-                cultural: ['scoreboard', 'scoresheet'],
-                esports: ['sports-scoreboard', 'leaderboard']
-            };
-
-            const recommended = recs[singleConfig.category] || [];
-
-            document.querySelectorAll('#step-layout-board-select .board-type-card').forEach(card => {
-                const onclickVal = card.getAttribute('onclick');
-                const type = onclickVal.match(/'([^']+)'/)[1];
-                const tag = card.querySelector('.rec-tag');
-
-                if(recommended.includes(type)) {
-                    tag.classList.remove('hidden');
-                } else {
-                    tag.classList.add('hidden');
-                }
-
-                // Ensure existing selections are visually marked
-                const checkIcon = card.querySelector('.check-icon');
-                if (singleConfig.boardTypes.includes(type)) {
-                    card.classList.add('border-astra-blue', 'ring-2', 'ring-blue-100');
-                    card.classList.remove('border-slate-200', 'dark:border-slate-600');
-                    checkIcon.classList.remove('opacity-0');
-                    checkIcon.classList.add('opacity-100', 'scale-110');
-                } else {
-                    card.classList.remove('border-astra-blue', 'ring-2', 'ring-blue-100');
-                    card.classList.add('border-slate-200', 'dark:border-slate-600');
-                    checkIcon.classList.remove('opacity-100', 'scale-110');
-                    checkIcon.classList.add('opacity-0');
-                }
-            });
-        }
-
-        // ==========================================
-        // 9. SUMMARY & CREATE
-        // ==========================================
-        function generateSummary() {
-            document.getElementById('sum-cat').textContent = singleConfig.category.toUpperCase() || 'EVENT';
-            document.getElementById('sum-name').textContent = document.getElementById('layout-name').value || 'Untitled Event';
-            document.getElementById('sum-type').textContent = singleConfig.participantType.toUpperCase();
-
-            const count = singleConfig.participants.length;
-            document.getElementById('sum-count').textContent = `${count} ${singleConfig.participantType}`;
-
-            const previewUL = document.getElementById('sum-part-preview');
-            previewUL.innerHTML = '';
-            for(let i=0; i<Math.min(3, count); i++) {
-                const part = singleConfig.participants[i];
-                let val = part.name;
-
-                if (singleConfig.participantType === 'individuals' && part.representsEntityId) {
-                    const entity = singleConfig.entities.find(e => e.id === part.representsEntityId);
-                    if (entity) {
-                        val += ` (${entity.shortCode})`;
-                    }
-                }
-
-                previewUL.innerHTML += `<li>${val}</li>`;
-            }
-            if(count > 3) previewUL.innerHTML += `<li>+ ${count - 3} more...</li>`;
-
-            const rulesUL = document.getElementById('sum-rules');
-            const unit = document.getElementById('score-unit').value;
-            const neg = document.getElementById('allow-negative').checked;
-            rulesUL.innerHTML = `
-                <li><i class="fas fa-check text-green-500 mr-2"></i>Unit: ${unit}</li>
-                <li><i class="fas fa-${neg?'check text-green-500':'times text-red-400'} mr-2"></i>Negative Scores</li>
             `;
-
-            if (singleConfig.boardTypes.length > 0) {
-                 rulesUL.innerHTML += `<li><i class="fas fa-list-alt text-green-500 mr-2"></i>Boards: ${singleConfig.boardTypes.join(', ')}</li>`;
-            }
-
-            const tagsDiv = document.getElementById('sum-tags');
-            const rows = document.getElementById('single-rows-container').children.length;
-            const cols = document.getElementById('single-cols-container').children.length;
-            let tagsHTML = '';
-            if(rows > 0) tagsHTML += `<span class="bg-blue-100 text-astra-blue px-2 py-1 rounded-full text-[10px] font-bold shadow-sm">${rows} Custom Rows</span>`;
-            if(cols > 0) tagsHTML += `<span class="bg-blue-100 text-astra-blue px-2 py-1 rounded-full text-[10px] font-bold shadow-sm">${cols} Custom Cols</span>`;
-
-            if(singleConfig.entities.length > 0) tagsHTML += `<span class="bg-purple-100 text-astra-purple px-2 py-1 rounded-full text-[10px] font-bold shadow-sm">${singleConfig.entities.length} Entities</span>`;
-
-            tagsDiv.innerHTML = tagsHTML;
         }
 
-        // Hijack the createScoreboard function to handle attachment
+        function addCustomRow(containerId) { document.getElementById(containerId).insertAdjacentHTML('beforeend', getCustomFieldHTML('Row')); }
+        function addCustomCol(containerId) { document.getElementById(containerId).insertAdjacentHTML('beforeend', getCustomFieldHTML('Col')); }
+
+        function validateBoardStepFinal() { if (singleConfig.boardTypes.length === 0) { document.getElementById('board-error-final').classList.remove('hidden'); return; } document.getElementById('board-error-final').classList.add('hidden'); nextStep(6); }
+        function toggleBoardType(type, el) { const idx = singleConfig.boardTypes.indexOf(type); const checkIcon = el.querySelector('.check-icon'); if (idx === -1) { singleConfig.boardTypes.push(type); el.classList.add('border-astra-blue', 'ring-2', 'ring-blue-100'); el.classList.remove('border-slate-200', 'dark:border-slate-600'); checkIcon.classList.remove('opacity-0'); checkIcon.classList.add('opacity-100', 'scale-110'); } else { singleConfig.boardTypes.splice(idx, 1); el.classList.remove('border-astra-blue', 'ring-2', 'ring-blue-100'); el.classList.add('border-slate-200', 'dark:border-slate-600'); checkIcon.classList.remove('opacity-100', 'scale-110'); checkIcon.classList.add('opacity-0'); } if(singleConfig.boardTypes.length > 0) { document.getElementById('board-error-final').classList.add('hidden'); } }
+        function updateBoardTypeVisualsFinal() { const badge = document.getElementById('category-badge-final'); badge.textContent = `Category: ${singleConfig.category.toUpperCase()}`; const recs = { sports: ['sports-scoreboard', 'leaderboard'], academic: ['leaderboard', 'scoresheet'], cultural: ['scoreboard', 'scoresheet'], esports: ['sports-scoreboard', 'leaderboard'] }; const recommended = recs[singleConfig.category] || []; document.querySelectorAll('#step-layout-board-select .board-type-card').forEach(card => { const onclickVal = card.getAttribute('onclick'); const type = onclickVal.match(/'([^']+)'/)[1]; const tag = card.querySelector('.rec-tag'); if(recommended.includes(type)) { tag.classList.remove('hidden'); } else { tag.classList.add('hidden'); } const checkIcon = card.querySelector('.check-icon'); if (singleConfig.boardTypes.includes(type)) { card.classList.add('border-astra-blue', 'ring-2', 'ring-blue-100'); card.classList.remove('border-slate-200', 'dark:border-slate-600'); checkIcon.classList.remove('opacity-0'); checkIcon.classList.add('opacity-100', 'scale-110'); } else { card.classList.remove('border-astra-blue', 'ring-2', 'ring-blue-100'); card.classList.add('border-slate-200', 'dark:border-slate-600'); checkIcon.classList.remove('opacity-100', 'scale-110'); checkIcon.classList.add('opacity-0'); } }); }
+
+        function generateSummary() { document.getElementById('sum-cat').textContent = singleConfig.category.toUpperCase() || 'EVENT'; document.getElementById('sum-name').textContent = document.getElementById('layout-name').value || 'Untitled Event'; document.getElementById('sum-type').textContent = singleConfig.participantType.toUpperCase(); const count = singleConfig.participants.length; document.getElementById('sum-count').textContent = `${count} ${singleConfig.participantType}`; const previewUL = document.getElementById('sum-part-preview'); previewUL.innerHTML = ''; for(let i=0; i<Math.min(3, count); i++) { const part = singleConfig.participants[i]; let val = part.name; if (singleConfig.participantType === 'individuals' && part.representsEntityId) { const entity = singleConfig.entities.find(e => e.id === part.representsEntityId); if (entity) { val += ` (${entity.shortCode})`; } } previewUL.innerHTML += `<li>${val}</li>`; } if(count > 3) previewUL.innerHTML += `<li>+ ${count - 3} more...</li>`; const rulesUL = document.getElementById('sum-rules'); const unit = document.getElementById('score-unit').value; const neg = document.getElementById('allow-negative').checked; rulesUL.innerHTML = `<li><i class="fas fa-check text-green-500 mr-2"></i>Unit: ${unit}</li><li><i class="fas fa-${neg?'check text-green-500':'times text-red-400'} mr-2"></i>Negative Scores</li>`; if (singleConfig.boardTypes.length > 0) { rulesUL.innerHTML += `<li><i class="fas fa-list-alt text-green-500 mr-2"></i>Boards: ${singleConfig.boardTypes.join(', ')}</li>`; } const tagsDiv = document.getElementById('sum-tags'); const rows = document.getElementById('single-rows-container').children.length; const cols = document.getElementById('single-cols-container').children.length; let tagsHTML = ''; if(rows > 0) tagsHTML += `<span class="bg-blue-100 text-astra-blue px-2 py-1 rounded-full text-[10px] font-bold shadow-sm">${rows} Custom Rows</span>`; if(cols > 0) tagsHTML += `<span class="bg-blue-100 text-astra-blue px-2 py-1 rounded-full text-[10px] font-bold shadow-sm">${cols} Custom Cols</span>`; if(singleConfig.entities.length > 0) tagsHTML += `<span class="bg-purple-100 text-astra-purple px-2 py-1 rounded-full text-[10px] font-bold shadow-sm">${singleConfig.entities.length} Entities</span>`; tagsDiv.innerHTML = tagsHTML; }
+
         let activeStageAttachment = null;
-        const originalCreateScoreboard = () => {
-            // 1. Generate ID
-            const eventId = 'evt-' + Date.now();
-            
-            // 2. Determine Subcategory
-            let subcat = 'General';
-            if(singleConfig.category === 'sports') subcat = document.getElementById('sport-type')?.value || 'General';
-            else if(singleConfig.category === 'academic') subcat = document.querySelector('input[name="acad-type"]:checked')?.value || 'Quiz';
-            else if(singleConfig.category === 'esports') subcat = 'Esports'; 
+        const originalCreateScoreboard = () => { const eventId = 'evt-' + Date.now(); let subcat = 'General'; if(singleConfig.category === 'sports') { const sType = document.getElementById('sport-type')?.value; subcat = (sType === 'custom' || sType === 'other') ? 'Manual' : sType || 'General'; } else if(singleConfig.category === 'academic') { const aType = document.querySelector('input[name="acad-type"]:checked')?.value; subcat = (aType === 'other') ? 'Manual' : aType || 'Quiz'; } else if(singleConfig.category === 'esports') { const eType = document.getElementById('esports-game')?.value; subcat = (eType === 'other') ? 'Manual' : 'Esports'; } else if(singleConfig.category === 'cultural') { const cType = document.getElementById('cult-subtype')?.value; subcat = (cType === 'other') ? 'Manual' : cType || 'Cultural'; } const categoryColors = { sports: 'orange', academic: 'blue', cultural: 'pink', esports: 'purple' }; const newEvent = { id: eventId, name: document.getElementById('layout-name').value || 'Untitled Event', category: singleConfig.category || 'sports', subcategory: subcat, status: 'upcoming', scale: singleConfig.participantType || 'Teams', color: categoryColors[singleConfig.category] || 'slate', config: singleConfig.scoring, layoutConfig: singleConfig.layout, teams: singleConfig.participants.map(p => ({ name: p.name, score: 0, color: p.color || '#3b82f6', id: p.id })), timer: { minutes: 0, seconds: 0, isRunning: false, period: "Period 1" }, logs: ["Event Created"] }; try { const existingEvents = JSON.parse(localStorage.getItem('astra_events')) || []; existingEvents.push(newEvent); localStorage.setItem('astra_events', JSON.stringify(existingEvents)); showTemporaryMessage("Scoreboard Created! Redirecting...", "success"); setTimeout(() => { window.location.href = `admin.html?id=${eventId}`; }, 1000); } catch (e) { console.error("Save failed", e); showTemporaryMessage("Error saving event", "error"); } };
+        function createScoreboard() { if (activeStageAttachment) { const { sIdx, stIdx } = activeStageAttachment; festivalConfig.subEvents[sIdx].stages[stIdx].scoreboardConfig = JSON.parse(JSON.stringify(singleConfig)); activeStageAttachment = null; showTemporaryMessage(`Scoreboard Attached to ${festivalConfig.subEvents[sIdx].name} - ${festivalConfig.subEvents[sIdx].stages[stIdx].name} Successfully!`, "success"); document.getElementById('single-mode-flow').classList.add('hidden'); document.getElementById('festival-mode-flow').classList.remove('hidden'); nextFestStep(4); } else { originalCreateScoreboard(); } }
 
-            // 3. Map Colors (Crucial for Dashboard to not crash)
-            const categoryColors = {
-                sports: 'orange',
-                academic: 'blue',
-                cultural: 'pink',
-                esports: 'purple'
-            };
-
-            // 4. Construct Event Object
-            const newEvent = {
-                id: eventId,
-                name: document.getElementById('layout-name').value || 'Untitled Event',
-                category: singleConfig.category || 'sports',
-                subcategory: subcat,
-                status: 'upcoming',
-                scale: singleConfig.participantType || 'Teams',
-                color: categoryColors[singleConfig.category] || 'slate', // Fallback color
-                config: singleConfig.scoring || {},
-                teams: singleConfig.participants.map(p => ({ 
-                    name: p.name, 
-                    score: 0, 
-                    color: p.color || '#3b82f6',
-                    id: p.id
-                })),
-                timer: { minutes: 0, seconds: 0, isRunning: false, period: "Period 1" },
-                logs: ["Event Created"]
-            };
-
-            // 5. Save to LocalStorage
-            try {
-                const existingEvents = JSON.parse(localStorage.getItem('astra_events')) || [];
-                existingEvents.push(newEvent);
-                localStorage.setItem('astra_events', JSON.stringify(existingEvents));
-                
-                showTemporaryMessage("Scoreboard Created! Redirecting...", "success");
-                setTimeout(() => { window.location.href = `admin.html?id=${eventId}`; }, 1000);
-            } catch (e) {
-                console.error("Save failed", e);
-                showTemporaryMessage("Error saving event", "error");
-            }
-        };
-
-        function createScoreboard() {
-            if (activeStageAttachment) {
-                const { sIdx, stIdx } = activeStageAttachment;
-
-                // Save the config to the festival object
-                festivalConfig.subEvents[sIdx].stages[stIdx].scoreboardConfig = JSON.parse(JSON.stringify(singleConfig));
-
-                // Reset Mode
-                activeStageAttachment = null;
-
-                showTemporaryMessage(`Scoreboard Attached to ${festivalConfig.subEvents[sIdx].name} - ${festivalConfig.subEvents[sIdx].stages[stIdx].name} Successfully!`, "success");
-
-                // Switch back to Festival Flow
-                document.getElementById('single-mode-flow').classList.add('hidden');
-                document.getElementById('festival-mode-flow').classList.remove('hidden');
-
-                // Go back to Stages step
-                nextFestStep(4);
-            } else {
-                originalCreateScoreboard();
-            }
-        }
-
-
-        // ==========================================
-        // 10. FESTIVAL MODE LOGIC
-        // ==========================================
         let festCurrentModeStep = 1;
-
         nextFestStep = function(stepNum) {
             festCurrentModeStep = stepNum;
             const steps = ['fest-step-1', 'fest-step-subevents', 'fest-step-participants', 'fest-step-stages', 'fest-step-summary-new'];
-            const oldSteps = ['fest-step-2', 'fest-step-3'];
-
-            oldSteps.forEach(id => document.getElementById(id).classList.add('hidden'));
             steps.forEach(id => document.getElementById(id).classList.add('hidden'));
-
-            const progress = (stepNum / 5) * 100;
-            document.getElementById('progress-bar').style.width = `${progress}%`;
-
+            const progress = (stepNum / 5) * 100; document.getElementById('progress-bar').style.width = `${progress}%`;
             let targetEl = null;
-            if(stepNum === 1) {
-                targetEl = document.getElementById('fest-step-1');
-            } else if (stepNum === 2) {
-                saveFestBasics();
-                renderSubEvents();
-                targetEl = document.getElementById('fest-step-subevents');
-            } else if (stepNum === 3) {
-                renderParticipantsOverview();
-                targetEl = document.getElementById('fest-step-participants');
-            } else if (stepNum === 4) {
-                renderStagesOverview();
-                targetEl = document.getElementById('fest-step-stages');
-            } else if (stepNum === 5) {
-                renderFestivalSummary();
-                targetEl = document.getElementById('fest-step-summary-new');
-            }
-
-            if (targetEl) {
-                targetEl.classList.remove('hidden');
-                targetEl.style.animation = 'none';
-                void targetEl.offsetWidth; // Trigger reflow
-                targetEl.style.animation = 'scaleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
-            }
+            if(stepNum === 1) { targetEl = document.getElementById('fest-step-1'); }
+            else if (stepNum === 2) { saveFestBasics(); renderSubEvents(); targetEl = document.getElementById('fest-step-subevents'); }
+            else if (stepNum === 3) { renderParticipantsOverview(); targetEl = document.getElementById('fest-step-participants'); }
+            else if (stepNum === 4) { renderStagesOverview(); targetEl = document.getElementById('fest-step-stages'); }
+            else if (stepNum === 5) { renderFestivalSummary(); targetEl = document.getElementById('fest-step-summary-new'); }
+            if (targetEl) { targetEl.classList.remove('hidden'); targetEl.style.animation = 'none'; void targetEl.offsetWidth; targetEl.style.animation = 'scaleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards'; }
         };
-
         function showFestStep(n) { nextFestStep(n); }
-
-        function saveFestBasics() {
-            festivalConfig.name = document.getElementById('fest-input-name').value;
-            festivalConfig.organizer = document.getElementById('fest-input-organizer').value;
-            const start = document.getElementById('fest-input-start').value;
-            const end = document.getElementById('fest-input-end').value;
-            festivalConfig.dates = `${start} to ${end}`;
-        }
-
-        function renderFestivalEntities() {
-            const container = document.getElementById('festival-entities-list');
-            container.innerHTML = festivalConfig.entities.length === 0
-                ? '<p class="text-xs text-slate-400 italic text-center py-2">No entities added yet (Optional)</p>'
-                : festivalConfig.entities.map(e => `
-                    <div class="flex justify-between items-center p-2 rounded-lg bg-slate-100 dark:bg-slate-700 transition hover:shadow-inner">
-                        <div class="flex items-center">
-                            <div class="w-1.5 h-5 rounded-l-sm mr-2 shadow-sm" style="background-color: ${e.color};"></div>
-                            <span class="text-xs font-bold text-slate-700 dark:text-white">${e.name}</span>
-                            <span class="ml-1 text-[10px] font-medium text-slate-500">(${e.shortCode})</span>
-                        </div>
-                        <button onclick="removeEntity('${e.id}')" class="text-slate-400 hover:text-red-500 transition active:scale-[0.9]"><i class="fas fa-times"></i></button>
-                    </div>
-                `).join('');
-        }
+        function saveFestBasics() { festivalConfig.name = document.getElementById('fest-input-name').value; festivalConfig.organizer = document.getElementById('fest-input-organizer').value; const start = document.getElementById('fest-input-start').value; const end = document.getElementById('fest-input-end').value; festivalConfig.dates = `${start} to ${end}`; }
+        function renderFestivalEntities() { const container = document.getElementById('festival-entities-list'); container.innerHTML = festivalConfig.entities.length === 0 ? '<p class="text-xs text-slate-400 italic text-center py-2">No entities added yet (Optional)</p>' : festivalConfig.entities.map(e => `<div class="flex justify-between items-center p-2 rounded-lg bg-slate-100 dark:bg-slate-700 transition hover:shadow-inner"><div class="flex items-center"><div class="w-1.5 h-5 rounded-l-sm mr-2 shadow-sm" style="background-color: ${e.color};"></div><span class="text-xs font-bold text-slate-700 dark:text-white">${e.name}</span><span class="ml-1 text-[10px] font-medium text-slate-500">(${e.shortCode})</span></div><button onclick="removeEntity('${e.id}')" class="text-slate-400 hover:text-red-500 transition active:scale-[0.9]"><i class="fas fa-times"></i></button></div>`).join(''); }
 
         function updateSubEventTypeOptions() {
-            const cat = document.getElementById('new-se-cat').value;
-            const typeSelect = document.getElementById('new-se-type');
-            typeSelect.innerHTML = '';
-            const opts = {
-                sports: ['Football', 'Cricket', 'Basketball', 'Volleyball', 'Athletics'],
-                academic: ['Quiz', 'Debate', 'Spelling Bee', 'Hackathon'],
-                cultural: ['Dance Solo', 'Dance Group', 'Singing', 'Drama', 'Fashion Show'],
-                esports: ['Valorant', 'BGMI/PUBG', 'FIFA', 'Rocket League']
-            };
-            opts[cat].forEach(o => {
-                typeSelect.innerHTML += `<option value="${o}">${o}</option>`;
-            });
+            const cat = document.getElementById('new-se-cat').value; const typeSelect = document.getElementById('new-se-type'); typeSelect.innerHTML = '';
+            const opts = { sports: ['Football', 'Cricket', 'Basketball', 'Volleyball', 'Athletics'], academic: ['Quiz', 'Debate', 'Spelling Bee', 'Hackathon'], cultural: ['Dance Solo', 'Dance Group', 'Singing', 'Drama', 'Fashion Show'], esports: ['Valorant', 'BGMI/PUBG', 'FIFA', 'Rocket League'] };
+            opts[cat].forEach(o => { typeSelect.innerHTML += `<option value="${o}">${o}</option>`; });
+            // Show options container for scoring based on category
+            const container = document.getElementById('se-specific-options-container');
+            if(cat === 'sports') container.innerHTML = `<label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Duration</label><input type="number" placeholder="Mins per half" class="w-full p-2 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-sm">`;
+            else if(cat === 'academic') container.innerHTML = `<label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Rounds</label><input type="number" value="3" class="w-full p-2 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-sm">`;
+            else container.innerHTML = `<p class="text-xs text-slate-400">Standard rules apply.</p>`;
         }
 
         function showSubEventModal() {
-            updateSubEventTypeOptions();
-            document.getElementById('new-se-name').value = '';
+            updateSubEventTypeOptions(); document.getElementById('new-se-name').value = '';
             document.getElementById('subevent-modal').classList.remove('hidden');
+            switchSubEventTab('basics');
+        }
+
+        function switchSubEventTab(tabName) {
+            ['basics', 'scoring', 'layout'].forEach(t => {
+                document.getElementById(`se-tab-${t}`).classList.add('hidden');
+                document.getElementById(`tab-se-${t}`).classList.remove('bg-purple-50', 'text-astra-purple', 'dark:bg-slate-700', 'dark:text-purple-300');
+                document.getElementById(`tab-se-${t}`).classList.add('text-slate-500', 'dark:text-slate-400');
+            });
+            document.getElementById(`se-tab-${tabName}`).classList.remove('hidden');
+            document.getElementById(`tab-se-${tabName}`).classList.add('bg-purple-50', 'text-astra-purple', 'dark:bg-slate-700', 'dark:text-purple-300');
+            document.getElementById(`tab-se-${tabName}`).classList.remove('text-slate-500', 'dark:text-slate-400');
+        }
+
+        function selectSeBoard(type, el) {
+            document.querySelectorAll('.se-board-opt').forEach(b => b.classList.remove('border-astra-purple', 'text-astra-purple', 'bg-purple-50', 'dark:bg-slate-700'));
+            el.classList.add('border-astra-purple', 'text-astra-purple', 'bg-purple-50', 'dark:bg-slate-700');
+            document.getElementById('se-board-pref').value = type;
+        }
+
+        function addSeCustomRow() {
+            document.getElementById('se-custom-rows').insertAdjacentHTML('beforeend', getCustomFieldHTML('Row'));
         }
 
         function saveSubEvent() {
             const name = document.getElementById('new-se-name').value;
             const cat = document.getElementById('new-se-cat').value;
             const type = document.getElementById('new-se-type').value;
-            if(!name) {
-                showTemporaryMessage("Please enter an event name.", "error");
-                return;
-            }
-
-            festivalConfig.subEvents.push({
-                name, category: cat, type,
-                participants: [],
-                stages: []
-            });
-
-            document.getElementById('subevent-modal').classList.add('hidden');
-            renderSubEvents();
+            if(!name) { showTemporaryMessage("Please enter an event name.", "error"); return; }
+            
+            // Collect advanced data
+            const boardPref = document.getElementById('se-board-pref').value;
+            const scoring = {
+                unit: document.getElementById('se-score-unit').value,
+                negative: document.getElementById('se-allow-negative').checked
+            };
+            
+            festivalConfig.subEvents.push({ name, category: cat, type, participants: [], stages: [], config: { boardPref, scoring } });
+            document.getElementById('subevent-modal').classList.add('hidden'); renderSubEvents();
         }
 
         function renderSubEvents() {
-            const container = document.getElementById('subevents-container');
-            if(festivalConfig.subEvents.length === 0) {
-                container.innerHTML = document.getElementById('subevents-empty').outerHTML;
-                return;
-            }
-
-            container.innerHTML = '';
-            festivalConfig.subEvents.forEach((se, idx) => {
-                const colors = { sports: 'orange', academic: 'astra-blue', cultural: 'pink', esports: 'astra-purple' };
-                const c = colors[se.category];
-
-                container.innerHTML += `
-                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border-l-4 border-${c}-500 shadow-md hover:shadow-lg transition relative group">
-                        <button onclick="deleteSubEvent(${idx})" class="absolute top-3 right-3 text-slate-300 hover:text-red-500 transition active:scale-[0.9]"><i class="fas fa-trash"></i></button>
-                        <div class="text-[10px] font-bold uppercase text-${c}-500 mb-1 tracking-wide">${se.category} • ${se.type}</div>
-                        <h4 class="font-black text-lg text-slate-800 dark:text-white">${se.name}</h4>
-                        <div class="mt-3 flex gap-2 text-xs font-bold text-slate-400">
-                            <span><i class="fas fa-users mr-1"></i> ${se.participants.length} Participants</span>
-                            <span><i class="fas fa-layer-group mr-1"></i> ${se.stages.length} Stages</span>
-                        </div>
-                    </div>
-                `;
+            const container = document.getElementById('subevents-container'); if(festivalConfig.subEvents.length === 0) { container.innerHTML = document.getElementById('subevents-empty').outerHTML; return; }
+            container.innerHTML = ''; festivalConfig.subEvents.forEach((se, idx) => {
+                const colors = { sports: 'orange', academic: 'astra-blue', cultural: 'pink', esports: 'astra-purple' }; const c = colors[se.category];
+                container.innerHTML += `<div class="bg-white dark:bg-slate-800 p-4 rounded-xl border-l-4 border-${c}-500 shadow-md hover:shadow-lg transition relative group"><button onclick="deleteSubEvent(${idx})" class="absolute top-3 right-3 text-slate-300 hover:text-red-500 transition active:scale-[0.9]"><i class="fas fa-trash"></i></button><div class="text-[10px] font-bold uppercase text-${c}-500 mb-1 tracking-wide">${se.category} • ${se.type}</div><h4 class="font-black text-lg text-slate-800 dark:text-white">${se.name}</h4><div class="mt-3 flex gap-2 text-xs font-bold text-slate-400"><span><i class="fas fa-users mr-1"></i> ${se.participants.length} Participants</span><span><i class="fas fa-layer-group mr-1"></i> ${se.stages.length} Stages</span></div></div>`;
             });
         }
+        function deleteSubEvent(idx) { if(confirm("Are you sure you want to delete this event?")) { festivalConfig.subEvents.splice(idx, 1); renderSubEvents(); } }
 
-        function deleteSubEvent(idx) {
-            if(confirm("Are you sure you want to delete this event?")) {
-                festivalConfig.subEvents.splice(idx, 1);
-                renderSubEvents();
-            }
-        }
+        function renderParticipantsOverview() { const container = document.getElementById('participants-overview-container'); container.innerHTML = ''; festivalConfig.subEvents.forEach((se, idx) => { container.innerHTML += `<div class="bg-white dark:bg-slate-800 p-4 rounded-xl flex justify-between items-center shadow-md border border-slate-100 dark:border-slate-700 hover:shadow-lg transition"><div><h4 class="font-black text-slate-800 dark:text-white">${se.name}</h4><div class="text-xs text-slate-500 font-bold">${se.participants.length} Registered</div></div><button onclick="openFestParticipantsModal(${idx})" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-4 py-2 rounded-lg text-xs font-black hover:bg-purple-100 hover:text-astra-purple transition active:scale-[0.98] shadow-sm">Manage</button></div>`; }); }
+        function openFestParticipantsModal(idx) { currentManageEventIdx = idx; document.getElementById('fpm-event-name').textContent = festivalConfig.subEvents[idx].name; const select = document.getElementById('fpm-entity-select'); select.innerHTML = '<option value="">No Affiliation</option>'; festivalConfig.entities.forEach(ent => { select.innerHTML += `<option value="${ent.id}">${ent.name} (${ent.shortCode})</option>`; }); renderFestParticipantList(); document.getElementById('fest-participants-modal').classList.remove('hidden'); }
+        function closeFestParticipantsModal() { document.getElementById('fest-participants-modal').classList.add('hidden'); renderParticipantsOverview(); }
+        function addFestParticipant() { const input = document.getElementById('fpm-input'); const select = document.getElementById('fpm-entity-select'); const name = input.value.trim(); const entityId = select.value; if(!name) return; festivalConfig.subEvents[currentManageEventIdx].participants.push({ name: name, entityId: entityId || null }); input.value = ''; select.value = ''; renderFestParticipantList(); }
+        function renderFestParticipantList() { const list = document.getElementById('fpm-list'); const parts = festivalConfig.subEvents[currentManageEventIdx].participants; list.innerHTML = ''; parts.forEach((p, i) => { let entityBadge = ''; if(p.entityId) { const ent = festivalConfig.entities.find(e => e.id === p.entityId); if(ent) { entityBadge = `<span class="ml-2 text-[10px] px-2 py-0.5 rounded-full text-white font-bold shadow-sm" style="background-color: ${ent.color}">${ent.shortCode}</span>`; } } list.innerHTML += `<div class="flex justify-between items-center bg-white dark:bg-slate-700 p-2 rounded shadow-sm border border-slate-100 dark:border-slate-600"><div class="flex items-center"><span class="text-sm font-bold text-slate-700 dark:text-white">${p.name}</span>${entityBadge}</div><button onclick="removeFestParticipant(${i})" class="text-slate-300 hover:text-red-500 transition active:scale-[0.9]"><i class="fas fa-times"></i></button></div>`; }); }
+        function removeFestParticipant(i) { festivalConfig.subEvents[currentManageEventIdx].participants.splice(i, 1); renderFestParticipantList(); }
+        
+        function renderStagesOverview() { const container = document.getElementById('stages-overview-container'); container.innerHTML = ''; if (festivalConfig.subEvents.length === 0) { container.innerHTML = '<p class="text-center text-slate-400 py-10">Add sub-events first to define stages.</p>'; return; } festivalConfig.subEvents.forEach((se, sIdx) => { let stagesHTML = ''; se.stages.forEach((st, stIdx) => { const hasBoard = st.scoreboardConfig ? true : false; stagesHTML += `<div class="flex items-center gap-3 mb-2 pl-4 border-l-2 border-slate-200 dark:border-slate-600 ml-2"><div class="flex-grow"><div class="text-sm font-bold text-slate-700 dark:text-white">${st.name}</div><div class="text-[10px] text-slate-400 uppercase font-bold">${st.type}</div></div><button onclick="attachScoreboardToStage(${sIdx}, ${stIdx})" class="${hasBoard ? 'bg-green-100 text-green-600' : 'bg-astra-purple/10 text-astra-purple'} px-3 py-1 rounded-full text-[10px] font-black uppercase hover:brightness-95 transition shadow-sm active:scale-[0.98]"><i class="fas fa-${hasBoard ? 'check-circle' : 'plug'} mr-1"></i> ${hasBoard ? 'Configured' : 'Attach Board'}</button><button onclick="deleteStage(${sIdx}, ${stIdx})" class="text-slate-300 hover:text-red-500 transition active:scale-[0.9]"><i class="fas fa-trash"></i></button></div>`; }); container.innerHTML += `<div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow-md border border-slate-100 dark:border-slate-700"><div class="flex justify-between items-center mb-4"><h4 class="font-black text-slate-800 dark:text-white text-lg">${se.name}</h4><button onclick="addStage(${sIdx})" class="text-xs font-bold text-astra-purple hover:text-astra-blue transition active:scale-[0.98]">+ Add Stage</button></div><div class="space-y-1">${stagesHTML}</div>${se.stages.length === 0 ? '<p class="text-xs text-slate-400 italic pl-2">No stages defined.</p>' : ''}</div>`; }); }
+        function addStage(sIdx) { const name = prompt("Enter Stage Name (e.g. Semi-Finals):"); if(!name) return; festivalConfig.subEvents[sIdx].stages.push({ name, type: 'Knockout', scoreboardConfig: null }); renderStagesOverview(); }
+        function deleteStage(sIdx, stIdx) { if(prompt("Type 'DELETE' to confirm deletion of this stage.") === 'DELETE') { festivalConfig.subEvents[sIdx].stages.splice(stIdx, 1); renderStagesOverview(); } }
+        function attachScoreboardToStage(sIdx, stIdx) { activeStageAttachment = { sIdx, stIdx }; const subEvent = festivalConfig.subEvents[sIdx]; document.getElementById('festival-mode-flow').classList.add('hidden'); document.getElementById('single-mode-flow').classList.remove('hidden'); singleConfig.category = subEvent.category; singleConfig.participantType = 'teams'; singleConfig.entities = [...festivalConfig.entities]; singleConfig.participants = subEvent.participants.map((p, i) => { let color = `#${Math.floor(Math.random()*16777215).toString(16)}`; if (p.entityId) { const ent = festivalConfig.entities.find(e => e.id === p.entityId); if (ent) color = ent.color; } return { id: `att-p-${i}`, name: p.name, color: color, representsEntityId: p.entityId }; }); singleConfig.boardTypes = []; setParticipantType(singleConfig.participantType); const container = document.getElementById('participants-list'); container.innerHTML = ''; singleConfig.participants.forEach((p, i) => addParticipant(i + 1)); showStep(2); }
 
-        function renderParticipantsOverview() {
-            const container = document.getElementById('participants-overview-container');
-            container.innerHTML = '';
-            festivalConfig.subEvents.forEach((se, idx) => {
-                container.innerHTML += `
-                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl flex justify-between items-center shadow-md border border-slate-100 dark:border-slate-700 hover:shadow-lg transition">
-                        <div>
-                            <h4 class="font-black text-slate-800 dark:text-white">${se.name}</h4>
-                            <div class="text-xs text-slate-500 font-bold">${se.participants.length} Registered</div>
-                        </div>
-                        <button onclick="openFestParticipantsModal(${idx})" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-4 py-2 rounded-lg text-xs font-black hover:bg-purple-100 hover:text-astra-purple transition active:scale-[0.98] shadow-sm">Manage</button>
-                    </div>
-                `;
-            });
-        }
-
-        function openFestParticipantsModal(idx) {
-            currentManageEventIdx = idx;
-            document.getElementById('fpm-event-name').textContent = festivalConfig.subEvents[idx].name;
-
-            const select = document.getElementById('fpm-entity-select');
-            select.innerHTML = '<option value="">No Affiliation</option>';
-
-            festivalConfig.entities.forEach(ent => {
-                select.innerHTML += `<option value="${ent.id}">${ent.name} (${ent.shortCode})</option>`;
-            });
-
-            renderFestParticipantList();
-            document.getElementById('fest-participants-modal').classList.remove('hidden');
-        }
-
-        function closeFestParticipantsModal() {
-            document.getElementById('fest-participants-modal').classList.add('hidden');
-            renderParticipantsOverview();
-        }
-
-        function addFestParticipant() {
-            const input = document.getElementById('fpm-input');
-            const select = document.getElementById('fpm-entity-select');
-
-            const name = input.value.trim();
-            const entityId = select.value;
-
-            if(!name) return;
-
-            festivalConfig.subEvents[currentManageEventIdx].participants.push({
-                name: name,
-                entityId: entityId || null
-            });
-
-            input.value = '';
-            select.value = '';
-            renderFestParticipantList();
-        }
-
-        function renderFestParticipantList() {
-            const list = document.getElementById('fpm-list');
-            const parts = festivalConfig.subEvents[currentManageEventIdx].participants;
-            list.innerHTML = '';
-
-            parts.forEach((p, i) => {
-                let entityBadge = '';
-                if(p.entityId) {
-                    const ent = festivalConfig.entities.find(e => e.id === p.entityId);
-                    if(ent) {
-                        entityBadge = `<span class="ml-2 text-[10px] px-2 py-0.5 rounded-full text-white font-bold shadow-sm" style="background-color: ${ent.color}">${ent.shortCode}</span>`;
-                    }
-                }
-
-                list.innerHTML += `
-                    <div class="flex justify-between items-center bg-white dark:bg-slate-700 p-2 rounded shadow-sm border border-slate-100 dark:border-slate-600">
-                        <div class="flex items-center">
-                            <span class="text-sm font-bold text-slate-700 dark:text-white">${p.name}</span>
-                            ${entityBadge}
-                        </div>
-                        <button onclick="removeFestParticipant(${i})" class="text-slate-300 hover:text-red-500 transition active:scale-[0.9]"><i class="fas fa-times"></i></button>
-                    </div>
-                `;
-            });
-        }
-
-        function removeFestParticipant(i) {
-            festivalConfig.subEvents[currentManageEventIdx].participants.splice(i, 1);
-            renderFestParticipantList();
-        }
-
-        function renderStagesOverview() {
-            const container = document.getElementById('stages-overview-container');
-            container.innerHTML = '';
-            if (festivalConfig.subEvents.length === 0) {
-                 container.innerHTML = '<p class="text-center text-slate-400 py-10">Add sub-events first to define stages.</p>';
-                 return;
-            }
-
-            festivalConfig.subEvents.forEach((se, sIdx) => {
-                let stagesHTML = '';
-                se.stages.forEach((st, stIdx) => {
-                    const hasBoard = st.scoreboardConfig ? true : false;
-                    stagesHTML += `
-                        <div class="flex items-center gap-3 mb-2 pl-4 border-l-2 border-slate-200 dark:border-slate-600 ml-2">
-                            <div class="flex-grow">
-                                <div class="text-sm font-bold text-slate-700 dark:text-white">${st.name}</div>
-                                <div class="text-[10px] text-slate-400 uppercase font-bold">${st.type}</div>
-                            </div>
-                            <button onclick="attachScoreboardToStage(${sIdx}, ${stIdx})" class="${hasBoard ? 'bg-green-100 text-green-600' : 'bg-astra-purple/10 text-astra-purple'} px-3 py-1 rounded-full text-[10px] font-black uppercase hover:brightness-95 transition shadow-sm active:scale-[0.98]">
-                                <i class="fas fa-${hasBoard ? 'check-circle' : 'plug'} mr-1"></i> ${hasBoard ? 'Configured' : 'Attach Board'}
-                            </button>
-                            <button onclick="deleteStage(${sIdx}, ${stIdx})" class="text-slate-300 hover:text-red-500 transition active:scale-[0.9]"><i class="fas fa-trash"></i></button>
-                        </div>
-                    `;
-                });
-
-                container.innerHTML += `
-                    <div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow-md border border-slate-100 dark:border-slate-700">
-                        <div class="flex justify-between items-center mb-4">
-                            <h4 class="font-black text-slate-800 dark:text-white text-lg">${se.name}</h4>
-                            <button onclick="addStage(${sIdx})" class="text-xs font-bold text-astra-purple hover:text-astra-blue transition active:scale-[0.98]">+ Add Stage</button>
-                        </div>
-                        <div class="space-y-1">
-                            ${stagesHTML}
-                        </div>
-                        ${se.stages.length === 0 ? '<p class="text-xs text-slate-400 italic pl-2">No stages defined.</p>' : ''}
-                    </div>
-                `;
-            });
-        }
-
-        function addStage(sIdx) {
-            const name = prompt("Enter Stage Name (e.g. Semi-Finals):");
-            if(!name) return;
-            festivalConfig.subEvents[sIdx].stages.push({
-                name,
-                type: 'Knockout',
-                scoreboardConfig: null
-            });
-            renderStagesOverview();
-        }
-
-        function deleteStage(sIdx, stIdx) {
-            // Note: Using prompt as a non-alert confirmation
-            if(prompt("Type 'DELETE' to confirm deletion of this stage.") === 'DELETE') {
-                festivalConfig.subEvents[sIdx].stages.splice(stIdx, 1);
-                renderStagesOverview();
-            }
-        }
-
-        function attachScoreboardToStage(sIdx, stIdx) {
-            activeStageAttachment = { sIdx, stIdx };
-            const subEvent = festivalConfig.subEvents[sIdx];
-
-            document.getElementById('festival-mode-flow').classList.add('hidden');
-            document.getElementById('single-mode-flow').classList.remove('hidden');
-
-            singleConfig.category = subEvent.category;
-            singleConfig.participantType = 'teams';
-            singleConfig.entities = [...festivalConfig.entities];
-
-            // Map Fest participants (objects) to Single participants (objects)
-            singleConfig.participants = subEvent.participants.map((p, i) => {
-                let color = `#${Math.floor(Math.random()*16777215).toString(16)}`;
-                if (p.entityId) {
-                    const ent = festivalConfig.entities.find(e => e.id === p.entityId);
-                    if (ent) color = ent.color;
-                }
-
-                return {
-                    id: `att-p-${i}`,
-                    name: p.name,
-                    color: color,
-                    representsEntityId: p.entityId
-                };
-            });
-
-            singleConfig.boardTypes = [];
-
-            // Reset and render step 2
-            setParticipantType(singleConfig.participantType);
-            const container = document.getElementById('participants-list');
-            container.innerHTML = '';
-            singleConfig.participants.forEach((p, i) => addParticipant(i + 1)); // Add participant populates the UI based on config.participants
-
-            showStep(2);
-        }
-
-        function renderFestivalSummary() {
-            document.getElementById('fest-sum-name').textContent = festivalConfig.name || 'Untitled Festival';
-            document.getElementById('fest-sum-org').textContent = festivalConfig.organizer || 'Unknown Organizer';
-            document.getElementById('fest-sum-dates').textContent = festivalConfig.dates;
-
-            document.getElementById('fest-sum-events-count').textContent = festivalConfig.subEvents.length;
-            document.getElementById('fest-sum-entities-count').textContent = festivalConfig.entities.length;
-
-            let totalStages = 0;
-            let totalBoards = 0;
-            const treeDiv = document.getElementById('fest-sum-tree');
-            treeDiv.innerHTML = '';
-
-            festivalConfig.subEvents.forEach(se => {
-                totalStages += se.stages.length;
-                const boards = se.stages.filter(s => s.scoreboardConfig).length;
-                totalBoards += boards;
-
-                let stagesList = '';
-                se.stages.forEach(st => {
-                    stagesList += `<div class="pl-4 text-xs text-slate-400 flex items-center">
-                        <i class="fas fa-angle-right mr-2"></i> ${st.name}
-                        ${st.scoreboardConfig ? '<i class="fas fa-check text-green-500 ml-2"></i>' : '<i class="fas fa-exclamation-triangle text-orange-400 ml-2"></i>'}
-                    </div>`;
-                });
-
-                treeDiv.innerHTML += `
-                    <div class="mb-2">
-                        <div class="flex items-center text-astra-purple dark:text-purple-300 font-bold"><i class="fas fa-folder mr-2"></i> ${se.name}</div>
-                        ${stagesList}
-                    </div>
-                `;
-            });
-
-            document.getElementById('fest-sum-stages-count').textContent = totalStages;
-            document.getElementById('fest-sum-boards-count').textContent = totalBoards;
-        }
-
+        function renderFestivalSummary() { document.getElementById('fest-sum-name').textContent = festivalConfig.name || 'Untitled Festival'; document.getElementById('fest-sum-org').textContent = festivalConfig.organizer || 'Unknown Organizer'; document.getElementById('fest-sum-dates').textContent = festivalConfig.dates; document.getElementById('fest-sum-events-count').textContent = festivalConfig.subEvents.length; document.getElementById('fest-sum-entities-count').textContent = festivalConfig.entities.length; let totalStages = 0; let totalBoards = 0; const treeDiv = document.getElementById('fest-sum-tree'); treeDiv.innerHTML = ''; festivalConfig.subEvents.forEach(se => { totalStages += se.stages.length; const boards = se.stages.filter(s => s.scoreboardConfig).length; totalBoards += boards; let stagesList = ''; se.stages.forEach(st => { stagesList += `<div class="pl-4 text-xs text-slate-400 flex items-center"><i class="fas fa-angle-right mr-2"></i> ${st.name}${st.scoreboardConfig ? '<i class="fas fa-check text-green-500 ml-2"></i>' : '<i class="fas fa-exclamation-triangle text-orange-400 ml-2"></i>'}</div>`; }); treeDiv.innerHTML += `<div class="mb-2"><div class="flex items-center text-astra-purple dark:text-purple-300 font-bold"><i class="fas fa-folder mr-2"></i> ${se.name}</div>${stagesList}</div>`; }); document.getElementById('fest-sum-stages-count').textContent = totalStages; document.getElementById('fest-sum-boards-count').textContent = totalBoards; }
+        
         function createFestival() {
-            console.log("FULL FESTIVAL CONFIG:", festivalConfig);
-            showTemporaryMessage("Festival Created! See Console for JSON.", "success");
+            if(!festivalConfig.name) { showTemporaryMessage("Festival Name is missing!", "error"); return; }
+            const festivalId = 'fest-' + Date.now();
+            const finalFestivalData = { ...festivalConfig, id: festivalId, status: 'upcoming', createdAt: new Date().toISOString() };
+            try {
+                const existingFestivals = JSON.parse(localStorage.getItem('astra_festivals')) || []; existingFestivals.push(finalFestivalData); localStorage.setItem('astra_festivals', JSON.stringify(existingFestivals));
+                showTemporaryMessage("Festival Created Successfully! Redirecting...", "success");
+                // CORRECTED: Redirect to Festival Dashboard
+                setTimeout(() => { window.location.href = `festival-dashboard.html?id=${festivalId}`; }, 1500);
+            } catch (e) { console.error(e); showTemporaryMessage("Error saving festival data.", "error"); }
         }
 
-
-        // ==========================================
-        // 11. Custom Message Box (Replaces alert/confirm)
-        // ==========================================
-        // NOTE: Since the prompt is running in a sandbox environment and not a full browser,
-        // implementing a full modal-based alert system can be tricky. I will use a simple,
-        // non-blocking toast/message system integrated into the body for better UX.
-
-        function showTemporaryMessage(message, type = 'info', duration = 3000) {
-            let messageBox = document.getElementById('custom-message-box');
-            if (!messageBox) {
-                messageBox = document.createElement('div');
-                messageBox.id = 'custom-message-box';
-                messageBox.className = 'fixed top-4 right-4 z-[100] p-4 rounded-xl shadow-2xl transition-all duration-300 transform translate-x-full opacity-0 font-bold text-white';
-                document.body.appendChild(messageBox);
-            }
-
-            const styles = {
-                success: { bg: 'bg-green-500', icon: 'fas fa-check-circle' },
-                error: { bg: 'bg-red-500', icon: 'fas fa-exclamation-triangle' },
-                info: { bg: 'bg-astra-blue', icon: 'fas fa-info-circle' }
-            };
-
-            const style = styles[type] || styles.info;
-            messageBox.className = `fixed top-4 right-4 z-[100] p-4 rounded-xl shadow-2xl transition-all duration-300 transform translate-x-0 opacity-100 font-bold ${style.bg} text-white`;
-            messageBox.innerHTML = `<i class="${style.icon} mr-2"></i> ${message}`;
-
-            setTimeout(() => {
-                messageBox.classList.remove('translate-x-0', 'opacity-100');
-                messageBox.classList.add('translate-x-full', 'opacity-0');
-            }, duration);
-        }
-
+        function showTemporaryMessage(message, type = 'info', duration = 3000) { let messageBox = document.getElementById('custom-message-box'); if (!messageBox) { messageBox = document.createElement('div'); messageBox.id = 'custom-message-box'; document.body.appendChild(messageBox); } const styles = { success: { bg: 'bg-green-500', icon: 'fas fa-check-circle' }, error: { bg: 'bg-red-500', icon: 'fas fa-exclamation-triangle' }, info: { bg: 'bg-astra-blue', icon: 'fas fa-info-circle' } }; const style = styles[type] || styles.info; messageBox.className = `fixed top-4 right-4 z-[100] p-4 rounded-xl shadow-2xl transition-all duration-300 transform translate-x-0 opacity-100 font-bold ${style.bg} text-white`; messageBox.innerHTML = `<i class="${style.icon} mr-2"></i> ${message}`; setTimeout(() => { messageBox.classList.remove('translate-x-0', 'opacity-100'); messageBox.classList.add('translate-x-full', 'opacity-0'); }, duration); }
     </script>
 </body>
 </html>

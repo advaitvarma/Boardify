@@ -28,7 +28,7 @@
                         sans: ['Outfit', 'sans-serif'],
                     },
                     colors: {
-                        // Custom Brand Colors extracted from design images
+                        // Custom Brand Colors
                         brand: {
                             orange: '#FF8A00', // Sports
                             blue: '#4876FF',   // Academic
@@ -203,15 +203,29 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+        /* --- Toggle Switch Styles --- */
+        .toggle-btn { transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .toggle-active {
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            border-color: transparent;
+        }
+        .toggle-inactive {
+            background: transparent;
+            color: #64748b;
+        }
+        .dark .toggle-inactive { color: #94a3b8; }
+        .toggle-inactive:hover { background: rgba(0,0,0,0.05); }
+        .dark .toggle-inactive:hover { background: rgba(255,255,255,0.05); }
+        
         /* --- Stat Tiles Active State --- */
-        /* This handles the visual toggle effect when a user clicks a stat tile */
         .stat-card-active {
             transform: scale(1.03);
-            border-width: 0 0 0 4px !important; /* Ensure left border stays */
+            border-width: 0 0 0 4px !important; 
         }
         
         /* --- Specific Category Gradients --- */
-        /* These match the exact hex codes from the design image */
         .gradient-sports { background: linear-gradient(135deg, #FF8A00 0%, #FF5F00 100%); }
         .gradient-academic { background: linear-gradient(135deg, #4876FF 0%, #2563EB 100%); }
         .gradient-cultural { background: linear-gradient(135deg, #FF4D8D 0%, #E11D48 100%); }
@@ -286,17 +300,20 @@
                 </p>
             </div>
             
-            <!-- Date Display -->
-            <div class="hidden md:block text-right">
-                <p class="text-sm font-bold text-slate-400 uppercase tracking-widest" id="current-date-label">Today</p>
-                <p class="text-2xl font-bold text-slate-700 dark:text-slate-200" id="current-date-display">...</p>
+            <!-- View Mode Toggle Switch -->
+            <div class="glass-card p-1.5 rounded-2xl flex items-center gap-1 border border-slate-200 dark:border-slate-700 shadow-sm backdrop-blur-xl">
+                <button onclick="toggleViewMode('events')" id="btn-view-events" class="toggle-btn px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2 toggle-active">
+                    <i class="fas fa-gamepad"></i> Single Events
+                </button>
+                <button onclick="toggleViewMode('festivals')" id="btn-view-festivals" class="toggle-btn px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2 toggle-inactive">
+                    <i class="fas fa-icons"></i> Festivals
+                </button>
             </div>
         </div>
 
         <!-- 
             STATISTICS TILES (Interactive Filters)
             Each tile is clickable and acts as a filter for the grid below.
-            Colors match the requested hex codes.
         -->
         <div id="stats-container" class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12">
             <!-- Loading Skeletons (replaced by JS) -->
@@ -308,7 +325,7 @@
 
         <!-- 
             CONTROL BAR
-            Contains Search, Status Dropdown (redundant but good for mobile), and Category Pills
+            Contains Search, Status Dropdown, and Category Pills
         -->
         <div class="glass-card p-3 rounded-2xl flex flex-col lg:flex-row gap-3 mb-8 shadow-sm animate-fade-in-up border border-white/60 dark:border-white/5 items-center backdrop-blur-xl sticky top-24 z-30" style="animation-delay: 0.1s;">
             
@@ -356,7 +373,7 @@
                     <i class="fas fa-search-minus"></i>
                 </div>
             </div>
-            <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-3">No events found</h3>
+            <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-3">No items found</h3>
             <p class="text-slate-500 dark:text-slate-400 max-w-sm mx-auto leading-relaxed">
                 We couldn't find any matches based on your current filters or search query.
             </p>
@@ -433,305 +450,167 @@
     ================================================================================== -->
     <script>
         /**
-         * ASTRASCORE DASHBOARD LOGIC
-         * * Table of Contents:
-         * 1. Theme & UI Initialization
-         * 2. Configuration & Color Mapping
-         * 3. Data Management & Mock Data Generation
-         * 4. Rendering Functions (Stats, Filters, Events)
-         * 5. Event Listeners & Interaction Handlers
+         * ASTRASCORE DASHBOARD LOGIC (COMPLETE)
+         * Table of Contents:
+         * 1. State & Configuration
+         * 2. Initialization & Theme
+         * 3. View Mode Switching (Single vs Festival)
+         * 4. Data Loading & Persistence
+         * 5. Rendering Logic (Cards, Stats, Filters)
+         * 6. Interaction Handlers (Delete, Status, Search)
          */
 
         // ---------------------------------------------------------
-        // 1. THEME & UI INIT
+        // 1. STATE & CONFIGURATION
         // ---------------------------------------------------------
-        (function() {
-            try {
-                // Set Current Date in Header
-                const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                const dateEl = document.getElementById('current-date-display');
-                if(dateEl) dateEl.textContent = new Date().toLocaleDateString('en-US', dateOptions);
-
-                // Theme Logic
-                const themeBtn = document.getElementById('theme-toggle');
-                const html = document.documentElement;
-                const icon = themeBtn ? themeBtn.querySelector('i') : null;
-
-                function updateIcon() {
-                    if(!icon) return;
-                    if (html.classList.contains('dark')) {
-                        icon.className = 'fas fa-moon text-blue-300 transform rotate-0';
-                    } else {
-                        icon.className = 'fas fa-sun text-yellow-500 text-lg transform rotate-0';
-                    }
-                }
-
-                // Check Local Storage or System Preference
-                if (localStorage.getItem('astra_theme') === 'dark' || 
-                   (!localStorage.getItem('astra_theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                    html.classList.add('dark');
-                }
-                updateIcon();
-
-                // Theme Toggle Click Handler
-                if(themeBtn) {
-                    themeBtn.addEventListener('click', () => {
-                        html.classList.toggle('dark');
-                        const isDark = html.classList.contains('dark');
-                        localStorage.setItem('astra_theme', isDark ? 'dark' : 'light');
-                        
-                        // Animate Icon Rotation
-                        icon.style.transition = 'all 0.3s ease';
-                        icon.style.transform = 'rotate(360deg) scale(0.5)';
-                        icon.style.opacity = '0';
-                        
-                        setTimeout(() => {
-                            updateIcon();
-                            icon.style.transform = 'rotate(0deg) scale(1)';
-                            icon.style.opacity = '1';
-                        }, 200);
-                    });
-                }
-            } catch (e) { console.warn("Init warning:", e); }
-        })();
-
-
-        // ---------------------------------------------------------
-        // 2. CONFIGURATION & STYLES
-        // ---------------------------------------------------------
+        let viewMode = 'events'; // 'events' or 'festivals'
+        let events = []; // Stores Single Events
+        let festivals = []; // Stores Festivals
         
-        /**
-         * styles: Defines general visual properties based on color names.
-         */
-        const styles = {
-            orange: { 
-                gradient: "bg-gradient-to-br from-orange-400 to-red-500", 
-                lightBg: "bg-orange-50", 
-                text: "text-orange-600",
-                textDark: "text-orange-700",
-                border: "border-orange-200",
-                shadow: "shadow-orange-500/20",
-                hex: "#FF8A00" // Sports
-            },
-            blue: { 
-                gradient: "bg-gradient-to-br from-blue-400 to-indigo-500", 
-                lightBg: "bg-blue-50", 
-                text: "text-blue-600",
-                textDark: "text-blue-700",
-                border: "border-blue-200",
-                shadow: "shadow-blue-500/20",
-                hex: "#4876FF" // Academic
-            },
-            emerald: { 
-                gradient: "bg-gradient-to-br from-emerald-400 to-teal-500", 
-                lightBg: "bg-emerald-50", 
-                text: "text-emerald-600",
-                textDark: "text-emerald-700",
-                border: "border-emerald-200",
-                shadow: "shadow-emerald-500/20",
-                hex: "#10b981"
-            },
-            purple: { 
-                gradient: "bg-gradient-to-br from-purple-400 to-fuchsia-500", 
-                lightBg: "bg-purple-50", 
-                text: "text-purple-600",
-                textDark: "text-purple-700",
-                border: "border-purple-200",
-                shadow: "shadow-purple-500/20",
-                hex: "#8B5CF6" // Esports
-            },
-            rose: { 
-                gradient: "bg-gradient-to-br from-rose-400 to-pink-500", 
-                lightBg: "bg-rose-50", 
-                text: "text-rose-600",
-                textDark: "text-rose-700",
-                border: "border-rose-200",
-                shadow: "shadow-rose-500/20",
-                hex: "#FF4D8D" // Cultural
-            },
-            red: { 
-                gradient: "bg-gradient-to-br from-red-500 to-rose-600", 
-                lightBg: "bg-red-50", 
-                text: "text-red-600",
-                textDark: "text-red-700",
-                border: "border-red-200",
-                shadow: "shadow-red-500/20",
-                hex: "#ef4444"
-            },
-            slate: { 
-                gradient: "bg-gradient-to-br from-slate-500 to-slate-600", 
-                lightBg: "bg-slate-50", 
-                text: "text-slate-600",
-                textDark: "text-slate-700",
-                border: "border-slate-200",
-                shadow: "shadow-slate-500/20",
-                hex: "#64748b"
-            }
-        };
-
-        /**
-         * categoryConfig: Maps specific categories to their assigned brand colors/icons.
-         * This strictly follows the user provided images.
-         */
-        const categoryConfig = {
-            'sports': { 
-                icon: 'fa-trophy', 
-                colorName: 'orange', 
-                gradientClass: 'gradient-sports',
-                hex: '#FF8A00'
-            },
-            'academic': { 
-                icon: 'fa-graduation-cap', 
-                colorName: 'blue', 
-                gradientClass: 'gradient-academic',
-                hex: '#4876FF'
-            },
-            'cultural': { 
-                icon: 'fa-theater-masks', 
-                colorName: 'rose', 
-                gradientClass: 'gradient-cultural',
-                hex: '#FF4D8D'
-            },
-            'esports': { 
-                icon: 'fa-headset', 
-                colorName: 'purple', 
-                gradientClass: 'gradient-esports',
-                hex: '#8B5CF6'
-            },
-            'other': { 
-                icon: 'fa-star', 
-                colorName: 'slate', 
-                gradientClass: 'gradient-other',
-                hex: '#64748b'
-            }
-        };
-
-
-        // ---------------------------------------------------------
-        // 3. DATA MANAGEMENT
-        // ---------------------------------------------------------
-        let events = [];
         let currentFilter = 'all'; // Category filter
-        let currentStatusFilter = 'all'; // Status filter (synced with tiles)
+        let currentStatusFilter = 'all'; // Status filter
         let searchQuery = '';
+        
         let eventToDeleteId = null;
-        let eventToEditStatusId = null; // New state for status edit
+        let eventToEditStatusId = null; 
 
-        /**
-         * Generates Mock Data if localStorage is empty.
-         * This ensures the dashboard looks good immediately.
-         */
-        function generateMockData() {
-            const mocks = [
-                {
-                    id: 'evt-001',
-                    name: "Inter-High Football Final",
-                    category: "sports",
-                    subcategory: "Football",
-                    scale: "Inter-school",
-                    status: "live",
-                    date: new Date().toISOString()
-                },
-                {
-                    id: 'evt-002',
-                    name: "Science Wizard 2025",
-                    category: "academic",
-                    subcategory: "Quiz",
-                    scale: "City Level",
-                    status: "upcoming",
-                    date: new Date(Date.now() + 86400000).toISOString()
-                },
-                {
-                    id: 'evt-003',
-                    name: "Valorant Championship",
-                    category: "esports",
-                    subcategory: "FPS Gaming",
-                    scale: "Regional",
-                    status: "live",
-                    date: new Date().toISOString()
-                },
-                {
-                    id: 'evt-004',
-                    name: "Annual Drama Fest",
-                    category: "cultural",
-                    subcategory: "Theatre",
-                    scale: "University",
-                    status: "upcoming",
-                    date: new Date(Date.now() + 172800000).toISOString()
-                },
-                {
-                    id: 'evt-005',
-                    name: "Math Olympiad",
-                    category: "academic",
-                    subcategory: "Mathematics",
-                    scale: "National",
-                    status: "completed",
-                    date: new Date(Date.now() - 86400000).toISOString()
-                },
-                {
-                    id: 'evt-006',
-                    name: "Spring Music Recital",
-                    category: "cultural",
-                    subcategory: "Music",
-                    scale: "Local",
-                    status: "upcoming",
-                    date: new Date(Date.now() + 259200000).toISOString()
-                },
-                {
-                    id: 'evt-007',
-                    name: "Basketball League",
-                    category: "sports",
-                    subcategory: "Basketball",
-                    scale: "Inter-House",
-                    status: "completed",
-                    date: new Date(Date.now() - 172800000).toISOString()
-                }
-            ];
-            
-            // Save to localStorage so it persists
-            localStorage.setItem('astra_events', JSON.stringify(mocks));
-            return mocks;
+        // Style configuration
+        const styles = {
+            orange: { hex: "#FF8A00", gradient: "bg-gradient-to-br from-orange-400 to-red-500", text: "text-orange-600", lightBg: "bg-orange-50", shadow: "shadow-orange-500/20" },
+            blue: { hex: "#4876FF", gradient: "bg-gradient-to-br from-blue-400 to-indigo-500", text: "text-blue-600", lightBg: "bg-blue-50", shadow: "shadow-blue-500/20" },
+            emerald: { hex: "#10b981", gradient: "bg-gradient-to-br from-emerald-400 to-teal-500", text: "text-emerald-600", lightBg: "bg-emerald-50", shadow: "shadow-emerald-500/20" },
+            purple: { hex: "#8B5CF6", gradient: "bg-gradient-to-br from-purple-400 to-fuchsia-500", text: "text-purple-600", lightBg: "bg-purple-50", shadow: "shadow-purple-500/20" },
+            rose: { hex: "#FF4D8D", gradient: "bg-gradient-to-br from-rose-400 to-pink-500", text: "text-rose-600", lightBg: "bg-rose-50", shadow: "shadow-rose-500/20" },
+            red: { hex: "#ef4444", gradient: "bg-gradient-to-br from-red-500 to-rose-600", text: "text-red-600", lightBg: "bg-red-50", shadow: "shadow-red-500/20" },
+            slate: { hex: "#64748b", gradient: "bg-gradient-to-br from-slate-500 to-slate-600", text: "text-slate-600", lightBg: "bg-slate-50", shadow: "shadow-slate-500/20" }
+        };
+
+        const categoryConfig = {
+            'sports': { icon: 'fa-trophy', colorName: 'orange', gradientClass: 'gradient-sports', hex: '#FF8A00' },
+            'academic': { icon: 'fa-graduation-cap', colorName: 'blue', gradientClass: 'gradient-academic', hex: '#4876FF' },
+            'cultural': { icon: 'fa-theater-masks', colorName: 'rose', gradientClass: 'gradient-cultural', hex: '#FF4D8D' },
+            'esports': { icon: 'fa-headset', colorName: 'purple', gradientClass: 'gradient-esports', hex: '#8B5CF6' },
+            'other': { icon: 'fa-star', colorName: 'slate', gradientClass: 'gradient-other', hex: '#64748b' }
+        };
+
+
+        // ---------------------------------------------------------
+        // 2. INITIALIZATION & THEME
+        // ---------------------------------------------------------
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            initTheme();
+            toggleViewMode('events'); // Default View
+        });
+
+        function initTheme() {
+            const themeBtn = document.getElementById('theme-toggle');
+            const html = document.documentElement;
+            const icon = themeBtn ? themeBtn.querySelector('i') : null;
+
+            // Check Preference
+            if (localStorage.getItem('astra_theme') === 'dark' || (!localStorage.getItem('astra_theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                html.classList.add('dark');
+                if(icon) icon.className = 'fas fa-moon text-blue-300';
+            }
+
+            if(themeBtn) {
+                themeBtn.addEventListener('click', () => {
+                    html.classList.toggle('dark');
+                    const isDark = html.classList.contains('dark');
+                    localStorage.setItem('astra_theme', isDark ? 'dark' : 'light');
+                    if(icon) icon.className = isDark ? 'fas fa-moon text-blue-300' : 'fas fa-sun text-yellow-500';
+                });
+            }
         }
 
-        function loadEvents() {
-            try {
-                let stored = localStorage.getItem('astra_events');
-                
-                // If no data, generate mock data
-                if (!stored) {
-                    const mocks = generateMockData();
-                    // We need to parse this again or just use the array directly
-                    // but for consistency let's pretend we loaded it
-                    stored = JSON.stringify(mocks);
-                }
 
-                if (stored) {
-                    const rawData = JSON.parse(stored);
+        // ---------------------------------------------------------
+        // 3. VIEW MODE TOGGLING
+        // ---------------------------------------------------------
+        window.toggleViewMode = function(mode) {
+            viewMode = mode;
+            
+            const btnEvents = document.getElementById('btn-view-events');
+            const btnFestivals = document.getElementById('btn-view-festivals');
+            const catPills = document.getElementById('category-pills');
+
+            // 1. Toggle Button Visuals
+            if (mode === 'events') {
+                btnEvents.classList.add('toggle-active');
+                btnEvents.classList.remove('toggle-inactive');
+                btnFestivals.classList.add('toggle-inactive');
+                btnFestivals.classList.remove('toggle-active');
+                
+                // Show category filters only for events
+                if(catPills) catPills.classList.remove('hidden');
+            } else {
+                btnFestivals.classList.add('toggle-active');
+                btnFestivals.classList.remove('toggle-inactive');
+                btnEvents.classList.add('toggle-inactive');
+                btnEvents.classList.remove('toggle-active');
+                
+                // Hide category filters for festivals (simplified view)
+                if(catPills) catPills.classList.add('hidden');
+            }
+
+            // 2. Reset Filters slightly to avoid confusion
+            currentStatusFilter = 'all';
+            document.getElementById('status-filter').value = 'all';
+            
+            // 3. Re-render Everything
+            renderStats();
+            renderFilters(); 
+            renderContent();
+        }
+
+
+        // ---------------------------------------------------------
+        // 4. DATA LOADING & PERSISTENCE
+        // ---------------------------------------------------------
+        function loadData() {
+            try {
+                // Load Single Events
+                const storedEvents = localStorage.getItem('astra_events');
+                if (storedEvents) {
+                    const rawData = JSON.parse(storedEvents);
                     events = rawData.map(e => ({
                         id: e.id,
-                        title: e.name || "Untitled Event",
-                        category: (e.category || "other").toLowerCase(), // Ensure lowercase for matching
-                        subCategory: e.subcategory || "General",
-                        type: e.scale || "Local",
+                        title: e.name || e.title || "Untitled Event",
+                        category: (e.category || "other").toLowerCase(),
+                        subCategory: e.subcategory || e.subCategory || "General",
+                        type: e.scale || e.type || "Local",
                         status: e.status || "upcoming",
                         date: e.date || new Date().toISOString(),
                         viewLink: `board.html?id=${e.id}`,
                         adminLink: `admin.html?id=${e.id}`
                     }));
                 } else {
-                    events = []; 
+                    events = generateMockEvents(); // Fallback
+                    localStorage.setItem('astra_events', JSON.stringify(events));
                 }
+
+                // Load Festivals
+                const storedFestivals = localStorage.getItem('astra_festivals');
+                festivals = storedFestivals ? JSON.parse(storedFestivals) : [];
+                
             } catch (err) {
-                console.error("Error loading events:", err);
+                console.error("Error loading data:", err);
                 events = [];
+                festivals = [];
             }
         }
 
+        function generateMockEvents() {
+            return [
+                { id: 'evt-001', name: "Inter-High Football Final", category: "sports", subcategory: "Football", scale: "Inter-school", status: "live" },
+                { id: 'evt-002', name: "Science Wizard 2025", category: "academic", subcategory: "Quiz", scale: "City Level", status: "upcoming" }
+            ];
+        }
+
         function saveEvents() {
-            // Save current events array back to storage
-            // Map back to simplified object structure if needed, or store as is if structure matches
-            // Here we just store the current 'events' list, but ideally we should match original structure.
-            // For simplicity in this demo, we assume full event object persistence.
+            // Saves current SINGLE events state back to local storage
+            // Note: We are not implementing full CRUD for festivals here, just read-only/link
             localStorage.setItem('astra_events', JSON.stringify(events.map(e => ({
                 id: e.id,
                 name: e.title,
@@ -741,61 +620,55 @@
                 status: e.status,
                 date: e.date
             }))));
-            loadEvents();
         }
 
 
         // ---------------------------------------------------------
-        // 4. RENDERING LOGIC
+        // 5. RENDERING LOGIC
         // ---------------------------------------------------------
 
         /**
-         * renderStats: Renders the top tiles.
-         * KEY FEATURE: These tiles are CLICKABLE toggles.
-         * They use border-color to show active state.
+         * renderStats: Renders the top tiles based on ACTIVE VIEW MODE.
          */
         function renderStats() {
             const container = document.getElementById('stats-container');
             if(!container) return;
 
-            const total = events.length;
-            const live = events.filter(e => e.status === 'live' || e.status === 'ongoing').length;
-            const upcoming = events.filter(e => e.status === 'upcoming').length;
-            const completed = events.filter(e => e.status === 'completed').length;
+            // Choose dataset based on view mode
+            const dataSet = viewMode === 'events' ? events : festivals;
+
+            const total = dataSet.length;
+            const live = dataSet.filter(e => e.status === 'live' || e.status === 'ongoing').length;
+            const upcoming = dataSet.filter(e => e.status === 'upcoming').length;
+            const completed = dataSet.filter(e => e.status === 'completed').length;
 
             const statItems = [
-                { label: 'Total Events', val: total, icon: 'fa-layer-group', color: 'blue', filterKey: 'all', hex: styles.blue.hex },
+                { label: 'Total Items', val: total, icon: viewMode === 'events' ? 'fa-layer-group' : 'fa-icons', color: 'blue', filterKey: 'all', hex: styles.blue.hex },
                 { label: 'Live Now', val: live, icon: 'fa-bolt', color: 'red', filterKey: 'live', hex: styles.red.hex },
                 { label: 'Upcoming', val: upcoming, icon: 'fa-calendar-alt', color: 'orange', filterKey: 'upcoming', hex: styles.orange.hex },
                 { label: 'Completed', val: completed, icon: 'fa-check-double', color: 'emerald', filterKey: 'completed', hex: styles.emerald.hex },
             ];
 
             container.innerHTML = statItems.map((stat, i) => {
-                const s = styles[stat.color] || styles.slate;
+                const s = styles[stat.color];
                 const isActive = currentStatusFilter === stat.filterKey;
                 
-                // Dynamic Classes for Active vs Inactive State
                 const activeClasses = isActive 
                     ? `stat-card-active ring-1 ring-${stat.color}-200 dark:ring-${stat.color}-900 bg-${stat.color}-50 dark:bg-${stat.color}-900/10` 
                     : `hover:bg-white/80 dark:hover:bg-slate-800/80 opacity-90 hover:opacity-100`;
 
-                // The border-left-color is applied inline to guarantee it shows up despite Tailwind JIT limitations
                 return `
                 <div onclick="handleStatusChange('${stat.filterKey}')"
                      class="glass-card p-5 rounded-2xl flex items-center gap-5 animate-fade-in-up transition-all duration-300 cursor-pointer border-l-4 group relative overflow-hidden ${activeClasses}" 
                      style="animation-delay: ${i * 0.1}s; border-left-color: ${stat.hex};">
                     
-                    <!-- Background Shine Effect on Hover -->
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 dark:via-white/5 to-transparent -translate-x-full group-hover:animate-shine z-0 pointer-events-none"></div>
 
-                    <!-- Icon Wrapper -->
                     <div class="relative z-10 w-12 h-12 rounded-2xl ${s.gradient} text-white flex items-center justify-center text-lg shadow-lg ${s.shadow} group-hover:scale-110 transition-transform duration-300">
                         <i class="fas ${stat.icon}"></i>
                     </div>
 
-                    <!-- Text Info -->
                     <div class="relative z-10">
-                        <!-- Updated Text Color to match theme -->
                         <p class="text-xs font-bold ${s.text} uppercase tracking-widest mb-1 opacity-90 group-hover:opacity-100 transition-opacity">
                             ${stat.label}
                         </p>
@@ -804,17 +677,15 @@
                         </p>
                     </div>
                     
-                    <!-- Active Indicator Checkmark -->
                     ${isActive ? `<div class="absolute top-3 right-3 text-${stat.color}-500 opacity-100 transition-opacity"><i class="fas fa-check-circle"></i></div>` : ''}
                 </div>`;
             }).join('');
         }
 
-        /**
-         * renderFilters: Renders the Category Pills.
-         * Uses custom coloring logic to match the brand colors when active.
-         */
         function renderFilters() {
+            // Only show category filters for Single Events mode
+            if(viewMode === 'festivals') return;
+
             const container = document.getElementById('category-pills');
             if(!container) return;
             const cats = ['all', 'sports', 'academic', 'cultural', 'esports', 'other'];
@@ -823,13 +694,11 @@
                 const isActive = currentFilter === cat;
                 const catConfig = categoryConfig[cat] || categoryConfig['other'];
                 
-                // Dynamic styling for active pill based on category color
                 let activeStyle = '';
                 if(isActive && cat !== 'all') {
-                   // Use the gradient defined for the category
                    activeStyle = `background: ${catConfig.hex}; color: white; border-color: transparent; box-shadow: 0 4px 10px -2px ${catConfig.hex}66;`;
                 } else if (isActive && cat === 'all') {
-                   activeStyle = `background: #1e293b; color: white; border-color: transparent;`; // Default dark for 'All'
+                   activeStyle = `background: #1e293b; color: white; border-color: transparent;`; 
                 }
 
                 const baseClasses = "px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap relative overflow-hidden group border";
@@ -839,10 +708,7 @@
                 <button onclick="setFilter('${cat}')" 
                     class="${baseClasses} ${isActive ? 'scale-105 shadow-lg' : inactiveClasses}"
                     style="${isActive ? activeStyle : ''}">
-                    
-                    <!-- Shine Effect for Active Pills -->
                     ${isActive ? '<div class="absolute inset-0 bg-white/20 skew-x-12 -translate-x-full animate-shine"></div>' : ''}
-
                     <span class="relative z-10 flex items-center gap-2">
                         ${isActive ? '<i class="fas fa-check text-xs"></i>' : (cat !== 'all' ? `<i class="fas ${catConfig.icon} text-xs opacity-70"></i>` : '')}
                         ${cat.charAt(0).toUpperCase() + cat.slice(1)}
@@ -852,38 +718,46 @@
         }
 
         /**
-         * renderEvents: Renders the main Grid of Event Cards.
-         * Filtering Logic happens here.
+         * renderContent: Decides whether to render Single Cards or Festival Cards.
          */
-        function renderEvents() {
+        function renderContent() {
             const grid = document.getElementById('events-grid');
             const empty = document.getElementById('empty-state');
             if(!grid || !empty) return;
 
             grid.innerHTML = '';
 
-            // --- Filtering Logic ---
-            const filtered = events.filter(e => {
-                const searchMatch = (e.title || '').toLowerCase().includes(searchQuery.toLowerCase()) || 
-                                    (e.subCategory || '').toLowerCase().includes(searchQuery.toLowerCase());
-                
-                const categoryMatch = currentFilter === 'all' || e.category === currentFilter;
-                
-                // Status Filter Logic
-                let statusMatch = true;
-                if (currentStatusFilter !== 'all') {
-                    if (currentStatusFilter === 'live') {
-                         statusMatch = (e.status === 'live' || e.status === 'ongoing');
-                    } else {
-                         statusMatch = e.status === currentStatusFilter;
-                    }
-                }
-                
-                return searchMatch && categoryMatch && statusMatch;
-            });
+            let itemsToRender = [];
 
-            // --- Empty State Handling ---
-            if(filtered.length === 0) {
+            if (viewMode === 'events') {
+                // Filter Single Events
+                itemsToRender = events.filter(e => {
+                    const searchMatch = (e.title || '').toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                        (e.subCategory || '').toLowerCase().includes(searchQuery.toLowerCase());
+                    const categoryMatch = currentFilter === 'all' || e.category === currentFilter;
+                    
+                    let statusMatch = true;
+                    if (currentStatusFilter !== 'all') {
+                        if (currentStatusFilter === 'live') statusMatch = (e.status === 'live' || e.status === 'ongoing');
+                        else statusMatch = e.status === currentStatusFilter;
+                    }
+                    return searchMatch && categoryMatch && statusMatch;
+                });
+            } else {
+                // Filter Festivals
+                itemsToRender = festivals.filter(f => {
+                    const searchMatch = (f.name || '').toLowerCase().includes(searchQuery.toLowerCase());
+                    // Festivals typically don't have the same "Category" field, so we skip category filter
+                    let statusMatch = true;
+                    if (currentStatusFilter !== 'all') {
+                         statusMatch = f.status === currentStatusFilter;
+                    }
+                    return searchMatch && statusMatch;
+                });
+            }
+
+            // Empty State
+            if(itemsToRender.length === 0) {
                 grid.classList.add('hidden');
                 empty.classList.remove('hidden');
                 empty.classList.add('flex');
@@ -894,127 +768,164 @@
             empty.classList.add('hidden');
             empty.classList.remove('flex');
 
-            // --- Card Generation Loop ---
-            filtered.forEach((e, i) => {
-                // DETERMINE STYLING BASED ON CATEGORY (matching image requirement)
-                // This ensures "Sports" gets Orange, "Academic" gets Blue, etc.
-                const catData = categoryConfig[e.category] || categoryConfig['other'];
+            // Render Loop
+            itemsToRender.forEach((item, i) => {
+                const cardHTML = viewMode === 'events' 
+                    ? getSingleEventCardHTML(item, i) 
+                    : getFestivalCardHTML(item, i);
                 
-                // Status Badge Logic - CONVERTED TO BUTTON FOR INTERACTION
-                let badge = '';
-                const clickHandler = `onclick="event.stopPropagation(); openStatusModal('${e.id}')"`;
-                const badgeBaseClasses = "flex items-center gap-1.5 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wide cursor-pointer hover:scale-105 active:scale-95 transition-transform z-20";
-
-                if(e.status === 'live' || e.status === 'ongoing') {
-                    badge = `<button ${clickHandler} class="${badgeBaseClasses} bg-red-500 text-white shadow-md shadow-red-500/30 hover:bg-red-600">
-                                <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>Live
-                             </button>`;
-                } else if(e.status === 'upcoming') {
-                    badge = `<button ${clickHandler} class="${badgeBaseClasses} bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 border border-blue-200 dark:border-blue-700/50 hover:bg-blue-200 dark:hover:bg-blue-900/60">
-                                Upcoming
-                             </button>`;
-                } else {
-                    badge = `<button ${clickHandler} class="${badgeBaseClasses} bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600">
-                                Ended
-                             </button>`;
-                }
-
                 const div = document.createElement('div');
-                div.className = "glass-card event-card rounded-3xl p-0 flex flex-col animate-fade-in-up group overflow-hidden border border-slate-100 dark:border-slate-700";
-                div.style.animationDelay = `${i * 0.07}s`;
-                
-                // Construct inner HTML
-                div.innerHTML = `
-                    <!-- Top Section with Gradient Accent -->
-                    <div class="relative p-6 pb-2">
-                        <!-- Decorative bg blob inside card based on category color -->
-                        <div class="absolute top-0 right-0 w-32 h-32 opacity-10 rounded-bl-full -mr-4 -mt-4 transition-all group-hover:scale-110 duration-500" style="background: ${catData.hex}"></div>
-                        
-                        <div class="flex justify-between items-start mb-4 relative z-10">
-                            <!-- Icon Container: Using specific gradients per category -->
-                            <!-- Added 'group-hover:rotate-12' for better interactivity -->
-                            <div class="card-icon-container w-12 h-12 rounded-2xl ${catData.gradientClass} flex items-center justify-center text-white shadow-lg shadow-${catData.colorName}-500/20 transition-transform duration-500 ease-out">
-                                <i class="fas ${catData.icon} text-lg"></i>
-                            </div>
-                            
-                            <!-- Options / Status -->
-                            <div class="flex flex-col items-end gap-2">
-                                ${badge}
-                                <button onclick="openDeleteModal('${e.id}', '${e.title.replace(/'/g, "\\'")}')" class="text-slate-300 hover:text-red-500 transition-colors p-1 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 duration-300" title="Delete Event">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- Content -->
-                        <div class="relative z-10">
-                            <span class="inline-block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1 pl-0.5">
-                                ${e.subCategory}
-                            </span>
-                            
-                            <!-- Title Color changes on hover to match category color -->
-                            <h3 class="text-2xl font-black text-slate-800 dark:text-white leading-tight mb-2 group-hover:text-${catData.colorName}-600 dark:group-hover:text-${catData.colorName}-400 transition-colors line-clamp-2">
-                                ${e.title}
-                            </h3>
-                            
-                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400 flex items-center gap-2 mb-4">
-                                <i class="fas fa-users text-xs opacity-70"></i> ${e.type}
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Divider -->
-                    <div class="h-px w-full bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-700 to-transparent my-2"></div>
-
-                    <!-- Action Footer -->
-                    <div class="p-4 pt-2 mt-auto grid grid-cols-2 gap-3">
-                        <a href="${e.adminLink}" class="group/btn flex items-center justify-center gap-2 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 py-3 rounded-xl font-bold text-sm border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all">
-                            <i class="fas fa-cog text-slate-400 group-hover/btn:text-slate-600 dark:group-hover/btn:text-slate-200 transition-colors"></i> 
-                            <span>Admin</span>
-                        </a>
-                        <a href="${e.viewLink}" class="flex items-center justify-center gap-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 py-3 rounded-xl font-bold text-sm shadow-md shadow-slate-900/10 dark:shadow-white/5 hover:transform hover:-translate-y-0.5 transition-all">
-                            <span>View</span>
-                            <i class="fas fa-arrow-right text-xs"></i>
-                        </a>
-                    </div>
-                `;
-                grid.appendChild(div);
+                div.innerHTML = cardHTML;
+                // Unwrap the div to append the card directly to grid
+                grid.appendChild(div.firstElementChild);
             });
         }
 
+        // --- HTML GENERATORS ---
+
+        function getSingleEventCardHTML(e, i) {
+            const catData = categoryConfig[e.category] || categoryConfig['other'];
+            
+            // Status Badge Logic
+            let badge = '';
+            const clickHandler = `onclick="event.stopPropagation(); openStatusModal('${e.id}')"`;
+            const badgeBaseClasses = "flex items-center gap-1.5 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wide cursor-pointer hover:scale-105 active:scale-95 transition-transform z-20";
+
+            if(e.status === 'live' || e.status === 'ongoing') {
+                badge = `<button ${clickHandler} class="${badgeBaseClasses} bg-red-500 text-white shadow-md shadow-red-500/30 hover:bg-red-600">
+                            <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>Live
+                         </button>`;
+            } else if(e.status === 'upcoming') {
+                badge = `<button ${clickHandler} class="${badgeBaseClasses} bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 border border-blue-200 dark:border-blue-700/50 hover:bg-blue-200 dark:hover:bg-blue-900/60">
+                            Upcoming
+                         </button>`;
+            } else {
+                badge = `<button ${clickHandler} class="${badgeBaseClasses} bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600">
+                            Ended
+                         </button>`;
+            }
+
+            return `
+            <div class="glass-card event-card rounded-3xl p-0 flex flex-col animate-fade-in-up group overflow-hidden border border-slate-100 dark:border-slate-700 h-full" style="animation-delay: ${i * 0.05}s">
+                <div class="relative p-6 pb-2">
+                    <div class="absolute top-0 right-0 w-32 h-32 opacity-10 rounded-bl-full -mr-4 -mt-4 transition-all group-hover:scale-110 duration-500" style="background: ${catData.hex}"></div>
+                    
+                    <div class="flex justify-between items-start mb-4 relative z-10">
+                        <div class="card-icon-container w-12 h-12 rounded-2xl ${catData.gradientClass} flex items-center justify-center text-white shadow-lg shadow-${catData.colorName}-500/20 transition-transform duration-500 ease-out">
+                            <i class="fas ${catData.icon} text-lg"></i>
+                        </div>
+                        <div class="flex flex-col items-end gap-2">
+                            ${badge}
+                            <button onclick="openDeleteModal('${e.id}', '${(e.title || '').replace(/'/g, "\\'")}')" class="text-slate-300 hover:text-red-500 transition-colors p-1 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 duration-300">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="relative z-10">
+                        <span class="inline-block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1 pl-0.5">
+                            ${e.subCategory}
+                        </span>
+                        <h3 class="text-2xl font-black text-slate-800 dark:text-white leading-tight mb-2 group-hover:text-${catData.colorName}-600 dark:group-hover:text-${catData.colorName}-400 transition-colors line-clamp-2">
+                            ${e.title}
+                        </h3>
+                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400 flex items-center gap-2 mb-4">
+                            <i class="fas fa-users text-xs opacity-70"></i> ${e.type}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="h-px w-full bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-700 to-transparent my-2"></div>
+
+                <div class="p-4 pt-2 mt-auto grid grid-cols-2 gap-3">
+                    <a href="${e.adminLink}" class="group/btn flex items-center justify-center gap-2 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 py-3 rounded-xl font-bold text-sm border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all">
+                        <i class="fas fa-cog text-slate-400 group-hover/btn:text-slate-600 dark:group-hover/btn:text-slate-200"></i> Admin
+                    </a>
+                    <a href="${e.viewLink}" class="flex items-center justify-center gap-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 py-3 rounded-xl font-bold text-sm shadow-md shadow-slate-900/10 dark:shadow-white/5 hover:transform hover:-translate-y-0.5 transition-all">
+                        View <i class="fas fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+            </div>`;
+        }
+
+        function getFestivalCardHTML(f, i) {
+            // New CLEAN WHITE Festival Card Design based on request
+            const statusColors = {
+                live: 'bg-red-500 text-white',
+                upcoming: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300',
+                completed: 'bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-400'
+            };
+            const badgeClass = statusColors[f.status] || statusColors.upcoming;
+            const badgeText = f.status === 'live' ? 'Live Now' : (f.status || 'Upcoming');
+
+            return `
+            <div class="glass-card event-card rounded-3xl p-6 flex flex-col h-full group border border-slate-100 dark:border-slate-700 relative overflow-hidden animate-fade-in-up" style="animation-delay: ${i*0.05}s">
+                
+                <!-- Subtle Gradient Decor -->
+                <div class="absolute top-0 right-0 w-40 h-40 bg-purple-500/5 rounded-bl-[100px] -mr-8 -mt-8 pointer-events-none transition-transform group-hover:scale-110"></div>
+
+                <div class="flex justify-between items-start mb-6 relative z-10">
+                    <!-- Icon Box -->
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center text-white shadow-lg shadow-purple-500/20">
+                        <i class="fas fa-calendar-star text-2xl"></i>
+                    </div>
+                    <!-- Status Pill -->
+                    <div class="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wide ${badgeClass}">
+                        ${badgeText}
+                    </div>
+                </div>
+
+                <div class="relative z-10 mb-8 flex-grow">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 block">
+                        FESTIVAL
+                    </span>
+                    <h3 class="text-3xl font-black text-slate-800 dark:text-white leading-tight mb-2 group-hover:text-purple-600 transition-colors">
+                        ${f.name}
+                    </h3>
+                    <div class="flex flex-col gap-1 mt-3">
+                        <p class="text-sm font-bold text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                            <i class="fas fa-building text-slate-300"></i> ${f.organizer || 'Organizer'}
+                        </p>
+                         <p class="text-sm font-bold text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                            <i class="fas fa-calendar text-slate-300"></i> ${f.dates || 'Dates TBD'}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Action Buttons (Specific for Festival) -->
+                <div class="grid grid-cols-2 gap-3 mt-auto relative z-10">
+                    <a href="festival-dashboard.html?id=${f.id}" class="flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition group/btn">
+                        <i class="fas fa-tools text-slate-400 group-hover/btn:text-purple-500 transition-colors"></i> Admin
+                    </a>
+                    <a href="festival-public.html?id=${f.id}" class="flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-md hover:-translate-y-0.5 transition">
+                        View <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>`;
+        }
+
 
         // ---------------------------------------------------------
-        // 5. EVENT LISTENERS & INTERACTION HANDLERS
+        // 6. INTERACTION HANDLERS
         // ---------------------------------------------------------
 
-        /**
-         * setFilter: Updates the Category Filter
-         */
+        /* --- FILTERS --- */
         window.setFilter = function(cat) {
             currentFilter = cat;
             renderFilters();
-            renderEvents();
+            renderContent();
         }
 
-        /**
-         * handleStatusChange: Updates Status Filter.
-         * Used by both the Dropdown AND the Stats Tiles.
-         */
         window.handleStatusChange = function(status) {
             currentStatusFilter = status;
-            
-            // Sync Dropdown (if triggered by tile)
+            // Sync Dropdown
             const select = document.getElementById('status-filter');
             if(select) select.value = status;
             
-            // Re-render components to show active state
-            renderStats(); // Updates the visual active state on tiles
-            renderEvents(); // Updates the grid
+            renderStats(); 
+            renderContent(); 
         }
 
-        /**
-         * resetFilters: Clears all filters and search.
-         */
         window.resetFilters = function() {
             currentFilter = 'all';
             currentStatusFilter = 'all';
@@ -1026,21 +937,12 @@
             if(searchEl) searchEl.value = '';
             if(statusEl) statusEl.value = 'all';
             
-            renderFilters();
             renderStats();
-            renderEvents();
+            renderFilters();
+            renderContent();
         }
 
-        // Search Input Listener
-        const searchEl = document.getElementById('search-input');
-        if(searchEl) {
-            searchEl.addEventListener('input', (e) => {
-                searchQuery = e.target.value;
-                renderEvents();
-            });
-        }
-
-        /* --- DELETE MODAL HANDLERS --- */
+        /* --- DELETE MODAL --- */
         const modal = document.getElementById('delete-modal');
         const modalBackdrop = document.getElementById('modal-backdrop');
         const modalContent = document.getElementById('modal-content');
@@ -1049,9 +951,7 @@
         window.openDeleteModal = function(id, title) {
             eventToDeleteId = id;
             if(modalEventName) modalEventName.textContent = title;
-            
             modal.classList.remove('hidden');
-            // Small timeout to allow display:block to apply before opacity transition
             setTimeout(() => {
                 modalBackdrop.classList.remove('opacity-0');
                 modalContent.classList.remove('scale-90', 'opacity-0');
@@ -1063,7 +963,6 @@
             modalBackdrop.classList.add('opacity-0');
             modalContent.classList.remove('scale-100', 'opacity-100');
             modalContent.classList.add('scale-90', 'opacity-0');
-            
             setTimeout(() => {
                 modal.classList.add('hidden');
                 eventToDeleteId = null;
@@ -1072,23 +971,21 @@
 
         window.confirmDelete = function() {
             if (eventToDeleteId) {
-                // Since we map in saveEvents, we need to filter the master list "events"
                 events = events.filter(e => e.id !== eventToDeleteId);
                 saveEvents(); 
                 closeDeleteModal();
-                renderEvents();
+                renderContent();
                 renderStats();
             }
         }
 
-        /* --- STATUS CHANGE MODAL HANDLERS (New Feature) --- */
+        /* --- STATUS CHANGE MODAL --- */
         const statusModal = document.getElementById('status-modal');
         const statusModalBackdrop = document.getElementById('status-modal-backdrop');
         const statusModalContent = document.getElementById('status-modal-content');
 
         window.openStatusModal = function(id) {
             eventToEditStatusId = id;
-            
             statusModal.classList.remove('hidden');
             setTimeout(() => {
                 statusModalBackdrop.classList.remove('opacity-0');
@@ -1101,7 +998,6 @@
             statusModalBackdrop.classList.add('opacity-0');
             statusModalContent.classList.remove('scale-100', 'opacity-100');
             statusModalContent.classList.add('scale-90', 'opacity-0');
-            
             setTimeout(() => {
                 statusModal.classList.add('hidden');
                 eventToEditStatusId = null;
@@ -1114,22 +1010,12 @@
                 if (eventIndex > -1) {
                     events[eventIndex].status = newStatus;
                     saveEvents();
-                    renderEvents();
-                    renderStats(); // Update counters
+                    renderContent();
+                    renderStats();
                 }
                 closeStatusModal();
             }
         }
-
-        // ---------------------------------------------------------
-        // 6. INITIALIZATION
-        // ---------------------------------------------------------
-        document.addEventListener('DOMContentLoaded', () => {
-            loadEvents();
-            renderStats();
-            renderFilters();
-            renderEvents();
-        });
 
     </script>
 </body>
