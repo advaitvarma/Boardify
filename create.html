@@ -484,6 +484,46 @@
                         </button>
                     </div>
                 </div>
+
+                <!-- Step 7: Success / Launch -->
+                <div id="step-success" class="wizard-step hidden animate-scale-in">
+                    <div class="text-center max-w-lg mx-auto">
+                        <div class="w-24 h-24 bg-green-100 dark:bg-green-900/30 rounded-full mx-auto mb-6 flex items-center justify-center animate-bounce-slow">
+                            <i class="fas fa-rocket text-5xl text-green-500"></i>
+                        </div>
+                        <h2 class="text-3xl font-black text-green-600 dark:text-green-400 mb-2">Success!</h2>
+                        <p class="text-slate-500 dark:text-slate-400 mb-8">
+                            Your scoreboard <strong id="success-event-name" class="text-slate-700 dark:text-white"></strong> has been created.
+                        </p>
+
+                        <div class="bg-white dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-lg space-y-4">
+                            <a id="success-admin-link" href="#" class="group w-full flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all">
+                                <div class="flex items-center gap-4">
+                                    <i class="fas fa-cog text-xl text-slate-400 group-hover:text-astra-blue transition-colors"></i>
+                                    <div>
+                                        <div class="font-bold text-slate-800 dark:text-white">Admin Panel</div>
+                                        <div class="text-xs text-slate-500">Manage scores and settings</div>
+                                    </div>
+                                </div>
+                                <i class="fas fa-arrow-right text-slate-400 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a id="success-public-link" href="#" target="_blank" class="group w-full flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all">
+                                <div class="flex items-center gap-4">
+                                    <i class="fas fa-desktop text-xl text-slate-400 group-hover:text-astra-purple transition-colors"></i>
+                                    <div>
+                                        <div class="font-bold text-slate-800 dark:text-white">Public Scoreboard</div>
+                                        <div class="text-xs text-slate-500">View the live board</div>
+                                    </div>
+                                </div>
+                                <i class="fas fa-external-link-alt text-slate-400 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                        </div>
+
+                        <a href="dashboard.html" class="mt-8 inline-block text-sm font-bold text-slate-500 hover:text-astra-blue transition">
+                            <i class="fas fa-arrow-left mr-1"></i> Back to Dashboard
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <!-- Festival Mode Flow -->
@@ -843,8 +883,8 @@
                 singleFlow.classList.remove('hidden');
                 festFlow.classList.add('hidden');
                 progressBar.classList.remove('bg-purple-500', 'shadow-[0_0_15px_rgba(168,85,247,0.5)]');
-                progressBar.classList.add('bg-astra-blue', 'shadow-md', 'shadow-blue-400/50');
-                stepper.classList.remove('opacity-0');
+                progressBar.classList.add('bg-astra-blue', 'shadow-md', 'shadow-blue-400/50'); 
+                stepper.classList.remove('hidden');
                 showStep(1);
             } else {
                 singleBtn.className = "px-6 py-3 rounded-full font-bold text-sm transition-all text-slate-500 hover:text-astra-purple dark:text-slate-400 hover:bg-white dark:hover:bg-slate-700 active:scale-[0.98]";
@@ -852,8 +892,8 @@
                 singleFlow.classList.add('hidden');
                 festFlow.classList.remove('hidden');
                 progressBar.classList.remove('bg-astra-blue', 'shadow-md', 'shadow-blue-400/50');
-                progressBar.classList.add('bg-astra-purple', 'shadow-md', 'shadow-purple-400/50');
-                stepper.classList.add('opacity-0');
+                progressBar.classList.add('bg-astra-purple', 'shadow-md', 'shadow-purple-400/50'); 
+                stepper.classList.add('hidden');
                 nextFestStep(1);
             }
         }
@@ -890,7 +930,7 @@
             if (step === 3) { document.querySelectorAll('.cat-panel').forEach(p => p.classList.add('hidden')); document.getElementById(`panel-${singleConfig.category}`).classList.remove('hidden'); if(singleConfig.category === 'sports') updateSportFields(); if(singleConfig.category === 'academic') updateAcadFields(); if(singleConfig.category === 'cultural') updateCulturalFields(); if(singleConfig.category === 'esports') updateEsportsFields(); }
             if (step === 5) { updateBoardTypeVisualsFinal(); showStep(5); return; }
             if (step === 6) { generateSummary(); }
-            showStep(step);
+            if (step !== 7) showStep(step);
         }
         function prevStep(step) { showStep(step); }
 
@@ -986,7 +1026,30 @@
         function generateSummary() { document.getElementById('sum-cat').textContent = singleConfig.category.toUpperCase() || 'EVENT'; document.getElementById('sum-name').textContent = document.getElementById('layout-name').value || 'Untitled Event'; document.getElementById('sum-type').textContent = singleConfig.participantType.toUpperCase(); const count = singleConfig.participants.length; document.getElementById('sum-count').textContent = `${count} ${singleConfig.participantType}`; const previewUL = document.getElementById('sum-part-preview'); previewUL.innerHTML = ''; for(let i=0; i<Math.min(3, count); i++) { const part = singleConfig.participants[i]; let val = part.name; if (singleConfig.participantType === 'individuals' && part.representsEntityId) { const entity = singleConfig.entities.find(e => e.id === part.representsEntityId); if (entity) { val += ` (${entity.shortCode})`; } } previewUL.innerHTML += `<li>${val}</li>`; } if(count > 3) previewUL.innerHTML += `<li>+ ${count - 3} more...</li>`; const rulesUL = document.getElementById('sum-rules'); const unit = document.getElementById('score-unit').value; const neg = document.getElementById('allow-negative').checked; rulesUL.innerHTML = `<li><i class="fas fa-check text-green-500 mr-2"></i>Unit: ${unit}</li><li><i class="fas fa-${neg?'check text-green-500':'times text-red-400'} mr-2"></i>Negative Scores</li>`; if (singleConfig.boardTypes.length > 0) { rulesUL.innerHTML += `<li><i class="fas fa-list-alt text-green-500 mr-2"></i>Boards: ${singleConfig.boardTypes.join(', ')}</li>`; } const tagsDiv = document.getElementById('sum-tags'); const rows = document.getElementById('single-rows-container').children.length; const cols = document.getElementById('single-cols-container').children.length; let tagsHTML = ''; if(rows > 0) tagsHTML += `<span class="bg-blue-100 text-astra-blue px-2 py-1 rounded-full text-[10px] font-bold shadow-sm">${rows} Custom Rows</span>`; if(cols > 0) tagsHTML += `<span class="bg-blue-100 text-astra-blue px-2 py-1 rounded-full text-[10px] font-bold shadow-sm">${cols} Custom Cols</span>`; if(singleConfig.entities.length > 0) tagsHTML += `<span class="bg-purple-100 text-astra-purple px-2 py-1 rounded-full text-[10px] font-bold shadow-sm">${singleConfig.entities.length} Entities</span>`; tagsDiv.innerHTML = tagsHTML; }
 
         let activeStageAttachment = null;
-        const originalCreateScoreboard = () => { const eventId = 'evt-' + Date.now(); let subcat = 'General'; if(singleConfig.category === 'sports') { const sType = document.getElementById('sport-type')?.value; subcat = (sType === 'custom' || sType === 'other') ? 'Manual' : sType || 'General'; } else if(singleConfig.category === 'academic') { const aType = document.querySelector('input[name="acad-type"]:checked')?.value; subcat = (aType === 'other') ? 'Manual' : aType || 'Quiz'; } else if(singleConfig.category === 'esports') { const eType = document.getElementById('esports-game')?.value; subcat = (eType === 'other') ? 'Manual' : 'Esports'; } else if(singleConfig.category === 'cultural') { const cType = document.getElementById('cult-subtype')?.value; subcat = (cType === 'other') ? 'Manual' : cType || 'Cultural'; } const categoryColors = { sports: 'orange', academic: 'blue', cultural: 'pink', esports: 'purple' }; const newEvent = { id: eventId, name: document.getElementById('layout-name').value || 'Untitled Event', category: singleConfig.category || 'sports', subcategory: subcat, status: 'upcoming', scale: singleConfig.participantType || 'Teams', color: categoryColors[singleConfig.category] || 'slate', config: singleConfig.scoring, layoutConfig: singleConfig.layout, teams: singleConfig.participants.map(p => ({ name: p.name, score: 0, color: p.color || '#3b82f6', id: p.id })), timer: { minutes: 0, seconds: 0, isRunning: false, period: "Period 1" }, logs: ["Event Created"] }; try { const existingEvents = JSON.parse(localStorage.getItem('astra_events')) || []; existingEvents.push(newEvent); localStorage.setItem('astra_events', JSON.stringify(existingEvents)); showTemporaryMessage("Scoreboard Created! Redirecting...", "success"); setTimeout(() => { window.location.href = `admin.html?id=${eventId}`; }, 1000); } catch (e) { console.error("Save failed", e); showTemporaryMessage("Error saving event", "error"); } };
+        const originalCreateScoreboard = () => {
+            const eventId = 'evt-' + Date.now();
+            let subcat = 'General';
+            if(singleConfig.category === 'sports') { const sType = document.getElementById('sport-type')?.value; subcat = (sType === 'custom' || sType === 'other') ? 'Manual' : sType || 'General'; }
+            else if(singleConfig.category === 'academic') { const aType = document.querySelector('input[name="acad-type"]:checked')?.value; subcat = (aType === 'other') ? 'Manual' : aType || 'Quiz'; }
+            else if(singleConfig.category === 'esports') { const eType = document.getElementById('esports-game')?.value; subcat = (eType === 'other') ? 'Manual' : 'Esports'; }
+            else if(singleConfig.category === 'cultural') { const cType = document.getElementById('cult-subtype')?.value; subcat = (cType === 'other') ? 'Manual' : cType || 'Cultural'; }
+            const categoryColors = { sports: 'orange', academic: 'blue', cultural: 'pink', esports: 'purple' };
+            const eventName = document.getElementById('layout-name').value || 'Untitled Event';
+            const newEvent = { id: eventId, name: eventName, category: singleConfig.category || 'sports', subcategory: subcat, status: 'upcoming', scale: singleConfig.participantType || 'Teams', color: categoryColors[singleConfig.category] || 'slate', config: singleConfig.scoring, layoutConfig: singleConfig.layout, teams: singleConfig.participants.map(p => ({ name: p.name, score: 0, color: p.color || '#3b82f6', id: p.id })), timer: { minutes: 0, seconds: 0, isRunning: false, period: "Period 1" }, logs: ["Event Created"] };
+            try {
+                const existingEvents = JSON.parse(localStorage.getItem('astra_events')) || [];
+                existingEvents.push(newEvent);
+                localStorage.setItem('astra_events', JSON.stringify(existingEvents));
+                
+                // Show success screen instead of redirecting
+                showStep(7); // A new step for success
+                document.getElementById('step-success').classList.remove('hidden');
+                document.getElementById('success-event-name').textContent = eventName;
+                document.getElementById('success-admin-link').href = `admin.html?id=${eventId}`;
+                document.getElementById('success-public-link').href = `board.html?id=${eventId}`;
+
+            } catch (e) { console.error("Save failed", e); showTemporaryMessage("Error saving event", "error"); }
+        };
         function createScoreboard() { if (activeStageAttachment) { const { sIdx, stIdx } = activeStageAttachment; festivalConfig.subEvents[sIdx].stages[stIdx].scoreboardConfig = JSON.parse(JSON.stringify(singleConfig)); activeStageAttachment = null; showTemporaryMessage(`Scoreboard Attached to ${festivalConfig.subEvents[sIdx].name} - ${festivalConfig.subEvents[sIdx].stages[stIdx].name} Successfully!`, "success"); document.getElementById('single-mode-flow').classList.add('hidden'); document.getElementById('festival-mode-flow').classList.remove('hidden'); nextFestStep(4); } else { originalCreateScoreboard(); } }
 
         let festCurrentModeStep = 1;

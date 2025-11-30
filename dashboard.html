@@ -595,6 +595,10 @@
                 festivals = storedFestivals ? JSON.parse(storedFestivals) : [];
                 
             } catch (err) {
+                // If there's an error, it might be corrupted data. Clear it and start fresh.
+                localStorage.removeItem('astra_events');
+                localStorage.removeItem('astra_festivals');
+
                 console.error("Error loading data:", err);
                 events = [];
                 festivals = [];
@@ -620,6 +624,11 @@
                 status: e.status,
                 date: e.date
             }))));
+        }
+
+        function saveFestivals() {
+            // Saves current FESTIVALS state back to local storage
+            localStorage.setItem('astra_festivals', JSON.stringify(festivals));
         }
 
 
@@ -858,20 +867,27 @@
             const badgeClass = statusColors[f.status] || statusColors.upcoming;
             const badgeText = f.status === 'live' ? 'Live Now' : (f.status || 'Upcoming');
 
+            const statusClickHandler = `onclick="event.stopPropagation(); openStatusModal('${f.id}')"`;
+
             return `
             <div class="glass-card event-card rounded-3xl p-6 flex flex-col h-full group border border-slate-100 dark:border-slate-700 relative overflow-hidden animate-fade-in-up" style="animation-delay: ${i*0.05}s">
                 
                 <!-- Subtle Gradient Decor -->
                 <div class="absolute top-0 right-0 w-40 h-40 bg-purple-500/5 rounded-bl-[100px] -mr-8 -mt-8 pointer-events-none transition-transform group-hover:scale-110"></div>
 
-                <div class="flex justify-between items-start mb-6 relative z-10">
+                <div class="flex justify-between items-start mb-6 relative z-10 gap-2">
                     <!-- Icon Box -->
                     <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center text-white shadow-lg shadow-purple-500/20">
                         <i class="fas fa-calendar-star text-2xl"></i>
                     </div>
-                    <!-- Status Pill -->
-                    <div class="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wide ${badgeClass}">
-                        ${badgeText}
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col items-end gap-2">
+                        <button ${statusClickHandler} class="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wide ${badgeClass} hover:scale-105 active:scale-95 transition-transform">
+                            ${badgeText}
+                        </button>
+                        <button onclick="openDeleteModal('${f.id}', '${(f.name || '').replace(/'/g, "\\'")}')" class="text-slate-300 hover:text-red-500 transition-colors p-1 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 duration-300">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
                     </div>
                 </div>
 
@@ -971,11 +987,19 @@
 
         window.confirmDelete = function() {
             if (eventToDeleteId) {
-                events = events.filter(e => e.id !== eventToDeleteId);
-                saveEvents(); 
+                if (viewMode === 'events') {
+                    events = events.filter(e => e.id !== eventToDeleteId);
+                    saveEvents(); 
+                } else {
+                    festivals = festivals.filter(f => f.id !== eventToDeleteId);
+                    saveFestivals();
+                }
                 closeDeleteModal();
-                renderContent();
-                renderStats();
+                // A small delay to let the modal animate out before re-rendering
+                setTimeout(() => {
+                    renderContent();
+                    renderStats();
+                }, 100);
             }
         }
 
@@ -1006,13 +1030,21 @@
 
         window.updateStatus = function(newStatus) {
             if (eventToEditStatusId) {
-                const eventIndex = events.findIndex(e => e.id === eventToEditStatusId);
-                if (eventIndex > -1) {
-                    events[eventIndex].status = newStatus;
-                    saveEvents();
-                    renderContent();
-                    renderStats();
+                if (viewMode === 'events') {
+                    const eventIndex = events.findIndex(e => e.id === eventToEditStatusId);
+                    if (eventIndex > -1) {
+                        events[eventIndex].status = newStatus;
+                        saveEvents();
+                    }
+                } else {
+                    const festivalIndex = festivals.findIndex(f => f.id === eventToEditStatusId);
+                    if (festivalIndex > -1) {
+                        festivals[festivalIndex].status = newStatus;
+                        saveFestivals();
+                    }
                 }
+                renderContent();
+                renderStats();
                 closeStatusModal();
             }
         }

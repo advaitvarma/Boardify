@@ -94,12 +94,8 @@
         <!-- Removed local blurred orb since body now has rich gradient -->
         
         <div class="container mx-auto px-4 text-center relative z-10">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm text-[10px] font-black uppercase tracking-widest mb-6 text-slate-500 dark:text-slate-400">
-                <span class="relative flex h-2 w-2">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                </span>
-                Live Dashboard
+            <!-- Dynamic Status Badge -->
+            <div id="public-status-badge" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm text-[10px] font-black uppercase tracking-widest mb-6 text-slate-500 dark:text-slate-400">
             </div>
             
             <h1 id="hero-title" class="text-4xl md:text-6xl font-black text-slate-900 dark:text-white mb-2 tracking-tight">
@@ -282,6 +278,22 @@
             document.getElementById('hero-title').textContent = festivalData.name;
             document.getElementById('hero-org').textContent = festivalData.organizer;
             document.getElementById('hero-dates').textContent = festivalData.dates;
+
+            // Public Status Badge
+            const statusBadge = document.getElementById('public-status-badge');
+            const status = festivalData.status || 'upcoming';
+            const statusText = { live: 'Live Now', upcoming: 'Upcoming', completed: 'Completed' };
+            const statusColors = {
+                live: 'text-green-600 dark:text-green-400',
+                upcoming: 'text-blue-600 dark:text-blue-400',
+                completed: 'text-slate-500 dark:text-slate-400'
+            };
+            const statusIcon = status === 'live' 
+                ? `<span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span></span>`
+                : `<i class="fas fa-info-circle"></i>`;
+
+            statusBadge.className += ` ${statusColors[status]}`;
+            statusBadge.innerHTML = `${statusIcon} ${statusText[status]}`;
             
             // 3. Render Widgets
             renderStats();
